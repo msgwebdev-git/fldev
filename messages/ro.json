@@ -1,0 +1,801 @@
+{
+  "HomePage": {
+    "title": "Bine ați venit",
+    "description": "Aceasta este pagina principală"
+  },
+  "Hero": {
+    "badge": "Cel mai mare festival din Moldova",
+    "august": "August",
+    "buyTickets": "Cumpără bilete",
+    "viewLineup": "Vezi Line-up",
+    "scrollDown": "Derulează în jos"
+  },
+  "Navigation": {
+    "home": "Acasă",
+    "about": "Despre noi",
+    "contact": "Contact"
+  },
+  "Navbar": {
+    "lineup": "Line-up",
+    "about": "Despre festival",
+    "program": "Programul festivalului",
+    "partners": "Parteneri",
+    "contacts": "Contacte",
+    "more": "Mai mult",
+    "howToGet": "Cum ajungi",
+    "perform": "Performează la festival",
+    "activities": "Activități",
+    "news": "Noutăți",
+    "becomePartner": "Devino partener",
+    "rules": "Regulile festivalului",
+    "faq": "Întrebări frecvente",
+    "organizers": "Contacte organizatori",
+    "buyTickets": "Cumpără bilete",
+    "toggleMenu": "Deschide meniul",
+    "menu": "Meniu"
+  },
+  "Aftermovie": {
+    "badge": "Video Oficial",
+    "title": "Aftermovie 2025",
+    "subtitle": "Retrăiește cele mai frumoase momente de la ediția trecută",
+    "thumbnailAlt": "Aftermovie Festivalul Lupilor 2025",
+    "playVideo": "Rulează video",
+    "officialAftermovie": "Aftermovie Oficial",
+    "watchNow": "Vizionează acum",
+    "stats": {
+      "visitors": "Vizitatori",
+      "artists": "Artiști",
+      "days": "Zile de festival",
+      "stages": "Scene"
+    }
+  },
+  "Tickets": {
+    "title": "Cumpără Bilete",
+    "subtitle": "Alege tipul de bilet potrivit pentru tine și bucură-te de cele 3 zile de festival",
+    "popular": "Popular",
+    "limited": "Limitat",
+    "remaining": "Au mai rămas {count} bilete",
+    "buyNow": "Cumpără acum",
+    "add": "Adaugă",
+    "close": "Închide",
+    "included": "Ce include",
+    "price": "Preț",
+    "aboutTicket": "Despre bilet",
+    "securePayment": "Plată securizată prin card bancar. Biletele vor fi trimise pe email."
+  },
+  "Gallery": {
+    "badge": "Fotogalerie",
+    "title": "Galeria Festivalului",
+    "subtitle": "Cele mai frumoase momente surprinse de fotografii noștri de-a lungul anilor",
+    "viewAll": "Vezi toate fotografiile",
+    "showMore": "Arată mai mult",
+    "close": "Închide",
+    "previous": "Fotografia anterioară",
+    "next": "Fotografia următoare",
+    "pageTitle": "Galerie Foto",
+    "pageSubtitle": "Explorează toate momentele de neuitat de la edițiile anterioare ale festivalului",
+    "backToHome": "Înapoi la pagina principală",
+    "noPhotos": "Nu sunt fotografii disponibile pentru acest an"
+  },
+  "App": {
+    "badge": "Aplicație mobilă",
+    "title": "Fii mereu la curent cu evenimentele",
+    "subtitle": "Descarcă aplicația oficială Festivalul Lupilor și obține acces la program, hartă și notificări exclusive",
+    "downloadOn": "Descarcă pe",
+    "getItOn": "Disponibil pe",
+    "features": {
+      "notifications": "Notificări push despre spectacole",
+      "schedule": "Program personalizat",
+      "map": "Hartă interactivă a festivalului"
+    }
+  },
+  "News": {
+    "badge": "Noutăți",
+    "title": "Ultimele noutăți",
+    "subtitle": "Fii la curent cu toate evenimentele festivalului",
+    "readMore": "Citește mai mult",
+    "viewAll": "Toate noutățile",
+    "publishedAt": "Publicat",
+    "pageTitle": "Noutăți festival",
+    "pageDescription": "Toate noutățile și anunțurile de la Festivalul Lupilor",
+    "backToNews": "Înapoi la noutăți"
+  },
+  "Common": {
+    "loading": "Se încarcă...",
+    "error": "Eroare",
+    "submit": "Trimite",
+    "cancel": "Anulează"
+  },
+  "About": {
+    "badge": "Despre festival",
+    "pageTitle": "Festivalul Lupilor",
+    "backToHome": "Înapoi la pagina principală",
+    "heroDescription": "Cel mai mare festival open-air din Moldova, care de cinci ani consecutiv se desfășoară în august în rezervația natural-culturală unică Orheiul Vechi.",
+    "stats": {
+      "years": "Ani de festival",
+      "artists": "Artiști pe scenă",
+      "visitors": "Vizitatori anual",
+      "stages": "Scene"
+    },
+    "historyTitle": "Istoria noastră",
+    "historyP1": "Din 2021, Festivalul Lupilor a devenit o tradiție de trei zile de imersiune în lumea muzicii live, tradițiilor și naturii uimitoare, unde folk-rock, ritmuri balcanice, etno, alternative și muzică electronică răsună printre stâncile milenare și meandrele râului Răut.",
+    "historyP2": "De-a lungul celor cinci ani, pe cele două scene ale festivalului au urcat peste 150 de artiști din Moldova, România, Ucraina, Balcani și din toată Europa.",
+    "musicTitle": "Muzica",
+    "musicP1": "Rezidenții permanenți sunt Lupii lui Calancea și Tudor Ungureanu, Vali Boghean Band, Gândul Mâței, Snails, iar printre headlinerii edițiilor trecute se numără Dubioza Kolektiv, Zdob și Zdub, Subcarpați, Shantel, La Caravane Passe și mulți alții.",
+    "featuresTitle": "Ce te așteaptă",
+    "features": {
+      "crafts": "Târg de meșteșuguri",
+      "workshops": "Ateliere și masterclass-uri",
+      "artInstallations": "Instalații artistice",
+      "foodCourt": "Food court diversificat",
+      "camping": "Zonă de camping",
+      "familyZone": "Zonă pentru familii"
+    },
+    "locationTitle": "Locația",
+    "locationDescription": "Festivalul se desfășoară în rezervația natural-culturală Orheiul Vechi, un loc unic unde muzica modernă întâlnește energia antică a pământului, iar mii de oameni devin în fiecare an o mare haită pentru trei zile cu adevărat de neuitat.",
+    "dates": "7-9 August 2026",
+    "distance": "50 km de la Chișinău",
+    "faqTitle": "Întrebări frecvente",
+    "faq": {
+      "q1": "Cum ajung la festival?",
+      "a1": "Festivalul se află la 50 km de Chișinău, în satul Trebujeni. Există autobuze speciale din capitală și parcare gratuită pentru cei care vin cu mașina.",
+      "q2": "Pot să vin cu cortul?",
+      "a2": "Da! Avem o zonă de camping confortabilă pentru peste 5000 de persoane, cu dușuri, stații de încărcare și pază 24/7.",
+      "q3": "Este potrivit pentru familii cu copii?",
+      "a3": "Absolut! Avem o zonă specială pentru copii cu activități pentru familie, ateliere creative și animatori.",
+      "q4": "Ce pot mânca la festival?",
+      "a4": "Food court-ul nostru oferă o varietate largă: bucătărie moldovenească, balcanică și opțiuni vegane."
+    },
+    "ctaTitle": "Alătură-te haitei în 2026!",
+    "ctaDescription": "Unul dintre cele mai frumoase și mai sufletiste festivaluri din Europa de Est — deja 5 ani consecutiv.",
+    "ctaBuyTickets": "Cumpără bilete",
+    "ctaViewLineup": "Vezi Line-up"
+  },
+  "Lineup": {
+    "badge": "Line-up oficial",
+    "pageTitle": "Line-up Festival",
+    "pageSubtitle": "Descoperă artiștii care vor urca pe scenă la Festivalul Lupilor",
+    "backToHome": "Înapoi la pagina principală",
+    "headliners": "Headlineri",
+    "day": "Ziua",
+    "stats": {
+      "headliners": "Headlineri",
+      "artists": "Artiști",
+      "stages": "Scene",
+      "days": "Zile"
+    },
+    "totalArtists": "artiști în total",
+    "stages": {
+      "main": "Scena Principală",
+      "stage2": "Scena 2",
+      "electronic": "Scena Electronică",
+      "rock": "Scena Rock"
+    }
+  },
+  "Contacts": {
+    "badge": "Contacte",
+    "title": "Contactează-ne",
+    "subtitle": "Suntem aici să te ajutăm. Alege departamentul potrivit pentru întrebarea ta.",
+    "backToHome": "Înapoi la pagina principală",
+    "departments": {
+      "general": "Pentru toate întrebările",
+      "generalDesc": "Informații generale despre festival",
+      "commercial": "Director comercial",
+      "commercialDesc": "Întrebări comerciale și sponsorizări",
+      "partners": "Colaborarea cu partenerii",
+      "partnersDesc": "Oportunități de parteneriat",
+      "artists": "Colaborarea cu artiștii",
+      "artistsDesc": "Booking și colaborări artistice",
+      "marketing": "Marketing",
+      "marketingDesc": "PR, media și promovare",
+      "it": "IT Support",
+      "itDesc": "Suport tehnic și site web"
+    },
+    "office": {
+      "title": "Sediul organizatorilor",
+      "subtitle": "Vino să ne vizitezi",
+      "addressLabel": "Adresa",
+      "hours": "Program de lucru",
+      "hoursValue": "Luni - Vineri: 09:00 - 18:00",
+      "social": "Rețele sociale"
+    }
+  },
+  "Partners": {
+    "badge": "Parteneri",
+    "title": "Partenerii Festivalului",
+    "subtitle": "Mulțumim partenerilor noștri care fac posibil acest eveniment",
+    "backToHome": "Înapoi la pagina principală",
+    "categories": {
+      "patronage": "Sub egida",
+      "generalPartner": "Partener General",
+      "partners": "Parteneri",
+      "generalMediaPartner": "Partener Media General",
+      "mediaPartners": "Parteneri Media"
+    },
+    "cta": {
+      "title": "Devino Partener",
+      "description": "Vrei să faci parte din cel mai mare festival din Moldova? Contactează-ne pentru oportunități de parteneriat.",
+      "button": "Scrie-ne",
+      "callUs": "Sună-ne"
+    },
+    "thankYou": "Mulțumim tuturor partenerilor pentru susținerea acordată!"
+  },
+  "Program": {
+    "badge": "Program Festival",
+    "title": "Programul pe zile",
+    "subtitle": "Descoperă ce artiști vor urca pe scenă în fiecare zi a festivalului",
+    "day": "Ziua",
+    "headliner": "Headliner",
+    "backToHome": "Înapoi la pagina principală",
+    "stats": {
+      "days": "Zile",
+      "performances": "Spectacole",
+      "stages": "Scene",
+      "hours": "Ore de muzică"
+    },
+    "stages": {
+      "main": "Scena Principală",
+      "stage2": "Scena 2",
+      "electronic": "Scena Electronică"
+    },
+    "ctaTitle": "Nu rata niciun moment!",
+    "ctaSubtitle": "Cumpără biletele acum și bucură-te de 3 zile de muzică live",
+    "ctaButton": "Cumpără bilete"
+  },
+  "Perform": {
+    "badge": "Colaborare",
+    "title": "Performează la Festival",
+    "subtitle": "Alătură-te celor peste 150 de artiști care au urcat pe scenele Festivalului Lupilor",
+    "backToHome": "Înapoi la pagina principală",
+    "stats": {
+      "artists": "Artiști pe scenă",
+      "stages": "Scene",
+      "audience": "Spectatori",
+      "years": "Ani de festival"
+    },
+    "headliners": {
+      "title": "Au cântat la noi",
+      "subtitle": "Alături de headlineri internaționali și artiști locali"
+    },
+    "benefits": {
+      "title": "De ce să cânți la Festivalul Lupilor?",
+      "subtitle": "Beneficii pentru artiști",
+      "stage": {
+        "title": "Scene profesionale",
+        "description": "Echipament de sunet și lumini de top, sunet de calitate"
+      },
+      "audience": {
+        "title": "Audiență mare",
+        "description": "Peste 30.000 de spectatori pe parcursul celor 3 zile"
+      },
+      "promotion": {
+        "title": "Promovare",
+        "description": "Acoperire media și promovare pe rețelele sociale"
+      }
+    },
+    "contact": {
+      "title": "Contact direct"
+    },
+    "form": {
+      "title": "Trimite cererea de participare",
+      "subtitle": "Completează formularul și te vom contacta în cel mai scurt timp",
+      "sections": {
+        "artistInfo": "Informații despre artist/trupă",
+        "contactInfo": "Date de contact",
+        "links": "Link-uri și media",
+        "additional": "Informații suplimentare"
+      },
+      "artistName": "Numele artistului/trupei",
+      "artistNamePlaceholder": "Ex: Zdob și Zdub",
+      "genre": "Genul muzical",
+      "genrePlaceholder": "Selectează genul",
+      "genres": {
+        "folk-rock": "Folk-Rock",
+        "balkan": "Muzică Balcanică",
+        "ethno": "Etno",
+        "alternative": "Alternative",
+        "electronic": "Electronică",
+        "rock": "Rock",
+        "pop": "Pop",
+        "jazz": "Jazz",
+        "other": "Altul"
+      },
+      "country": "Țara",
+      "countryPlaceholder": "Ex: Moldova",
+      "members": "Număr de membri",
+      "membersPlaceholder": "Ex: 5",
+      "bio": "Descriere scurtă",
+      "bioPlaceholder": "Povestește-ne despre trupă, stilul vostru și experiența pe scenă...",
+      "contactName": "Persoana de contact",
+      "contactNamePlaceholder": "Nume și prenume",
+      "email": "Email",
+      "emailPlaceholder": "email@exemplu.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "+373 ...",
+      "website": "Website oficial",
+      "musicLink": "Link către muzică",
+      "musicLinkPlaceholder": "https://spotify.com/... sau https://soundcloud.com/...",
+      "musicLinkHint": "Spotify, SoundCloud, Bandcamp sau alt serviciu de streaming",
+      "message": "Mesaj suplimentar",
+      "messagePlaceholder": "Orice informații suplimentare pe care dorești să le menționezi...",
+      "terms": "Sunt de acord ca datele mele să fie procesate în scopul colaborării cu Festivalul Lupilor",
+      "submit": "Trimite cererea",
+      "submitting": "Se trimite..."
+    },
+    "success": {
+      "title": "Cererea a fost trimisă!",
+      "description": "Mulțumim pentru interes! Echipa noastră va analiza cererea și te va contacta în curând.",
+      "backToHome": "Înapoi la pagina principală",
+      "viewLineup": "Vezi Line-up"
+    },
+    "faq": {
+      "title": "Întrebări frecvente",
+      "subtitle": "Răspunsuri pentru artiști",
+      "q1": "Când este termenul limită pentru aplicații?",
+      "a1": "Acceptăm aplicații pe tot parcursul anului, dar recomandăm să aplicați cu cel puțin 3 luni înainte de festival pentru a fi luați în considerare.",
+      "q2": "Ce echipament trebuie să aducem?",
+      "a2": "Asigurăm sistem de sunet complet, lumini și backline de bază. Instrumentele personale și efectele trebuie aduse de artiști.",
+      "q3": "Există posibilitatea de a cânta pro-bono?",
+      "a3": "Da, avem și scene pentru artiști emergenți. Contactați-ne pentru detalii despre programul de dezvoltare a talentelor.",
+      "q4": "Cum se face selecția artiștilor?",
+      "a4": "Echipa noastră de booking analizează fiecare aplicație. Criteriile includ: calitatea muzicală, potrivirea cu atmosfera festivalului și experiența scenică."
+    }
+  },
+  "HowToGet": {
+    "badge": "Locație",
+    "title": "Cum ajungi la festival",
+    "subtitle": "Festivalul se desfășoară în rezervația natural-culturală Orheiul Vechi, la doar 50 km de Chișinău",
+    "backToHome": "Înapoi la pagina principală",
+    "mapTitle": "Hartă Festival",
+    "getDirections": "În drum",
+    "location": {
+      "title": "Locația festivalului",
+      "description": "Orheiul Vechi - un loc unic în Moldova",
+      "addressLabel": "Adresa",
+      "distanceLabel": "Distanța de la Chișinău",
+      "distanceValue": "50 km (~1 oră cu mașina)"
+    },
+    "transport": {
+      "title": "Cum să ajungi",
+      "car": {
+        "title": "Cu mașina",
+        "description": "Parcare gratuită disponibilă"
+      },
+      "bus": {
+        "title": "Cu autobusul",
+        "description": "Autobuze speciale din Chișinău"
+      }
+    },
+    "parking": {
+      "title": "Parcare gratuită",
+      "description": "Avem o parcare mare și gratuită pentru toți participanții la festival."
+    },
+    "tips": {
+      "title": "Sfaturi pentru călătorie",
+      "subtitle": "Pentru a ajunge confortabil și fără griji",
+      "tip1": {
+        "title": "Pleacă devreme",
+        "description": "În zilele festivalului traficul poate fi aglomerat. Recomandăm să pleci cu 2-3 ore înainte."
+      },
+      "tip2": {
+        "title": "Verifică GPS-ul",
+        "description": "Salvează locația în avans și verifică traseul înainte de plecare."
+      },
+      "tip3": {
+        "title": "Ia apă și gustări",
+        "description": "Drumul poate dura mai mult în zilele de vârf. Asigură-te că ai provizii."
+      },
+      "tip4": {
+        "title": "Încarcă telefonul",
+        "description": "Vei avea nevoie de GPS și de biletul electronic. Asigură-te că ai baterie suficientă."
+      }
+    },
+    "cta": {
+      "title": "Ne vedem la festival!",
+      "subtitle": "Cumpără biletele acum și pregătește-te pentru 3 zile de neuitat",
+      "buyTickets": "Cumpără bilete"
+    }
+  },
+  "Activities": {
+    "badge": "Activități",
+    "title": "Activități la Festival",
+    "subtitle": "Descoperă toate experiențele care te așteaptă pe parcursul celor 3 zile de festival",
+    "backToHome": "Înapoi la pagina principală",
+    "featured": "Recomandat",
+    "noActivities": "Activitățile vor fi disponibile în curând",
+    "stats": {
+      "activities": "Activități",
+      "categories": "Categorii",
+      "highlights": "Recomandate",
+      "days": "Zile"
+    },
+    "categories": {
+      "entertainment": "Divertisment",
+      "workshops": "Ateliere",
+      "relaxation": "Relaxare",
+      "food": "Mâncare & Băuturi",
+      "family": "Familie"
+    },
+    "highlights": {
+      "music": "Scene",
+      "camping": "Locuri camping",
+      "food": "Standuri de mâncare",
+      "family": "Prietenos cu familiile"
+    },
+    "activities": {
+      "mainStage": {
+        "title": "Scena Principală",
+        "description": "Concerte live cu cei mai populari artiști din țară și din străinătate"
+      },
+      "electronicZone": {
+        "title": "Zona Electronică",
+        "description": "DJ seturi și muzică electronică toată noaptea"
+      },
+      "artInstallations": {
+        "title": "Instalații Artistice",
+        "description": "Opere de artă interactive și fotogenice răspândite în tot festivalul"
+      },
+      "crafts": {
+        "title": "Târg de Meșteșuguri",
+        "description": "Produse handmade, suveniruri unice și meșteșugari locali"
+      },
+      "musicWorkshop": {
+        "title": "Atelier de Muzică",
+        "description": "Învață instrumente tradiționale și descoperă muzica folk"
+      },
+      "photoZone": {
+        "title": "Zone Foto",
+        "description": "Locații speciale pentru fotografii memorabile"
+      },
+      "camping": {
+        "title": "Camping",
+        "description": "Zonă de camping confortabilă cu dușuri, WC-uri și stații de încărcare"
+      },
+      "natureWalks": {
+        "title": "Plimbări în Natură",
+        "description": "Explorează frumusețea naturală a Orheiului Vechi"
+      },
+      "chillZone": {
+        "title": "Zonă de Relaxare",
+        "description": "Hamace, perne și zone umbrite pentru odihnă"
+      },
+      "foodCourt": {
+        "title": "Food Court",
+        "description": "Varietate mare de bucătării: moldovenească, balcanică, street food și opțiuni vegane"
+      },
+      "localCuisine": {
+        "title": "Bucătărie Tradițională",
+        "description": "Gustă mâncarea autentică moldovenească preparată pe loc"
+      },
+      "barZone": {
+        "title": "Zona de Bar",
+        "description": "Băuturi răcoritoare, cocktailuri și vinuri locale"
+      },
+      "kidsZone": {
+        "title": "Zona Copiilor",
+        "description": "Activități supervizate pentru cei mici cu animatori profesioniști"
+      },
+      "familyActivities": {
+        "title": "Activități pentru Familie",
+        "description": "Jocuri și activități pentru toate vârstele"
+      },
+      "creativeWorkshops": {
+        "title": "Ateliere Creative",
+        "description": "Pictură, meșteșuguri și activități artistice pentru copii"
+      }
+    },
+    "mapTitle": "Harta Festivalului",
+    "mapSubtitle": "Vezi unde sunt amplasate toate zonele și activitățile",
+    "mapPlaceholder": "Harta interactivă va fi disponibilă în curând",
+    "viewLocation": "Vezi locația",
+    "app": {
+      "badge": "Aplicație mobilă",
+      "title": "Nu rata nicio activitate!",
+      "subtitle": "Descarcă aplicația oficială și primește notificări push la fiecare început de activitate. Fii mereu la curent cu tot ce se întâmplă la festival.",
+      "features": {
+        "notifications": "Push-notificări la startul activităților",
+        "schedule": "Program personalizat al activităților",
+        "map": "Hartă interactivă cu toate zonele"
+      },
+      "notification": {
+        "title": "Workshop începe!",
+        "message": "Atelierul de meșteșuguri începe în 10 min"
+      }
+    },
+    "ctaTitle": "Pregătit pentru aventură?",
+    "ctaSubtitle": "Cumpără biletele acum și bucură-te de toate activitățile festivalului",
+    "ctaButton": "Cumpără bilete"
+  },
+  "Rules": {
+    "badge": "Regulamentul festivalului",
+    "pageTitle": "Regulamentul festivalului",
+    "pageSubtitle": "Consultați regulile pentru o ședere sigură și confortabilă la festival",
+    "backToHome": "Înapoi la pagina principală",
+    "searchPlaceholder": "Căutare în regulament (alcool, mâncare, copii...)",
+    "quickTopics": "Subiecte populare",
+    "foundSections": "Secțiuni găsite: {count}",
+    "tableOfContents": "Cuprins",
+    "noResults": "Nu s-au găsit rezultate pentru căutarea dvs.",
+    "clearSearch": "Șterge căutarea",
+    "importantTitle": "Informații importante",
+    "importantText": "Încălcarea regulilor festivalului poate duce la evacuarea de pe teritoriu fără returnarea costului biletului. Vă rugăm să respectați regulile pentru siguranța dvs. și confortul tuturor participanților.",
+    "ctaTitle": "Pregătit pentru festival?",
+    "ctaDescription": "Cumpărați biletele și alăturați-vă nouă pentru 3 zile de neuitat de muzică și distracție",
+    "ctaBuyTickets": "Cumpără bilete",
+    "ctaContacts": "Contactează-ne"
+  },
+  "FAQ": {
+    "badge": "Întrebări frecvente",
+    "pageTitle": "Întrebări frecvente",
+    "pageSubtitle": "Găsește răspunsuri la cele mai comune întrebări despre Festivalul Lupilor",
+    "backToHome": "Înapoi la pagina principală",
+    "searchPlaceholder": "Caută întrebări (bilete, camping, copii...)",
+    "filterByCategory": "Filtrează după categorie",
+    "clearFilter": "Șterge filtrul",
+    "clearSearch": "Șterge căutarea",
+    "foundQuestions": "Întrebări găsite: {count}",
+    "noResults": "Nu am găsit nicio întrebare care să corespundă căutării tale",
+    "stillHaveQuestions": "Mai ai întrebări?",
+    "stillHaveQuestionsDescription": "Dacă nu ai găsit răspunsul pe care îl cauți, nu ezita să ne contactezi",
+    "contactUs": "Contactează-ne",
+    "viewRules": "Vezi regulamentul",
+    "ctaTitle": "Pregătit pentru festival?",
+    "ctaDescription": "Cumpără biletele acum și alătură-te nouă pentru 3 zile de neuitat",
+    "ctaBuyTickets": "Cumpără bilete",
+    "categories": {
+      "tickets": {
+        "title": "Bilete",
+        "q1": "De unde pot cumpăra bilete?",
+        "a1": "Biletele pot fi achiziționate online de pe site-ul oficial al festivalului sau de la punctele de vânzare partenere. Recomandăm achiziționarea online pentru a evita cozile.",
+        "q2": "Ce tipuri de bilete sunt disponibile?",
+        "a2": "Oferim bilete pentru o zi, abonamente pentru toate cele 3 zile, bilete VIP cu acces în zonele exclusive și pachete cu camping inclus.",
+        "q3": "Pot returna sau schimba biletul?",
+        "a3": "Biletele nu pot fi returnate, dar pot fi transferate altei persoane. Contactează-ne pentru detalii despre procedura de transfer.",
+        "q4": "Ce fac dacă pierd biletul sau brățara?",
+        "a4": "Prezintă-te la punctul de informații cu un act de identitate și dovada achiziției pentru a primi o brățară de înlocuire.",
+        "q5": "Copiii au nevoie de bilet?",
+        "a5": "Copiii sub 7 ani au intrare gratuită. De la 7 ani este necesar un bilet. Copiii sub 14 ani trebuie însoțiți de un adult."
+      },
+      "camping": {
+        "title": "Camping",
+        "q1": "Este inclus camping-ul în prețul biletului?",
+        "a1": "Camping-ul standard este inclus în biletele de 3 zile. Pentru camping premium sau family camping, este necesar un bilet separat.",
+        "q2": "Ce facilități sunt în zona de camping?",
+        "a2": "Zona de camping dispune de dușuri, toalete, stații de încărcare pentru telefoane, apă potabilă și pază 24/7.",
+        "q3": "Pot veni cu rulota sau autorulota?",
+        "a3": "Da, există o zonă dedicată pentru rulote și autorulote. Este necesar un bilet special pentru această zonă.",
+        "q4": "Când pot instala cortul?",
+        "a4": "Accesul în camping începe cu o zi înainte de festival, de la ora 18:00. Cortul trebuie demontat până la ora 12:00 a zilei de după festival.",
+        "q5": "Sunt permise focurile în camping?",
+        "a5": "Nu, focurile deschise sunt strict interzise în camping și pe teritoriul festivalului. Sunt disponibile zone de grătar amenajate."
+      },
+      "transport": {
+        "title": "Transport",
+        "q1": "Cum ajung la festival cu mașina?",
+        "a1": "Festivalul se află în Orheiul Vechi, la 50 km de Chișinău. Urmează indicatoarele spre festival. Parcarea este gratuită.",
+        "q2": "Există transport organizat din Chișinău?",
+        "a2": "Da, în zilele festivalului vor circula autobuze speciale din Chișinău. Programul și locațiile de plecare vor fi anunțate pe site.",
+        "q3": "Pot pleca și reveni în aceeași zi?",
+        "a3": "Da, cu brățara validă poți ieși și reintra pe teritoriul festivalului. Ultimul autobuz spre Chișinău pleacă la miezul nopții.",
+        "q4": "Este disponibilă parcarea peste noapte?",
+        "a4": "Da, parcarea este disponibilă 24/7 pe toată durata festivalului și este gratuită."
+      },
+      "children": {
+        "title": "Copii",
+        "q1": "Este festivalul potrivit pentru copii?",
+        "a1": "Da! Avem o zonă dedicată familiilor cu activități pentru copii, ateliere creative și animatori profesioniști.",
+        "q2": "Ce documente sunt necesare pentru copii?",
+        "a2": "Este necesar un act de identitate pentru adult și certificatul de naștere al copilului (original sau copie).",
+        "q3": "Există zone liniștite pentru familii?",
+        "a3": "Da, Family Camping este o zonă de liniște între orele 23:00 - 07:00, ideală pentru familii cu copii mici.",
+        "q4": "Pot aduce cărucioare pentru copii?",
+        "a4": "Da, cărucioarele sunt permise, dar terenul poate fi accidentat în unele zone. Recomandăm cărucior cu roți mari."
+      },
+      "food": {
+        "title": "Mâncare și băuturi",
+        "q1": "Pot aduce propria mâncare și băuturi?",
+        "a1": "Nu este permisă introducerea de mâncare și băuturi, cu excepția apei plate în recipiente de plastic. Excepții: mâncare pentru copii și diete medicale.",
+        "q2": "Ce opțiuni de mâncare sunt disponibile?",
+        "a2": "Food court-ul nostru oferă bucătărie moldovenească tradițională, balcanică, street food internațional și opțiuni vegetariene/vegane.",
+        "q3": "Sunt acceptate plățile cu cardul?",
+        "a3": "Da, majoritatea punctelor de vânzare acceptă plata cu cardul. Recomandăm totuși să ai și numerar pentru unele zone.",
+        "q4": "Există opțiuni pentru alergii alimentare?",
+        "a4": "Da, standurile noastre de mâncare afișează alergenii. Personal este disponibil să ofere informații despre ingrediente."
+      },
+      "safety": {
+        "title": "Siguranță",
+        "q1": "Există servicii medicale pe loc?",
+        "a1": "Da, echipe medicale și puncte de prim ajutor sunt disponibile 24/7 pe toată durata festivalului.",
+        "q2": "Ce obiecte sunt interzise?",
+        "a2": "Sunt interzise: arme, substanțe ilegale, artificii, drone, sticlărie, obiecte tăioase, spray-uri și băuturi alcoolice.",
+        "q3": "Cum funcționează controlul de securitate?",
+        "a3": "La intrare, toate persoanele și bagajele sunt verificate de echipa de securitate. Vă rugăm să aveți răbdare și să cooperați.",
+        "q4": "Ce fac în caz de urgență?",
+        "a4": "Contactează cel mai apropiat membru al echipei de securitate sau prezintă-te la punctul medical/informații."
+      },
+      "location": {
+        "title": "Locație",
+        "q1": "Unde are loc festivalul?",
+        "a1": "Festivalul se desfășoară în rezervația naturală Orheiul Vechi, în satul Trebujeni, la aproximativ 50 km de Chișinău.",
+        "q2": "Ce condiții meteo să mă aștept?",
+        "a2": "În august, temperaturile sunt de obicei între 20-35°C ziua. Serile pot fi răcoroase. Recomandăm și haine de ploaie.",
+        "q3": "Există loc de cazare în apropiere?",
+        "a3": "Pe lângă camping, există pensiuni și hoteluri în zonă. Recomandăm rezervarea din timp în perioada festivalului."
+      },
+      "app": {
+        "title": "Aplicație",
+        "q1": "Există o aplicație oficială a festivalului?",
+        "a1": "Da! Aplicația Festivalul Lupilor este disponibilă gratuit pe iOS și Android și include programul complet, hartă și notificări.",
+        "q2": "Ce funcții are aplicația?",
+        "a2": "Program personalizat, hartă interactivă, notificări push pentru artiștii favoriți, informații despre standuri și activități.",
+        "q3": "Funcționează aplicația offline?",
+        "a3": "Da, programul și harta pot fi accesate offline după ce le descarci prima dată în aplicație."
+      },
+      "general": {
+        "title": "Generale",
+        "q1": "Care sunt datele festivalului?",
+        "a1": "Festivalul Lupilor 2026 va avea loc în perioada 7-9 august 2026.",
+        "q2": "Pot face fotografii și filmări?",
+        "a2": "Da, fotografiile și filmările pentru uz personal sunt permise. Pentru presă sau scop comercial, este necesar acreditare.",
+        "q3": "Există WiFi pe teritoriul festivalului?",
+        "a3": "WiFi gratuit este disponibil în zonele principale, dar semnalul poate fi limitat în zonele aglomerate.",
+        "q4": "Sunt permise animalele de companie?",
+        "a4": "Din motive de siguranță și confort, animalele de companie nu sunt permise pe teritoriul festivalului."
+      }
+    }
+  },
+  "TicketsPage": {
+    "badge": "Bilete Festival",
+    "pageTitle": "Cumpără Bilete",
+    "pageSubtitle": "Alege tipul de bilet potrivit pentru tine și bucură-te de cele 3 zile de festival în Orheiul Vechi",
+    "backToHome": "Înapoi la pagina principală",
+    "paymentTitle": "Plată Securizată",
+    "payment": {
+      "secure": "Tranzacții securizate SSL",
+      "cards": "Acceptăm Visa, Mastercard",
+      "email": "Biletele se trimit pe email"
+    },
+    "viewFaq": "Întrebări frecvente",
+    "contactUs": "Contactează-ne"
+  },
+  "Cart": {
+    "title": "Coșul tău",
+    "description": "Verifică biletele selectate",
+    "empty": "Coșul tău este gol",
+    "viewCart": "Vezi coșul",
+    "totalItems": "Total bilete",
+    "total": "Total",
+    "clearCart": "Golește",
+    "checkout": "Continuă la plată",
+    "remove": "Elimină",
+    "added": "Adăugat în coș"
+  },
+  "Checkout": {
+    "title": "Finalizare comandă",
+    "subtitle": "Completează datele pentru a primi biletele",
+    "backToTickets": "Înapoi la bilete",
+    "customerInfo": {
+      "title": "Date de contact",
+      "subtitle": "Biletele vor fi trimise la adresa de email indicată",
+      "firstName": "Prenume",
+      "firstNamePlaceholder": "Introdu prenumele",
+      "lastName": "Nume",
+      "lastNamePlaceholder": "Introdu numele",
+      "email": "Email",
+      "emailPlaceholder": "exemplu@email.com",
+      "emailHint": "Biletele vor fi trimise la această adresă",
+      "phone": "Telefon",
+      "phonePlaceholder": "+373 ..."
+    },
+    "additionalInfo": {
+      "title": "Informații suplimentare",
+      "subtitle": "Câmpuri opționale",
+      "hearAbout": "De unde ați aflat despre festival?",
+      "hearAboutPlaceholder": "Selectați o opțiune",
+      "sources": {
+        "social": "Rețele sociale",
+        "friends": "De la prieteni/cunoștințe",
+        "search": "Motoare de căutare (Google)",
+        "ads": "Publicitate",
+        "media": "Mass-media / Presă",
+        "other": "Altele"
+      },
+      "comment": "Comentariu la comandă",
+      "commentPlaceholder": "Dorințe speciale sau întrebări..."
+    },
+    "payment": {
+      "title": "Metodă de plată",
+      "subtitle": "Alege metoda de plată preferată"
+    },
+    "paymentMethods": {
+      "card": "Card bancar",
+      "cardDesc": "Visa, Mastercard, Maestro",
+      "mobile": "Plată mobilă",
+      "mobileDesc": "Apple Pay, Google Pay",
+      "bank": "Transfer bancar",
+      "bankDesc": "Transfer direct în cont"
+    },
+    "terms": {
+      "accept": "Accept",
+      "termsLink": "Termenii și condițiile",
+      "and": "și",
+      "privacyLink": "Politica de confidențialitate",
+      "marketing": "Doresc să primesc noutăți și oferte speciale de la festival"
+    },
+    "orderSummary": {
+      "title": "Biletele tale",
+      "promoCode": "Cod promoțional",
+      "promoPlaceholder": "Introdu codul",
+      "apply": "Aplică",
+      "promoError": "Cod promoțional invalid",
+      "discount": "Reducere",
+      "subtotal": "Subtotal",
+      "serviceFee": "Taxă de serviciu",
+      "total": "Total de plată"
+    },
+    "errors": {
+      "required": "Câmp obligatoriu",
+      "invalidEmail": "Format email invalid",
+      "invalidPhone": "Format telefon invalid",
+      "acceptTerms": "Trebuie să accepți termenii"
+    },
+    "placeOrder": "Plătește comanda",
+    "processing": "Se procesează...",
+    "security": {
+      "secure": "Conexiune securizată",
+      "encrypted": "Date criptate"
+    },
+    "guarantee": {
+      "title": "Garanție de rambursare",
+      "description": "Dacă festivalul este anulat, vom returna costul integral al biletelor"
+    }
+  },
+  "CheckoutSuccess": {
+    "title": "Comandă finalizată cu succes!",
+    "subtitle": "Mulțumim pentru achiziție! Biletele au fost trimise pe email.",
+    "orderNumber": "Număr comandă",
+    "eventDate": "Data evenimentului",
+    "eventLocation": "Locația",
+    "confirmationEmail": "Confirmare",
+    "emailSent": "Email-ul cu biletele a fost trimis",
+    "downloadTickets": "Descarcă biletele",
+    "shareWithFriends": "Distribuie",
+    "whatsNext": {
+      "title": "Ce urmează?",
+      "step1": "Verifică email-ul — acolo vei găsi biletele electronice în format PDF",
+      "step2": "Salvează biletele în telefon sau printează-le",
+      "step3": "Vino la festival și arată biletul la intrare"
+    },
+    "backToHome": "Acasă",
+    "viewProgram": "Vezi programul"
+  },
+  "Footer": {
+    "description": "Cel mai mare festival de muzică din Moldova. Trei zile de muzică, artă și experiențe de neuitat în locația pitorească Saharna.",
+    "navTitle": "Navigare",
+    "nav": {
+      "home": "Acasă",
+      "lineup": "Line-up",
+      "program": "Program",
+      "gallery": "Galerie",
+      "news": "Noutăți"
+    },
+    "infoTitle": "Informații",
+    "info": {
+      "about": "Despre festival",
+      "rules": "Reguli",
+      "faq": "Întrebări frecvente",
+      "howToGet": "Cum ajungi",
+      "contacts": "Contacte"
+    },
+    "contactTitle": "Contact",
+    "partners": {
+      "ourPartners": "Partenerii noștri",
+      "becomePartner": "Devino partener",
+      "perform": "Performează"
+    },
+    "buyTickets": "Cumpără bilete",
+    "rights": "Toate drepturile rezervate.",
+    "privacy": "Politica de confidențialitate",
+    "terms": "Termeni și condiții"
+  }
+}
