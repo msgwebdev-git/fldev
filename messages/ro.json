@@ -57,11 +57,89 @@
     "remaining": "Au mai rămas {count} bilete",
     "buyNow": "Cumpără acum",
     "add": "Adaugă",
+    "addToCart": "Adaugă în coș",
+    "selectOption": "Alegeți opțiunile necesare (incluse în preț):",
     "close": "Închide",
     "included": "Ce include",
     "price": "Preț",
     "aboutTicket": "Despre bilet",
-    "securePayment": "Plată securizată prin card bancar. Biletele vor fi trimise pe email."
+    "securePayment": "Plată securizată prin card bancar. Biletele vor fi trimise pe email.",
+    "tickets": {
+      "dayPass": {
+        "name": "Day Pass",
+        "description": "Acces pe teritoriul festivalului fără camping - 1 zi",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului fără camping",
+          "feature2": "1 zi de festival la alegere",
+          "feature3": "1 adult",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      },
+      "weekendPass": {
+        "name": "Weekend Pass",
+        "description": "Acces pe teritoriul festivalului fără camping - 2 zile",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului fără camping",
+          "feature2": "2 zile de festival",
+          "feature3": "1 adult",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      },
+      "familyDayPass": {
+        "name": "Family Day Pass",
+        "description": "Bilet de familie pentru 1 zi de festival",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului fără camping",
+          "feature2": "1 zi de festival la alegere",
+          "feature3": "2 adulți + max 2 copii de la 8 până la 14 ani",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      },
+      "familyWeekendPass": {
+        "name": "Family Weekend Pass",
+        "description": "Bilet de familie pentru 2 zile de festival",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului fără camping",
+          "feature2": "2 zile de festival",
+          "feature3": "2 adulți + max 2 copii de la 8 până la 14 ani",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      },
+      "campingPass": {
+        "name": "Camping Pass",
+        "description": "Acces la festival cu cazare în camping - 3 zile",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului și cazare în camping",
+          "feature2": "3 zile de festival",
+          "feature3": "1 adult",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      },
+      "familyCampingPass": {
+        "name": "Family Camping Pass",
+        "description": "Bilet de familie cu camping pentru 3 zile",
+        "features": {
+          "feature1": "Acces pe teritoriul festivalului și cazare în camping",
+          "feature2": "3 zile de festival",
+          "feature3": "2 adulți + max 2 copii de la 8 până la 14 ani",
+          "feature4": "Copiii până la 7 ani au acces gratuit"
+        }
+      }
+    },
+    "options": {
+      "tentSpot": {
+        "name": "Tent Spot",
+        "description": "Amplasarea cortului în zona fără vehicule"
+      },
+      "parkingSpot": {
+        "name": "Parking Spot",
+        "description": "Parcare pentru 1 vehicul în zona de camping"
+      },
+      "camperSpot": {
+        "name": "Camper / RV Spot",
+        "description": "Parcare pentru camper, rulotă sau vehicul cu amplasarea cortului lângă"
+      }
+    }
   },
   "Gallery": {
     "badge": "Fotogalerie",
@@ -666,9 +744,14 @@
     "totalItems": "Total bilete",
     "total": "Total",
     "clearCart": "Golește",
-    "checkout": "Continuă la plată",
+    "checkout": "Plătește",
     "remove": "Elimină",
-    "added": "Adăugat în coș"
+    "added": "Adăugat în coș",
+    "ticket": "bilet",
+    "tickets": "bilete",
+    "yourCart": "Coșul tău",
+    "yourTickets": "Biletele tale",
+    "continueShopping": "Continuă cumpărăturile"
   },
   "Checkout": {
     "title": "Finalizare comandă",
@@ -737,7 +820,18 @@
       "required": "Câmp obligatoriu",
       "invalidEmail": "Format email invalid",
       "invalidPhone": "Format telefon invalid",
-      "acceptTerms": "Trebuie să accepți termenii"
+      "acceptTerms": "Trebuie să accepți termenii",
+      "orderFailed": "Nu s-a putut crea comanda. Vă rugăm să încercați din nou."
+    },
+    "failed": {
+      "title": "Plata nu a reușit",
+      "subtitle": "Din păcate, plata nu a fost finalizată",
+      "orderNumber": "Număr comandă",
+      "reason": "Motiv",
+      "description": "Încercați din nou sau alegeți altă metodă de plată. Dacă problema persistă, contactați echipa de suport.",
+      "tryAgain": "Încearcă din nou",
+      "backHome": "Pagina principală",
+      "contactSupport": "Contactează suportul"
     },
     "placeOrder": "Plătește comanda",
     "processing": "Se procesează...",
@@ -758,8 +852,13 @@
     "eventLocation": "Locația",
     "confirmationEmail": "Confirmare",
     "emailSent": "Email-ul cu biletele a fost trimis",
+    "downloadTicket": "Descarcă biletul",
     "downloadTickets": "Descarcă biletele",
-    "shareWithFriends": "Distribuie",
+    "downloading": "Se descarcă...",
+    "loading": "Se încarcă...",
+    "ticketsNotReady": "Biletele se pregătesc...",
+    "downloadError": "Nu s-au putut descărca biletele. Vă rugăm să încercați din nou.",
+    "ticketsCountLabel": "{count, plural, one {# bilet} few {# bilete} other {# bilete}} în arhivă",
     "whatsNext": {
       "title": "Ce urmează?",
       "step1": "Verifică email-ul — acolo vei găsi biletele electronice în format PDF",

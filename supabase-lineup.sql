@@ -34,17 +34,17 @@ CREATE POLICY "Artists can be deleted by authenticated users" ON artists
   FOR DELETE USING (true);
 
 -- Добавим bucket для изображений артистов (если его еще нет)
--- INSERT INTO storage.buckets (id, name, public) VALUES ('artists', 'artists', true);
+INSERT INTO storage.buckets (id, name, public) VALUES ('artists', 'artists', true);
 
 -- Политики для storage bucket artists
--- CREATE POLICY "Artist images are publicly accessible" ON storage.objects
---   FOR SELECT USING (bucket_id = 'artists');
+CREATE POLICY "Artist images are publicly accessible" ON storage.objects
+FOR SELECT USING (bucket_id = 'artists');
 
--- CREATE POLICY "Anyone can upload artist images" ON storage.objects
---   FOR INSERT WITH CHECK (bucket_id = 'artists');
+CREATE POLICY "Anyone can upload artist images" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'artists');
 
--- CREATE POLICY "Anyone can update artist images" ON storage.objects
---   FOR UPDATE USING (bucket_id = 'artists');
+CREATE POLICY "Anyone can update artist images" ON storage.objects
+FOR UPDATE USING (bucket_id = 'artists');
 
--- CREATE POLICY "Anyone can delete artist images" ON storage.objects
---   FOR DELETE USING (bucket_id = 'artists');
+CREATE POLICY "Anyone can delete artist images" ON storage.objects
+FOR DELETE USING (bucket_id = 'artists');

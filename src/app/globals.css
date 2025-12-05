@@ -120,6 +120,16 @@
   body {
     @apply bg-background text-foreground;
   }
+
+}
+
+/* Autofill - убираем синюю заливку браузера */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 600000s 0s, color 600000s 0s !important;
+  -webkit-text-fill-color: inherit !important;
 }
 
 /* Hide scrollbar but keep functionality */

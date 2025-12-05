@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
   CheckCircle2,
@@ -12,7 +13,7 @@ import {
   MapPin,
   Ticket,
   Home,
-  Share2,
+  Loader2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -24,14 +25,76 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { api } from "@/lib/api";
+
+interface TicketInfo {
+  ticketCode: string;
+  pdfUrl: string | null;
+}
 
 export default function CheckoutSuccessPage() {
   const t = useTranslations("CheckoutSuccess");
+  const searchParams = useSearchParams();
+  const [tickets, setTickets] = React.useState<TicketInfo[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isDownloading, setIsDownloading] = React.useState(false);
 
-  // Generate random order number
-  const orderNumber = React.useMemo(() => {
-    return `FL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+  // Get order number from URL or generate fallback
+  const orderNumber = searchParams.get("order") || React.useMemo(() => {
+    return `FL-${Date.now().toString(36).toUpperCase()}`;
   }, []);
+
+  const readyTickets = tickets.filter(t => t.pdfUrl);
+  const ticketsReady = readyTickets.length > 0;
+
+  // Check tickets status on mount and poll if not ready
+  React.useEffect(() => {
+    if (!orderNumber) return;
+
+    let interval: NodeJS.Timeout | null = null;
+
+    const checkTickets = async () => {
+      try {
+        const response = await api.getOrderTickets(orderNumber);
+        if (response.success && response.data?.tickets) {
+          const ticketsList = response.data.tickets;
+          setTickets(ticketsList);
+
+          // Stop polling when all tickets are ready
+          const allReady = ticketsList.length > 0 && ticketsList.every(t => t.pdfUrl);
+          if (allReady && interval) {
+            clearInterval(interval);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check tickets:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Initial check
+    checkTickets();
+
+    // Poll every 2 seconds until tickets are ready
+    interval = setInterval(checkTickets, 2000);
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [orderNumber]);
+
+  const handleDownloadTickets = () => {
+    if (!orderNumber || isDownloading || !ticketsReady) return;
+
+    setIsDownloading(true);
+
+    // Always download through server (handles both single PDF and ZIP)
+    const downloadUrl = api.getTicketsDownloadUrl(orderNumber);
+    window.location.href = downloadUrl;
+
+    setTimeout(() => setIsDownloading(false), 2000);
+  };
 
   return (
     <main className="min-h-screen bg-muted/30 pt-24 pb-20">
@@ -140,15 +203,34 @@ export default function CheckoutSuccessPage() {
 
               <Separator />
 
-              {/* Action Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Button variant="outline" className="gap-2">
-                  <Download className="h-4 w-4" />
-                  {t("downloadTickets")}
-                </Button>
-                <Button variant="outline" className="gap-2">
-                  <Share2 className="h-4 w-4" />
-                  {t("shareWithFriends")}
+              {/* Download Button */}
+              <div className="space-y-3">
+                {tickets.length > 1 && ticketsReady && (
+                  <p className="text-sm text-muted-foreground text-center">
+                    {t("ticketsCountLabel", { count: readyTickets.length })}
+                  </p>
+                )}
+
+                <Button
+                  size="lg"
+                  className="w-full gap-2 text-lg py-6"
+                  onClick={handleDownloadTickets}
+                  disabled={isLoading || isDownloading || !ticketsReady}
+                >
+                  {isLoading || isDownloading ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <Download className="h-5 w-5" />
+                  )}
+                  {isLoading
+                    ? t("loading")
+                    : isDownloading
+                    ? t("downloading")
+                    : !ticketsReady
+                    ? t("ticketsNotReady")
+                    : tickets.length === 1
+                    ? t("downloadTicket")
+                    : t("downloadTickets")}
                 </Button>
               </div>
             </CardContent>

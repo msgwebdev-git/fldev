@@ -14,7 +14,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -42,7 +41,7 @@ const PhoneInput = React.forwardRef<
       className={cn("flex", className)}
       flagComponent={FlagComponent}
       countrySelectComponent={CountrySelect}
-      inputComponent={InputComponent}
+      inputComponent={PhoneInputField}
       smartCaret={false}
       international
       countryCallingCodeEditable={false}
@@ -55,20 +54,26 @@ const PhoneInput = React.forwardRef<
 });
 PhoneInput.displayName = "PhoneInput";
 
-const InputComponent = React.forwardRef<
+// Кастомный инпут для телефона
+const PhoneInputField = React.forwardRef<
   HTMLInputElement,
   React.ComponentProps<"input">
 >(({ className, ...props }, ref) => (
-  <Input
+  <input
+    ref={ref}
     className={cn(
-      "rounded-s-none rounded-e-lg border-l-0 h-12 text-base focus-visible:ring-0 focus-visible:border-input tracking-wide font-mono",
+      "flex-1 h-12 w-full rounded-r-md border border-l-0 border-input bg-background px-3 py-2 text-base",
+      "placeholder:text-muted-foreground",
+      "focus-visible:outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:border-ring",
+      "disabled:cursor-not-allowed disabled:opacity-50",
+      "dark:bg-input/30",
+      "font-mono tracking-wide",
       className
     )}
     {...props}
-    ref={ref}
   />
 ));
-InputComponent.displayName = "InputComponent";
+PhoneInputField.displayName = "PhoneInputField";
 
 const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country];
@@ -104,7 +109,12 @@ const CountrySelect = ({
         <Button
           type="button"
           variant="outline"
-          className="flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 h-12 focus:z-10 hover:bg-accent"
+          className={cn(
+            "flex gap-1 rounded-l-md rounded-r-none border-r-0 px-3 h-12",
+            "bg-background hover:bg-accent",
+            "dark:bg-input/30 dark:hover:bg-accent",
+            "focus:z-10"
+          )}
           disabled={disabled}
         >
           <FlagComponent country={selectedCountry} countryName={selectedCountry} />

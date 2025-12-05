@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, Settings, BarChart3, ShoppingCart, Gift, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -21,14 +21,39 @@ type NavElement = NavItem | NavCategory;
 const navigation: NavElement[] = [
   { name: "Главная", href: "/admin", icon: LayoutDashboard },
   {
-    category: "Контент",
+    category: "Продажи",
+    items: [
+      { name: "Аналитика", href: "/admin/analytics", icon: TrendingUp },
+      { name: "Заказы", href: "/admin/orders", icon: ShoppingCart },
+      { name: "Билеты", href: "/admin/tickets", icon: Ticket },
+      { name: "Приглашения", href: "/admin/invitations", icon: Gift },
+    ]
+  },
+  {
+    category: "Фестиваль",
     items: [
       { name: "Lineup", href: "/admin/lineup", icon: Music },
       { name: "Программа", href: "/admin/program", icon: Calendar },
       { name: "Активности", href: "/admin/activities", icon: Sparkles },
-      { name: "Партнёры", href: "/admin/partners", icon: Handshake },
-      { name: "Aftermovie", href: "/admin/aftermovies", icon: Video },
+    ]
+  },
+  {
+    category: "Контент",
+    items: [
       { name: "Новости", href: "/admin/news", icon: Newspaper },
+      { name: "Aftermovie", href: "/admin/aftermovies", icon: Video },
+    ]
+  },
+  {
+    category: "Партнёры",
+    items: [
+      { name: "Партнёры", href: "/admin/partners", icon: Handshake },
+    ]
+  },
+  {
+    category: "Настройки",
+    items: [
+      { name: "Маркетинг", href: "/admin/settings/marketing", icon: BarChart3 },
     ]
   },
 ];

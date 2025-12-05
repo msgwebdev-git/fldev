@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
+import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -38,9 +39,13 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale}>
+      <head>
+        <MarketingScriptsHead />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <MarketingScriptsBody />
         <NextIntlClientProvider>
           <CartProvider>
             <Navbar />

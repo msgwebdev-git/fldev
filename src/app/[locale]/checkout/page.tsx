@@ -51,6 +51,8 @@ import {
 } from "@/components/ui/select";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useCart } from "@/context/CartContext";
+import { api } from "@/lib/api";
+import { useLocale } from "next-intl";
 
 // Form validation
 function validateEmail(email: string) {
@@ -61,7 +63,9 @@ export default function CheckoutPage() {
   const t = useTranslations("Checkout");
   const tCart = useTranslations("Cart");
   const router = useRouter();
+  const locale = useLocale() as 'ro' | 'ru';
   const { items, totalPrice, totalItems, removeItem, updateQuantity, clearCart, isHydrated } = useCart();
+  const [submitError, setSubmitError] = React.useState("");
 
   // Form state
   const [formData, setFormData] = React.useState({
@@ -79,7 +83,7 @@ export default function CheckoutPage() {
 
   // Promo code state
   const [promoCode, setPromoCode] = React.useState("");
-  const [promoApplied, setPromoApplied] = React.useState<{ code: string; discount: number } | null>(null);
+  const [promoApplied, setPromoApplied] = React.useState<{ code: string; discount: number; discountAmount?: number } | null>(null);
   const [promoError, setPromoError] = React.useState("");
   const [promoLoading, setPromoLoading] = React.useState(false);
 
@@ -90,21 +94,20 @@ export default function CheckoutPage() {
     setPromoLoading(true);
     setPromoError("");
 
-    // Simulate API call - replace with actual promo validation
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const result = await api.validatePromo(promoCode, totalPrice);
 
-    // Demo promo codes
-    const promoCodes: Record<string, number> = {
-      "WOLF10": 10,
-      "FESTIVAL20": 20,
-      "VIP50": 50,
-    };
-
-    const discount = promoCodes[promoCode.toUpperCase()];
-    if (discount) {
-      setPromoApplied({ code: promoCode.toUpperCase(), discount });
-      setPromoCode("");
-    } else {
+      if (result.success && result.data) {
+        setPromoApplied({
+          code: result.data.code,
+          discount: result.data.discountPercent || 0,
+          discountAmount: result.data.discountAmount,
+        });
+        setPromoCode("");
+      } else {
+        setPromoError(result.error || t("orderSummary.promoError"));
+      }
+    } catch {
       setPromoError(t("orderSummary.promoError"));
     }
 
@@ -116,7 +119,7 @@ export default function CheckoutPage() {
   };
 
   // Calculate discount
-  const discountAmount = promoApplied ? Math.round(totalPrice * promoApplied.discount / 100) : 0;
+  const discountAmount = promoApplied?.discountAmount ?? (promoApplied ? Math.round(totalPrice * promoApplied.discount / 100) : 0);
   const finalPrice = totalPrice - discountAmount;
 
   // Redirect if cart is empty (only after hydration)
@@ -171,14 +174,42 @@ export default function CheckoutPage() {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitError("");
 
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Prepare order items
+      const orderItems = items.map((item) => ({
+        ticketId: item.ticket.id,
+        optionId: item.selectedOption?.id,
+        quantity: item.quantity,
+      }));
 
-    // Here you would integrate with actual payment gateway
-    // For now, we'll just simulate success
-    clearCart();
-    router.push("/checkout/success");
+      // Create order via API
+      const result = await api.createOrder({
+        customer: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+        },
+        items: orderItems,
+        promoCode: promoApplied?.code,
+        language: locale,
+      });
+
+      if (result.success && result.data) {
+        // Clear cart before redirecting to payment
+        clearCart();
+        // Redirect to MAIB payment page
+        window.location.href = result.data.redirectUrl;
+      } else {
+        setSubmitError(result.error || t("errors.orderFailed"));
+        setIsSubmitting(false);
+      }
+    } catch {
+      setSubmitError(t("errors.orderFailed"));
+      setIsSubmitting(false);
+    }
   };
 
   // Show loading while hydrating
@@ -541,6 +572,14 @@ export default function CheckoutPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="flex-col gap-4">
+                    {submitError && (
+                      <div className="w-full p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                        <p className="text-sm text-destructive flex items-center gap-2">
+                          <AlertCircle className="h-4 w-4" />
+                          {submitError}
+                        </p>
+                      </div>
+                    )}
                     <Button
                       type="submit"
                       size="lg"
