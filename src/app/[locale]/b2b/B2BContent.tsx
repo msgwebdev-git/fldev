@@ -5,11 +5,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   ArrowLeft,
-  Building2,
-  Users,
   Trophy,
-  Megaphone,
-  CheckCircle2,
   Sparkles,
   Mail,
   Phone,
@@ -36,45 +32,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { B2BOrderSection } from "@/components/B2BOrderSection";
-
-const corporatePackages = [
-  {
-    id: "b2b-sales",
-    icon: Building2,
-    titleKey: "packages.b2b.title",
-    descriptionKey: "packages.b2b.description",
-    features: [
-      "packages.b2b.features.0",
-      "packages.b2b.features.1",
-      "packages.b2b.features.2",
-      "packages.b2b.features.3",
-    ],
-  },
-  {
-    id: "team-building",
-    icon: Users,
-    titleKey: "packages.teamBuilding.title",
-    descriptionKey: "packages.teamBuilding.description",
-    features: [
-      "packages.teamBuilding.features.0",
-      "packages.teamBuilding.features.1",
-      "packages.teamBuilding.features.2",
-      "packages.teamBuilding.features.3",
-    ],
-  },
-  {
-    id: "branded-zones",
-    icon: Megaphone,
-    titleKey: "packages.brandedZones.title",
-    descriptionKey: "packages.brandedZones.description",
-    features: [
-      "packages.brandedZones.features.0",
-      "packages.brandedZones.features.1",
-      "packages.brandedZones.features.2",
-      "packages.brandedZones.features.3",
-    ],
-  },
-];
 
 const benefits = [
   { icon: Target, key: "benefits.reach" },
@@ -154,50 +111,6 @@ export function B2BContent() {
           <div className="text-center p-6 rounded-xl bg-muted/50">
             <div className="text-4xl font-bold text-primary mb-2">24/7</div>
             <div className="text-sm text-muted-foreground">{t("stats.visibility")}</div>
-          </div>
-        </div>
-
-        {/* Corporate Packages */}
-        <div className="mb-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("packagesTitle")}</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              {t("packagesSubtitle")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {corporatePackages.map((pkg) => {
-              const Icon = pkg.icon;
-              return (
-                <Card
-                  key={pkg.id}
-                  className="transition-all duration-300 hover:shadow-lg"
-                >
-                  <CardHeader>
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                      <Icon className="h-7 w-7 text-primary" />
-                    </div>
-                    <CardTitle className="text-2xl mb-2">{t(pkg.titleKey)}</CardTitle>
-                    <CardDescription className="text-base">
-                      {t(pkg.descriptionKey)}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-3">
-                      {pkg.features.map((featureKey, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                          <span className="text-sm text-muted-foreground">
-                            {t(featureKey)}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              );
-            })}
           </div>
         </div>
 

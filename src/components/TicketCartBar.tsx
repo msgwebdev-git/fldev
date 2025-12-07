@@ -236,8 +236,9 @@ export function TicketCartBar() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-  // Hide on checkout pages
+  // Hide on checkout and b2b pages
   if (pathname.includes("/checkout")) return null;
+  if (pathname.includes("/b2b")) return null;
   if (items.length === 0) return null;
 
   // Mobile version with drawer

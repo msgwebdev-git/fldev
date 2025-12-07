@@ -5,10 +5,12 @@ import { useTranslations, useLocale } from "next-intl";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, AlertCircle, CheckCircle2 } from "lucide-react";
+import { ShoppingCart, AlertCircle, CheckCircle2, Mail, ArrowRight } from "lucide-react";
 import { B2BOrderWizard } from "@/components/B2BOrderWizard";
 import type { B2BOrderFormData } from "@/components/B2BOrderForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface TicketSelection {
   ticketId: string;
@@ -100,12 +102,11 @@ export function B2BOrderSection() {
 
       // If invoice, show success message
       setSuccess(true);
-
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
       console.error("Error creating order:", err);
       setError(err.message || t("errorCreatingOrder"));
+      // Scroll to top to show error
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setIsSubmitting(false);
     }
@@ -121,18 +122,43 @@ export function B2BOrderSection() {
 
   if (success) {
     return (
-      <div className="py-20">
-        <div className="max-w-2xl mx-auto text-center">
-          <Alert className="border-green-500 bg-green-50">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
-            <AlertDescription className="text-green-900">
-              <div className="space-y-3">
-                <p className="font-semibold text-lg">{t("orderSuccess")}</p>
-                <p>{t("orderSuccessMessage")}</p>
+      <div className="min-h-[60vh] flex items-center justify-center py-20 px-4">
+        <Card className="max-w-lg w-full border-green-200 shadow-xl">
+          <CardContent className="pt-12 pb-8 px-6 text-center">
+            <div className="mb-6 flex justify-center">
+              <div className="relative">
+                <div className="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-20 animate-pulse" />
+                <div className="relative bg-gradient-to-br from-green-500 to-green-600 rounded-full p-6">
+                  <CheckCircle2 className="h-12 w-12 text-white" strokeWidth={2.5} />
+                </div>
               </div>
-            </AlertDescription>
-          </Alert>
-        </div>
+            </div>
+
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+              {t("orderSuccess")}
+            </h2>
+
+            <div className="space-y-4 mb-8">
+              <p className="text-base text-gray-600 leading-relaxed">
+                {t("orderSuccessMessage")}
+              </p>
+
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-lg py-3 px-4">
+                <Mail className="h-4 w-4" />
+                <span>Проверьте вашу почту для получения деталей</span>
+              </div>
+            </div>
+
+            <Button
+              size="lg"
+              onClick={() => setSuccess(false)}
+              className="w-full group"
+            >
+              Создать новый заказ
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }

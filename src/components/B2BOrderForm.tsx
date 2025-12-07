@@ -274,25 +274,25 @@ export function B2BOrderForm({ initialData, onSubmit, isLoading }: B2BOrderFormP
         </CardHeader>
         <CardContent>
           <RadioGroup value={formData.paymentMethod} onValueChange={handlePaymentMethodChange} className="space-y-4">
-            <div className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer" onClick={() => handlePaymentMethodChange("online")}>
+            <Label htmlFor="online" className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer">
               <RadioGroupItem value="online" id="online" className="mt-1" />
               <div className="flex-1">
-                <Label htmlFor="online" className="cursor-pointer block">
+                <div>
                   <p className="font-semibold text-base mb-1">{t("paymentOnline")}</p>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("paymentOnlineDescription")}</p>
-                </Label>
+                </div>
               </div>
-            </div>
+            </Label>
 
-            <div className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer" onClick={() => handlePaymentMethodChange("invoice")}>
+            <Label htmlFor="invoice" className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer">
               <RadioGroupItem value="invoice" id="invoice" className="mt-1" />
               <div className="flex-1">
-                <Label htmlFor="invoice" className="cursor-pointer block">
+                <div>
                   <p className="font-semibold text-base mb-1">{t("paymentInvoice")}</p>
                   <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("paymentInvoiceDescription")}</p>
-                </Label>
+                </div>
               </div>
-            </div>
+            </Label>
           </RadioGroup>
         </CardContent>
       </Card>
