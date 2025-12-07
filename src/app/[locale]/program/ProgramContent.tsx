@@ -3,12 +3,13 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft, Clock, MapPin, Music, Calendar, Ticket } from "lucide-react";
+import { ArrowLeft, Clock, MapPin, Music, Calendar } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AppCTABlock } from "@/components/AppCTABlock";
 
 // Types for program data
 interface ProgramEvent {
@@ -215,17 +216,8 @@ export function ProgramContent({ events }: ProgramContentProps) {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-12 p-8 rounded-2xl bg-muted/50">
-          <h3 className="text-xl font-semibold mb-2">{t("ctaTitle")}</h3>
-          <p className="text-muted-foreground mb-6">{t("ctaSubtitle")}</p>
-          <Button size="lg" asChild>
-            <Link href="/tickets">
-              <Ticket className="mr-2 h-5 w-5" />
-              {t("ctaButton")}
-            </Link>
-          </Button>
-        </div>
+        {/* App Download CTA */}
+        <AppCTABlock namespace="Program" notificationText="Main Stage starts in 30 min!" />
       </div>
     </main>
   );

@@ -14,7 +14,6 @@ import {
   Sparkles,
   Camera,
   Heart,
-  Ticket,
   MapPin,
   Clock,
   LucideIcon,
@@ -23,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AppCTABlock } from "@/components/AppCTABlock";
 
 interface Activity {
   id: number;
@@ -199,17 +199,8 @@ export function ActivitiesContent({ activities }: ActivitiesContentProps) {
           </div>
         )}
 
-        {/* CTA */}
-        <div className="text-center mt-12 p-8 rounded-2xl bg-muted/50">
-          <h3 className="text-xl font-semibold mb-2">{t("ctaTitle")}</h3>
-          <p className="text-muted-foreground mb-6">{t("ctaSubtitle")}</p>
-          <Button size="lg" asChild>
-            <Link href="/tickets">
-              <Ticket className="mr-2 h-5 w-5" />
-              {t("ctaButton")}
-            </Link>
-          </Button>
-        </div>
+        {/* App Download CTA */}
+        <AppCTABlock namespace="Activities" notificationText="Workshop starts in 10 min!" />
       </div>
     </main>
   );

@@ -27,6 +27,7 @@
     "activities": "Activități",
     "news": "Noutăți",
     "becomePartner": "Devino partener",
+    "b2b": "Pachete Corporate",
     "rules": "Regulile festivalului",
     "faq": "Întrebări frecvente",
     "organizers": "Contacte organizatori",
@@ -318,7 +319,19 @@
     },
     "ctaTitle": "Nu rata niciun moment!",
     "ctaSubtitle": "Cumpără biletele acum și bucură-te de 3 zile de muzică live",
-    "ctaButton": "Cumpără bilete"
+    "ctaButton": "Cumpără bilete",
+    "appCta": {
+      "badge": "Aplicație mobilă",
+      "title": "Nu rata niciun spectacol!",
+      "subtitle": "Descarcă aplicația și primește notificări când începe concertul artiștilor tăi preferați",
+      "downloadOn": "Descarcă din",
+      "getItOn": "Disponibil pe",
+      "features": {
+        "notifications": "Push-notificări pentru spectacole",
+        "schedule": "Program personalizat",
+        "map": "Hartă interactivă a festivalului"
+      }
+    }
   },
   "Perform": {
     "badge": "Colaborare",
@@ -582,7 +595,19 @@
     },
     "ctaTitle": "Pregătit pentru aventură?",
     "ctaSubtitle": "Cumpără biletele acum și bucură-te de toate activitățile festivalului",
-    "ctaButton": "Cumpără bilete"
+    "ctaButton": "Cumpără bilete",
+    "appCta": {
+      "badge": "Aplicație mobilă",
+      "title": "Nu rata nicio activitate!",
+      "subtitle": "Descarcă aplicația și primește notificări despre workshop-uri, evenimente și multe altele",
+      "downloadOn": "Descarcă din",
+      "getItOn": "Disponibil pe",
+      "features": {
+        "notifications": "Push-notificări pentru activități",
+        "schedule": "Program personalizat",
+        "map": "Hartă interactivă a festivalului"
+      }
+    }
   },
   "Rules": {
     "badge": "Regulamentul festivalului",
@@ -867,6 +892,185 @@
     },
     "backToHome": "Acasă",
     "viewProgram": "Vezi programul"
+  },
+  "B2B": {
+    "badge": "Colaborare corporativă",
+    "title": "Pachete Corporate",
+    "subtitle": "Descoperă noi oportunități pentru afacerea ta la cel mai mare festival din Moldova. Peste 15.000 de vizitatori în 3 zile — platforma perfectă pentru promovarea brandului tău.",
+    "backToHome": "Înapoi la pagina principală",
+    "stats": {
+      "visitors": "Vizitatori",
+      "companies": "Companii partenere",
+      "days": "Zile de festival",
+      "visibility": "Vizibilitate brand"
+    },
+    "packagesTitle": "Soluțiile noastre pentru business",
+    "packagesSubtitle": "Alege formatul de colaborare potrivit pentru compania ta",
+    "packages": {
+      "b2b": {
+        "title": "Vânzări B2B",
+        "description": "Soluții complexe pentru clienți corporativi cu condiții speciale și manager personal",
+        "features": {
+          "0": "Prețuri corporate speciale pentru pachete de bilete",
+          "1": "Manager personal pentru coordonare",
+          "2": "Condiții flexibile de plată și rezervare",
+          "3": "Servicii prioritare și suport 24/7"
+        }
+      },
+      "teamBuilding": {
+        "title": "Team Building la festival",
+        "description": "Organizează un eveniment corporate de neuitat pentru echipa ta în atmosfera unică a festivalului",
+        "features": {
+          "0": "Zone exclusive pentru grupuri corporate",
+          "1": "Organizare de activități și workshop-uri",
+          "2": "Catering și servicii de bar pentru echipă",
+          "3": "Foto și video shooting al evenimentului tău"
+        }
+      },
+      "brandedZones": {
+        "title": "Zone branduite",
+        "description": "Vizibilitate maximă a brandului tău prin crearea de zone de activare unice pe teritoriul festivalului",
+        "features": {
+          "0": "Crearea de spații și instalații branduite",
+          "1": "Integrarea produsului în programul festivalului",
+          "2": "Promovare pe rețelele sociale și în media",
+          "3": "Analiză detaliată a acoperirii și engagement-ului"
+        }
+      }
+    },
+    "benefitsBadge": "Beneficii",
+    "benefitsTitle": "De ce ne aleg pe noi",
+    "benefitsSubtitle": "Festivalul Lupilor nu este doar un festival, ci o platformă pentru creșterea afacerii tale",
+    "benefits": {
+      "reach": {
+        "title": "Acoperire largă a audienței",
+        "description": "Peste 15.000 de vizitatori activi în 3 zile din Moldova și țările vecine"
+      },
+      "brand": {
+        "title": "Recunoaștere de brand",
+        "description": "Acoperire media, prezență pe rețelele sociale și mențiuni în presă"
+      },
+      "engagement": {
+        "title": "Engagement ridicat",
+        "description": "Interacțiune directă cu publicul țintă într-o atmosferă pozitivă"
+      },
+      "networking": {
+        "title": "Networking",
+        "description": "Oportunitatea de a întâlni parteneri, clienți și lideri din industrie"
+      },
+      "experience": {
+        "title": "Experiență unică",
+        "description": "Crearea de experiențe memorabile pentru angajați și clienți"
+      },
+      "exclusive": {
+        "title": "Condiții exclusive",
+        "description": "Soluții personalizate și pachete flexibile pentru obiectivele tale de business"
+      }
+    },
+    "faqTitle": "Întrebări frecvente",
+    "faqSubtitle": "Răspunsuri la întrebările populare despre colaborarea corporativă",
+    "faq": {
+      "q1": {
+        "question": "Care este dimensiunea minimă a comenzii corporate?",
+        "answer": "Comanda minimă începe de la 20 de bilete. Pentru grupuri de peste 50 de persoane oferim condiții speciale și bonusuri suplimentare, inclusiv zone exclusive și servicii personalizate."
+      },
+      "q2": {
+        "question": "Pot organiza un eveniment privat pe teritoriul festivalului?",
+        "answer": "Da, putem organiza zone private pentru evenimente corporate cu intrare separată, catering și program de divertisment. Contactează-ne pentru a discuta detaliile."
+      },
+      "q3": {
+        "question": "Ce opțiuni de branding sunt disponibile?",
+        "answer": "Oferim diverse formate: de la plasarea logo-urilor pe materialele festivalului până la crearea de zone branduite complete cu activări. Fiecare pachet este dezvoltat individual pentru obiectivele tale."
+      },
+      "q4": {
+        "question": "Cum se măsoară eficiența participării?",
+        "answer": "Furnizăm rapoarte detaliate cu metrici: acoperire de audiență, număr de interacțiuni, mențiuni pe rețelele sociale, acoperire media și materiale foto-video pentru utilizarea ta."
+      },
+      "q5": {
+        "question": "Care sunt condițiile de plată pentru clienții corporativi?",
+        "answer": "Oferim condiții flexibile de plată: posibilitate de plată în rate, transfer bancar cu amânare a plății pentru partenerii permanenți. Detaliile se discută individual."
+      }
+    },
+    "contactBadge": "Contactează-ne",
+    "contactTitle": "Pregătit pentru colaborare?",
+    "contactSubtitle": "Lasă o solicitare și managerul nostru te va contacta în 24 de ore pentru a discuta toate detaliile",
+    "form": {
+      "company": "Numele companiei",
+      "companyPlaceholder": "S.R.L. \"Compania ta\"",
+      "name": "Persoana de contact",
+      "namePlaceholder": "Nume și prenume",
+      "email": "Email",
+      "emailPlaceholder": "corporate@company.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "+373 XX XXX XXX",
+      "message": "Mesaj",
+      "messagePlaceholder": "Povestește-ne despre obiectivele și interesele tale. Ce format de colaborare te interesează?",
+      "submit": "Trimite cererea",
+      "callUs": "Sună-ne"
+    },
+    "availability": "Lun-Vin 09:00-18:00",
+    "orderBadge": "Comandă bilete corporate",
+    "orderTitle": "Creați comanda dvs.",
+    "orderSubtitle": "Selectați bilete, introduceți datele companiei și plasați comanda",
+    "selectMinimum": "Selectați minim 50 de bilete pentru a continua",
+    "orderSuccess": "Comanda a fost creată cu succes!",
+    "orderSuccessMessage": "Veți primi un email cu detaliile comenzii. Mulțumim!",
+    "errorLoadingTickets": "Eroare la încărcarea biletelor",
+    "errorCreatingOrder": "Eroare la crearea comenzii",
+    "loading": "Se încarcă..."
+  },
+  "B2BCalculator": {
+    "discountTiers": "Niveluri de reducere",
+    "discountTiersDescription": "Cu cât cumperi mai multe bilete, cu atât reducerea este mai mare",
+    "active": "Activ",
+    "selectTickets": "Selectează biletele",
+    "selectTicketsDescription": "Alege tipurile de bilete și cantitatea",
+    "selectOption": "Selectează opțiunea",
+    "summary": "Rezumat",
+    "minimumRequired": "Minim necesar {min} bilete. Acum: {current}",
+    "nextTierMessage": "Încă {needed} bilete pentru reducere de {discount}%!",
+    "totalTickets": "Total bilete",
+    "subtotal": "Subtotal",
+    "discount": "Reducere",
+    "total": "Total",
+    "discountApplied": "Reducere {percent}% aplicată"
+  },
+  "B2BOrderForm": {
+    "companyInfo": "Informații despre companie",
+    "companyInfoDescription": "Introduceți datele oficiale ale companiei",
+    "companyName": "Numele companiei",
+    "companyNamePlaceholder": "S.R.L. \"Compania ta\"",
+    "taxId": "IDNO / Cod fiscal",
+    "taxIdPlaceholder": "1234567890123",
+    "address": "Adresa juridică",
+    "addressPlaceholder": "mun. Chișinău, str. Exemple, 123",
+    "contactInfo": "Persoană de contact",
+    "contactInfoDescription": "Cine va comunica cu noi referitor la comandă",
+    "contactName": "Nume și prenume",
+    "contactNamePlaceholder": "Ion Popescu",
+    "contactEmail": "Email",
+    "contactEmailPlaceholder": "corporate@company.com",
+    "contactPhone": "Telefon",
+    "contactPhonePlaceholder": "+373 XX XXX XXX",
+    "paymentMethod": "Metoda de plată",
+    "paymentMethodDescription": "Alege cum dorești să plătești",
+    "paymentOnline": "Plată online",
+    "paymentOnlineDescription": "Plată imediată prin MAIB (card bancar)",
+    "paymentInvoice": "Plată prin factură",
+    "paymentInvoiceDescription": "Vom genera o factură proformă. Plata după primirea facturii",
+    "notes": "Observații",
+    "notesDescription": "Adaugă orice informații suplimentare",
+    "notesPlaceholder": "De exemplu, data preferată de livrare a biletelor, cerințe speciale etc.",
+    "submit": "Trimite comanda",
+    "submitting": "Se trimite...",
+    "errors": {
+      "companyNameRequired": "Numele companiei este obligatoriu",
+      "addressRequired": "Adresa este obligatorie",
+      "contactNameRequired": "Numele persoanei de contact este obligatoriu",
+      "emailRequired": "Email-ul este obligatoriu",
+      "emailInvalid": "Email invalid",
+      "phoneRequired": "Telefonul este obligatoriu"
+    }
   },
   "Footer": {
     "description": "Cel mai mare festival de muzică din Moldova. Trei zile de muzică, artă și experiențe de neuitat în locația pitorească Saharna.",

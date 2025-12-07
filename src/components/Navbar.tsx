@@ -53,6 +53,7 @@ export function Navbar() {
     { href: "/how-to-get", label: t("howToGet") },
     { href: "/perform", label: t("perform") },
     { href: "/activities", label: t("activities") },
+    { href: "/b2b", label: t("b2b") },
     { href: "#news", label: t("news") },
     { href: "/rules", label: t("rules") },
     { href: "/faq", label: t("faq") },
