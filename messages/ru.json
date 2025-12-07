@@ -1017,7 +1017,15 @@
     "orderSuccessMessage": "Вы получите email с деталями заказа. Спасибо!",
     "errorLoadingTickets": "Ошибка загрузки билетов",
     "errorCreatingOrder": "Ошибка создания заказа",
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "close": "Закрыть",
+    "step": "Этап",
+    "stepTickets": "Выберите билеты",
+    "stepTicketsDesc": "Выберите тип и количество билетов",
+    "stepInfo": "Информация о компании",
+    "stepInfoDesc": "Введите данные компании и контакты",
+    "continue": "Продолжить",
+    "back": "Назад"
   },
   "B2BCalculator": {
     "discountTiers": "Уровни скидок",
@@ -1026,6 +1034,9 @@
     "selectTickets": "Выберите билеты",
     "selectTicketsDescription": "Выберите типы билетов и количество",
     "selectOption": "Выберите опцию",
+    "aboutTicket": "О билете",
+    "included": "Что включено",
+    "price": "Цена",
     "summary": "Итого",
     "minimumRequired": "Минимум требуется {min} билетов. Сейчас: {current}",
     "nextTierMessage": "Ещё {needed} билетов для скидки {discount}%!",

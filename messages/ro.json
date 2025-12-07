@@ -1017,7 +1017,15 @@
     "orderSuccessMessage": "Veți primi un email cu detaliile comenzii. Mulțumim!",
     "errorLoadingTickets": "Eroare la încărcarea biletelor",
     "errorCreatingOrder": "Eroare la crearea comenzii",
-    "loading": "Se încarcă..."
+    "loading": "Se încarcă...",
+    "close": "Închide",
+    "step": "Etapa",
+    "stepTickets": "Selectați biletele",
+    "stepTicketsDesc": "Alegeți tipul și cantitatea de bilete",
+    "stepInfo": "Informații despre companie",
+    "stepInfoDesc": "Introduceți datele companiei și contactul",
+    "continue": "Continuați",
+    "back": "Înapoi"
   },
   "B2BCalculator": {
     "discountTiers": "Niveluri de reducere",
@@ -1026,6 +1034,9 @@
     "selectTickets": "Selectează biletele",
     "selectTicketsDescription": "Alege tipurile de bilete și cantitatea",
     "selectOption": "Selectează opțiunea",
+    "aboutTicket": "Despre bilet",
+    "included": "Ce include",
+    "price": "Preț",
     "summary": "Rezumat",
     "minimumRequired": "Minim necesar {min} bilete. Acum: {current}",
     "nextTierMessage": "Încă {needed} bilete pentru reducere de {discount}%!",

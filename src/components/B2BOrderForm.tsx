@@ -130,138 +130,141 @@ export function B2BOrderForm({ initialData, onSubmit, isLoading }: B2BOrderFormP
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Company Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
-            {t("companyInfo")}
-          </CardTitle>
-          <CardDescription>{t("companyInfoDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="companyName">
-              {t("companyName")} <span className="text-destructive">*</span>
-            </Label>
-            <Input
-              id="companyName"
-              value={formData.company.name}
-              onChange={(e) => handleChange("company", "name", e.target.value)}
-              placeholder={t("companyNamePlaceholder")}
-              className={errors["company.name"] ? "border-destructive" : ""}
-            />
-            {errors["company.name"] && (
-              <p className="text-sm text-destructive">{errors["company.name"]}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="taxId">{t("taxId")}</Label>
-            <div className="relative">
-              <FileDigit className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+      {/* Company and Contact Information - Two Columns */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Company Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-primary" />
+              {t("companyInfo")}
+            </CardTitle>
+            <CardDescription>{t("companyInfoDescription")}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="companyName">
+                {t("companyName")} <span className="text-destructive">*</span>
+              </Label>
               <Input
-                id="taxId"
-                value={formData.company.taxId}
-                onChange={(e) => handleChange("company", "taxId", e.target.value)}
-                placeholder={t("taxIdPlaceholder")}
-                className="pl-10"
+                id="companyName"
+                value={formData.company.name}
+                onChange={(e) => handleChange("company", "name", e.target.value)}
+                placeholder={t("companyNamePlaceholder")}
+                className={errors["company.name"] ? "border-destructive" : ""}
               />
+              {errors["company.name"] && (
+                <p className="text-sm text-destructive">{errors["company.name"]}</p>
+              )}
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="address">
-              {t("address")} <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Textarea
-                id="address"
-                value={formData.company.address}
-                onChange={(e) => handleChange("company", "address", e.target.value)}
-                placeholder={t("addressPlaceholder")}
-                className={`pl-10 ${errors["company.address"] ? "border-destructive" : ""}`}
-                rows={3}
-              />
+            <div className="space-y-2">
+              <Label htmlFor="taxId">{t("taxId")}</Label>
+              <div className="relative">
+                <FileDigit className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="taxId"
+                  value={formData.company.taxId}
+                  onChange={(e) => handleChange("company", "taxId", e.target.value)}
+                  placeholder={t("taxIdPlaceholder")}
+                  className="pl-10"
+                />
+              </div>
             </div>
-            {errors["company.address"] && (
-              <p className="text-sm text-destructive">{errors["company.address"]}</p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Contact Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" />
-            {t("contactInfo")}
-          </CardTitle>
-          <CardDescription>{t("contactInfoDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="contactName">
-              {t("contactName")} <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="contactName"
-                value={formData.contact.name}
-                onChange={(e) => handleChange("contact", "name", e.target.value)}
-                placeholder={t("contactNamePlaceholder")}
-                className={`pl-10 ${errors["contact.name"] ? "border-destructive" : ""}`}
-              />
+            <div className="space-y-2">
+              <Label htmlFor="address">
+                {t("address")} <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Textarea
+                  id="address"
+                  value={formData.company.address}
+                  onChange={(e) => handleChange("company", "address", e.target.value)}
+                  placeholder={t("addressPlaceholder")}
+                  className={`pl-10 ${errors["company.address"] ? "border-destructive" : ""}`}
+                  rows={3}
+                />
+              </div>
+              {errors["company.address"] && (
+                <p className="text-sm text-destructive">{errors["company.address"]}</p>
+              )}
             </div>
-            {errors["contact.name"] && (
-              <p className="text-sm text-destructive">{errors["contact.name"]}</p>
-            )}
-          </div>
+          </CardContent>
+        </Card>
 
-          <div className="space-y-2">
-            <Label htmlFor="contactEmail">
-              {t("contactEmail")} <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="contactEmail"
-                type="email"
-                value={formData.contact.email}
-                onChange={(e) => handleChange("contact", "email", e.target.value)}
-                placeholder={t("contactEmailPlaceholder")}
-                className={`pl-10 ${errors["contact.email"] ? "border-destructive" : ""}`}
-              />
+        {/* Contact Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5 text-primary" />
+              {t("contactInfo")}
+            </CardTitle>
+            <CardDescription>{t("contactInfoDescription")}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="contactName">
+                {t("contactName")} <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="contactName"
+                  value={formData.contact.name}
+                  onChange={(e) => handleChange("contact", "name", e.target.value)}
+                  placeholder={t("contactNamePlaceholder")}
+                  className={`pl-10 ${errors["contact.name"] ? "border-destructive" : ""}`}
+                />
+              </div>
+              {errors["contact.name"] && (
+                <p className="text-sm text-destructive">{errors["contact.name"]}</p>
+              )}
             </div>
-            {errors["contact.email"] && (
-              <p className="text-sm text-destructive">{errors["contact.email"]}</p>
-            )}
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="contactPhone">
-              {t("contactPhone")} <span className="text-destructive">*</span>
-            </Label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="contactPhone"
-                type="tel"
-                value={formData.contact.phone}
-                onChange={(e) => handleChange("contact", "phone", e.target.value)}
-                placeholder={t("contactPhonePlaceholder")}
-                className={`pl-10 ${errors["contact.phone"] ? "border-destructive" : ""}`}
-              />
+            <div className="space-y-2">
+              <Label htmlFor="contactEmail">
+                {t("contactEmail")} <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="contactEmail"
+                  type="email"
+                  value={formData.contact.email}
+                  onChange={(e) => handleChange("contact", "email", e.target.value)}
+                  placeholder={t("contactEmailPlaceholder")}
+                  className={`pl-10 ${errors["contact.email"] ? "border-destructive" : ""}`}
+                />
+              </div>
+              {errors["contact.email"] && (
+                <p className="text-sm text-destructive">{errors["contact.email"]}</p>
+              )}
             </div>
-            {errors["contact.phone"] && (
-              <p className="text-sm text-destructive">{errors["contact.phone"]}</p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+
+            <div className="space-y-2">
+              <Label htmlFor="contactPhone">
+                {t("contactPhone")} <span className="text-destructive">*</span>
+              </Label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="contactPhone"
+                  type="tel"
+                  value={formData.contact.phone}
+                  onChange={(e) => handleChange("contact", "phone", e.target.value)}
+                  placeholder={t("contactPhonePlaceholder")}
+                  className={`pl-10 ${errors["contact.phone"] ? "border-destructive" : ""}`}
+                />
+              </div>
+              {errors["contact.phone"] && (
+                <p className="text-sm text-destructive">{errors["contact.phone"]}</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Payment Method */}
       <Card>
@@ -270,27 +273,25 @@ export function B2BOrderForm({ initialData, onSubmit, isLoading }: B2BOrderFormP
           <CardDescription>{t("paymentMethodDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={formData.paymentMethod} onValueChange={handlePaymentMethodChange}>
-            <div className="flex items-start space-x-3 space-y-0 rounded-lg border p-4 hover:bg-accent transition-colors">
-              <RadioGroupItem value="online" id="online" />
-              <Label htmlFor="online" className="flex-1 cursor-pointer">
-                <div className="flex items-center gap-2 mb-1">
-                  <CreditCard className="h-4 w-4 text-primary" />
-                  <span className="font-semibold">{t("paymentOnline")}</span>
-                </div>
-                <p className="text-sm text-muted-foreground">{t("paymentOnlineDescription")}</p>
-              </Label>
+          <RadioGroup value={formData.paymentMethod} onValueChange={handlePaymentMethodChange} className="space-y-4">
+            <div className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer" onClick={() => handlePaymentMethodChange("online")}>
+              <RadioGroupItem value="online" id="online" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="online" className="cursor-pointer block">
+                  <p className="font-semibold text-base mb-1">{t("paymentOnline")}</p>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("paymentOnlineDescription")}</p>
+                </Label>
+              </div>
             </div>
 
-            <div className="flex items-start space-x-3 space-y-0 rounded-lg border p-4 hover:bg-accent transition-colors">
-              <RadioGroupItem value="invoice" id="invoice" />
-              <Label htmlFor="invoice" className="flex-1 cursor-pointer">
-                <div className="flex items-center gap-2 mb-1">
-                  <FileText className="h-4 w-4 text-primary" />
-                  <span className="font-semibold">{t("paymentInvoice")}</span>
-                </div>
-                <p className="text-sm text-muted-foreground">{t("paymentInvoiceDescription")}</p>
-              </Label>
+            <div className="flex items-start gap-4 rounded-lg border-2 p-4 hover:bg-accent transition-colors cursor-pointer" onClick={() => handlePaymentMethodChange("invoice")}>
+              <RadioGroupItem value="invoice" id="invoice" className="mt-1" />
+              <div className="flex-1">
+                <Label htmlFor="invoice" className="cursor-pointer block">
+                  <p className="font-semibold text-base mb-1">{t("paymentInvoice")}</p>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("paymentInvoiceDescription")}</p>
+                </Label>
+              </div>
             </div>
           </RadioGroup>
         </CardContent>
