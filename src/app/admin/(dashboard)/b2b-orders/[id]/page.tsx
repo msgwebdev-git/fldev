@@ -68,7 +68,7 @@ async function getOrderHistory(orderId: string) {
   const { data: history } = await supabase
     .from("b2b_order_history")
     .select("*")
-    .eq("order_id", orderId)
+    .eq("b2b_order_id", orderId)
     .order("created_at", { ascending: false });
 
   return history || [];
