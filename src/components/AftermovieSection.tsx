@@ -37,6 +37,8 @@ export function AftermovieSection() {
   const [selectedVideo, setSelectedVideo] = React.useState<AftermovieData>(fallbackAftermovies[0]);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [thumbnailQuality, setThumbnailQuality] = React.useState<'maxresdefault' | 'hqdefault' | 'mqdefault'>('maxresdefault');
+  const [galleryThumbnailErrors, setGalleryThumbnailErrors] = React.useState<Set<string>>(new Set());
 
   React.useEffect(() => {
     async function fetchAftermovies() {
@@ -58,7 +60,17 @@ export function AftermovieSection() {
     fetchAftermovies();
   }, []);
 
-  const thumbnailUrl = `https://img.youtube.com/vi/${selectedVideo.videoId}/maxresdefault.jpg`;
+  const thumbnailUrl = `https://img.youtube.com/vi/${selectedVideo.videoId}/${thumbnailQuality}.jpg`;
+
+  const handleThumbnailError = () => {
+    if (thumbnailQuality === 'maxresdefault') {
+      setThumbnailQuality('hqdefault');
+      setIsLoading(true);
+    } else if (thumbnailQuality === 'hqdefault') {
+      setThumbnailQuality('mqdefault');
+      setIsLoading(true);
+    }
+  };
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -69,7 +81,18 @@ export function AftermovieSection() {
       setSelectedVideo(video);
       setIsPlaying(false);
       setIsLoading(true);
+      setThumbnailQuality('maxresdefault'); // Reset to highest quality
     }
+  };
+
+  const getGalleryThumbnailUrl = (videoId: string) => {
+    return galleryThumbnailErrors.has(videoId)
+      ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+      : `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+  };
+
+  const handleGalleryThumbnailError = (videoId: string) => {
+    setGalleryThumbnailErrors(prev => new Set(prev).add(videoId));
   };
 
   return (
@@ -111,6 +134,7 @@ export function AftermovieSection() {
                       isLoading ? "opacity-0" : "opacity-100"
                     )}
                     onLoad={() => setIsLoading(false)}
+                    onError={handleThumbnailError}
                     priority
                   />
                 </div>
@@ -182,10 +206,11 @@ export function AftermovieSection() {
               >
                 <div className="relative w-24 h-16 sm:w-32 sm:h-20 md:w-40 md:h-24">
                   <Image
-                    src={`https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg`}
+                    src={getGalleryThumbnailUrl(video.videoId)}
                     alt={`Aftermovie ${video.year}`}
                     fill
                     className="object-cover"
+                    onError={() => handleGalleryThumbnailError(video.videoId)}
                   />
                   {/* Overlay */}
                   <div className={cn(

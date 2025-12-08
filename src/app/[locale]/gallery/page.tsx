@@ -10,16 +10,15 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
+import { supabase } from "@/lib/supabase";
+
 interface GalleryImage {
-  id: string;
-  src: string;
+  id: number;
+  filename: string;
+  thumbnailSrc: string;
+  fullSrc: string;
   alt: string;
   width: number;
   height: number;
@@ -30,37 +29,107 @@ interface YearGallery {
   images: GalleryImage[];
 }
 
-// Mock data - will be replaced with Supabase
-const generateMockImages = (year: string, count: number): GalleryImage[] => {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${year}-${i + 1}`,
-    src: `https://picsum.photos/seed/${year}${i}/800/600`,
-    alt: `Festival ${year} - Photo ${i + 1}`,
-    width: 800,
-    height: 600,
-  }));
-};
+interface GalleryDbRow {
+  id: number;
+  year: string;
+  filename: string;
+  alt_text: string | null;
+  width: number;
+  height: number;
+  display_order: number;
+}
 
-const galleryData: YearGallery[] = [
-  { year: "2025", images: generateMockImages("2025", 24) },
-  { year: "2024", images: generateMockImages("2024", 24) },
-  { year: "2023", images: generateMockImages("2023", 24) },
-  { year: "2022", images: generateMockImages("2022", 24) },
-  { year: "2021", images: generateMockImages("2021", 24) },
-];
+// Helper function to get Supabase Storage URL
+function getStorageUrl(bucketName: string, path: string): string {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return `${supabaseUrl}/storage/v1/object/public/${bucketName}/${path}`;
+}
+
+// Fetch gallery data from Supabase
+async function fetchGalleryData(): Promise<YearGallery[]> {
+  try {
+    const { data, error } = await supabase
+      .from('gallery')
+      .select('*')
+      .order('year', { ascending: false })
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching gallery:', error);
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      return [];
+    }
+
+    // Group by year
+    const galleryByYear = new Map<string, GalleryImage[]>();
+
+    (data as GalleryDbRow[]).forEach((row) => {
+      const thumbnailSrc = getStorageUrl('gallery', `${row.year}/thumbnails/${row.filename}.webp`);
+      const fullSrc = getStorageUrl('gallery', `${row.year}/full/${row.filename}.webp`);
+
+      const image: GalleryImage = {
+        id: row.id,
+        filename: row.filename,
+        thumbnailSrc,
+        fullSrc,
+        alt: row.alt_text || `Festival ${row.year}`,
+        width: row.width,
+        height: row.height,
+      };
+
+      if (!galleryByYear.has(row.year)) {
+        galleryByYear.set(row.year, []);
+      }
+      galleryByYear.get(row.year)!.push(image);
+    });
+
+    // Convert to array
+    const result: YearGallery[] = Array.from(galleryByYear.entries()).map(([year, images]) => ({
+      year,
+      images,
+    }));
+
+    return result;
+  } catch (error) {
+    console.error('Error in fetchGalleryData:', error);
+    return [];
+  }
+}
 
 export default function GalleryPage() {
   const t = useTranslations("Gallery");
   const searchParams = useSearchParams();
   const yearParam = searchParams.get("year");
 
-  const [selectedYear, setSelectedYear] = React.useState(
-    yearParam && galleryData.some(g => g.year === yearParam)
-      ? yearParam
-      : galleryData[0].year
-  );
+  const [galleryData, setGalleryData] = React.useState<YearGallery[]>([]);
+  const [selectedYear, setSelectedYear] = React.useState("");
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  // Load gallery data
+  React.useEffect(() => {
+    async function loadGallery() {
+      setIsLoading(true);
+      const data = await fetchGalleryData();
+      setGalleryData(data);
+
+      // Set initial year
+      if (data.length > 0) {
+        const initialYear = yearParam && data.some(g => g.year === yearParam)
+          ? yearParam
+          : data[0].year;
+        setSelectedYear(initialYear);
+      }
+
+      setIsLoading(false);
+    }
+
+    loadGallery();
+  }, [yearParam]);
 
   const currentGallery = galleryData.find((g) => g.year === selectedYear);
 
@@ -102,6 +171,35 @@ export default function GalleryPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [lightboxOpen]);
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-background pt-24 pb-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center py-20">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+            <p className="mt-4 text-muted-foreground">Загрузка галереи...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Show empty state
+  if (galleryData.length === 0) {
+    return (
+      <main className="min-h-screen bg-background pt-24 pb-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center py-20">
+            <Camera className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Галерея пуста</h2>
+            <p className="text-muted-foreground">Фотографии скоро появятся</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-background pt-24 pb-20">
       <div className="container mx-auto px-4">
@@ -132,7 +230,12 @@ export default function GalleryPage() {
         {/* Year Tabs */}
         <Tabs value={selectedYear} onValueChange={handleYearChange} className="w-full">
           <div className="flex justify-center mb-8">
-            <TabsList className="grid grid-cols-5 h-auto p-1">
+            <TabsList className={cn(
+              "h-auto p-1",
+              galleryData.length <= 3 ? "grid grid-cols-3" : "grid",
+              galleryData.length === 4 && "grid-cols-4",
+              galleryData.length >= 5 && "grid-cols-5"
+            )}>
               {galleryData.map((gallery) => (
                 <TabsTrigger
                   key={gallery.year}
@@ -161,11 +264,12 @@ export default function GalleryPage() {
                     )}
                   >
                     <Image
-                      src={image.src}
+                      src={image.thumbnailSrc}
                       alt={image.alt}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      loading="lazy"
                     />
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
@@ -187,59 +291,59 @@ export default function GalleryPage() {
           ))}
         </Tabs>
 
-        {/* Lightbox */}
-        <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
-          <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 bg-black/95 border-none">
-            <DialogTitle className="sr-only">
-              {currentGallery?.images[currentImageIndex]?.alt}
-            </DialogTitle>
-
+        {/* Custom Lightbox */}
+        {lightboxOpen && (
+          <div className="fixed inset-0 z-50 bg-black">
             {/* Close Button */}
             <button
               onClick={closeLightbox}
-              className="absolute top-4 right-4 z-50 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              aria-label={t("close")}
+              className="fixed top-4 right-4 md:top-6 md:right-6 z-50 p-2 md:p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+              aria-label="Close"
             >
-              <X className="h-6 w-6 text-white" />
+              <X className="h-5 w-5 md:h-6 md:w-6 text-white" />
             </button>
 
-            {/* Navigation Buttons */}
-            <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              aria-label={t("previous")}
-            >
-              <ChevronLeft className="h-8 w-8 text-white" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              aria-label={t("next")}
-            >
-              <ChevronRight className="h-8 w-8 text-white" />
-            </button>
+            {/* Main Content Area with Flexbox Layout */}
+            <div className="fixed inset-0 flex items-center">
+              {/* Previous Button */}
+              <button
+                onClick={goToPrevious}
+                className="flex-shrink-0 p-2 md:p-4 mx-2 md:mx-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-white" />
+              </button>
 
-            {/* Image */}
-            <div className="relative w-full h-[85vh] flex items-center justify-center p-8">
-              {currentGallery?.images[currentImageIndex] && (
-                <Image
-                  src={currentGallery.images[currentImageIndex].src}
-                  alt={currentGallery.images[currentImageIndex].alt}
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              )}
+              {/* Image Container */}
+              <div className="flex-1 flex items-center justify-center h-full py-16">
+                {currentGallery?.images[currentImageIndex] && (
+                  <img
+                    src={currentGallery.images[currentImageIndex].fullSrc}
+                    alt={currentGallery.images[currentImageIndex].alt}
+                    className="max-w-full max-h-full w-auto h-auto object-contain"
+                    loading="eager"
+                  />
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={goToNext}
+                className="flex-shrink-0 p-2 md:p-4 mx-2 md:mx-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+                aria-label="Next"
+              >
+                <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-white" />
+              </button>
             </div>
 
             {/* Counter */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
-              <span className="text-white text-sm">
+            <div className="fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 px-4 md:px-6 py-2 md:py-3 rounded-full bg-white/10 backdrop-blur-sm">
+              <span className="text-white text-sm md:text-base font-medium">
                 {currentImageIndex + 1} / {currentGallery?.images.length}
               </span>
             </div>
-          </DialogContent>
-        </Dialog>
+          </div>
+        )}
       </div>
     </main>
   );

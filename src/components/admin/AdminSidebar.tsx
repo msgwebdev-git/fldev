@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -45,6 +45,7 @@ const navigation: NavElement[] = [
     items: [
       { name: "Новости", href: "/admin/news", icon: Newspaper },
       { name: "Aftermovie", href: "/admin/aftermovies", icon: Video },
+      { name: "Галерея", href: "/admin/gallery", icon: Images },
     ]
   },
   {
