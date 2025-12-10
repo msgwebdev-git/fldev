@@ -58,8 +58,10 @@ export function AddActivityButton({ years }: AddActivityButtonProps) {
     const supabase = createClient();
 
     const { error } = await supabase.from("activities").insert({
-      title: formData.get("title") as string,
-      description: formData.get("description") as string || null,
+      title_ru: formData.get("title_ru") as string,
+      title_ro: formData.get("title_ro") as string,
+      description_ru: formData.get("description_ru") as string || null,
+      description_ro: formData.get("description_ro") as string || null,
       category: selectedCategory,
       icon: selectedIcon,
       location: formData.get("location") as string || null,
@@ -93,10 +95,10 @@ export function AddActivityButton({ years }: AddActivityButtonProps) {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-gray-700">Название *</Label>
+            <Label htmlFor="title_ru" className="text-gray-700">Название (RU) *</Label>
             <Input
-              id="title"
-              name="title"
+              id="title_ru"
+              name="title_ru"
               placeholder="Концерты на главной сцене"
               required
               className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
@@ -104,11 +106,33 @@ export function AddActivityButton({ years }: AddActivityButtonProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-gray-700">Описание</Label>
+            <Label htmlFor="title_ro" className="text-gray-700">Titlu (RO) *</Label>
+            <Input
+              id="title_ro"
+              name="title_ro"
+              placeholder="Concerte pe scena principală"
+              required
+              className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="description_ru" className="text-gray-700">Описание (RU)</Label>
             <Textarea
-              id="description"
-              name="description"
+              id="description_ru"
+              name="description_ru"
               placeholder="Выступления хедлайнеров и известных артистов"
+              className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
+              rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="description_ro" className="text-gray-700">Descriere (RO)</Label>
+            <Textarea
+              id="description_ro"
+              name="description_ro"
+              placeholder="Spectacole ale headlinerilor și artiștilor celebri"
               className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
               rows={3}
             />

@@ -24,16 +24,11 @@ import {
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 
-interface AddEventButtonProps {
-  years: string[];
-}
-
-export function AddEventButton({ years }: AddEventButtonProps) {
+export function AddEventButton() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isHeadliner, setIsHeadliner] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
   const [selectedDay, setSelectedDay] = useState("1");
   const [selectedStage, setSelectedStage] = useState("main");
 
@@ -52,7 +47,6 @@ export function AddEventButton({ years }: AddEventButtonProps) {
       stage: selectedStage,
       genre: formData.get("genre") as string || null,
       is_headliner: isHeadliner,
-      year: selectedYear,
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
     });
 
@@ -100,36 +94,18 @@ export function AddEventButton({ years }: AddEventButtonProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="year" className="text-gray-700">Год *</Label>
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                  <SelectValue placeholder="Выберите год" />
-                </SelectTrigger>
-                <SelectContent>
-                  {["2025", "2024", "2023", "2022", "2021"].map((year) => (
-                    <SelectItem key={year} value={year}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="day" className="text-gray-700">День</Label>
-              <Select value={selectedDay} onValueChange={setSelectedDay}>
-                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                  <SelectValue placeholder="День" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">День 1</SelectItem>
-                  <SelectItem value="2">День 2</SelectItem>
-                  <SelectItem value="3">День 3</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="day" className="text-gray-700">День</Label>
+            <Select value={selectedDay} onValueChange={setSelectedDay}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <SelectValue placeholder="День" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">День 1</SelectItem>
+                <SelectItem value="2">День 2</SelectItem>
+                <SelectItem value="3">День 3</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

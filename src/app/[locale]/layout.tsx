@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
 import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
+import { Toaster } from "sonner";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -52,6 +53,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main>{children}</main>
             <Footer />
             <TicketCartBar />
+            <Toaster position="top-center" richColors />
           </CartProvider>
         </NextIntlClientProvider>
       </body>

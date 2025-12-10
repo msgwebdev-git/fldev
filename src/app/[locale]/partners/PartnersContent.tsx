@@ -4,12 +4,21 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { ArrowLeft, Handshake, Mail, ExternalLink } from "lucide-react";
+import { ArrowLeft, Handshake, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { PartnerApplicationForm } from "./PartnerApplicationForm";
 
 // Types for partners data
 interface Partner {
@@ -36,6 +45,7 @@ const categoryOrder = ["patronage", "generalPartner", "partners", "generalMediaP
 
 export function PartnersContent({ partners }: PartnersContentProps) {
   const t = useTranslations("Partners");
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   // Группируем партнёров по категориям
   const partnersByCategory = partners.reduce((acc, partner) => {
@@ -56,18 +66,18 @@ export function PartnersContent({ partners }: PartnersContentProps) {
 
   const getGridCols = (count: number, isMain: boolean) => {
     if (isMain) {
-      if (count === 1) return "grid-cols-1 max-w-md mx-auto";
-      if (count === 2) return "grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto";
-      return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto";
+      if (count === 1) return "grid-cols-1 max-w-xs mx-auto";
+      if (count === 2) return "grid-cols-2 max-w-lg mx-auto";
+      return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 max-w-3xl mx-auto";
     }
-    return "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6";
+    return "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6";
   };
 
   const getLogoSize = (key: string) => {
     if (key === "patronage" || key === "generalPartner" || key === "generalMediaPartner") {
       return "h-24 md:h-32";
     }
-    return "h-16 md:h-20";
+    return "h-20 md:h-24";
   };
 
   return (
@@ -83,23 +93,53 @@ export function PartnersContent({ partners }: PartnersContentProps) {
           </Button>
         </div>
 
-        {/* Header */}
-        <div className="text-center mb-16">
+        {/* Hero Content */}
+        <div className="text-center mb-16 space-y-6">
           <Badge variant="outline" className="mb-4">
             <Handshake className="h-3 w-3 mr-1" />
             {t("badge")}
           </Badge>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            {t("title")}
+
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+            {t("hero.title")}
           </h1>
+
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            {t("subtitle")}
+            {t("hero.subtitle")}
           </p>
+
+          {/* CTA Button */}
+          <div className="flex justify-center pt-4">
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg">
+                  {t("hero.ctaButton")}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl">{t("form.title")}</DialogTitle>
+                  <DialogDescription>{t("form.description")}</DialogDescription>
+                </DialogHeader>
+                <PartnerApplicationForm onSuccess={() => setIsDialogOpen(false)} />
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
-        {/* Partner Categories */}
-        <div className="space-y-16">
-          {categories.map((category) => {
+        {/* Partners Section */}
+        {categories.length === 0 ? (
+          <div className="text-center py-20">
+            <Handshake className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold mb-2">{t("noPartnersYet")}</h3>
+            <p className="text-muted-foreground max-w-md mx-auto">
+              {t("noPartnersDescription")}
+            </p>
+          </div>
+        ) : (
+          /* Partner Categories */
+          <div className="space-y-16">
+            {categories.map((category) => {
             const isMainCategory = ["patronage", "generalPartner", "generalMediaPartner"].includes(category.key);
 
             return (
@@ -113,13 +153,13 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                 </div>
 
                 {/* Partners Grid */}
-                <div className={`grid gap-6 ${getGridCols(category.partners.length, isMainCategory)}`}>
+                <div className={`grid gap-4 ${getGridCols(category.partners.length, isMainCategory)}`}>
                   {category.partners.map((partner) => (
                     <Card
                       key={partner.id}
                       className="group transition-all hover:shadow-lg hover:border-primary/30 overflow-hidden"
                     >
-                      <CardContent className="p-6 flex items-center justify-center">
+                      <CardContent className="p-6 flex items-center justify-center min-h-[140px]">
                         {partner.website ? (
                           <a
                             href={partner.website}
@@ -172,43 +212,18 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                 </div>
               </section>
             );
-          })}
-        </div>
-
-        {/* Become a Partner CTA */}
-        <div className="mt-20 text-center">
-          <Card className="max-w-2xl mx-auto bg-primary/5 border-primary/20">
-            <CardContent className="p-8 md:p-12">
-              <Handshake className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                {t("cta.title")}
-              </h3>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                {t("cta.description")}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" asChild>
-                  <a href="mailto:partners@festivalullupilor.md">
-                    <Mail className="mr-2 h-5 w-5" />
-                    {t("cta.button")}
-                  </a>
-                </Button>
-                <Button size="lg" variant="outline" asChild>
-                  <a href="tel:+37360123456">
-                    {t("cta.callUs")}
-                  </a>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+            })}
+          </div>
+        )}
 
         {/* Thank you message */}
-        <div className="mt-12 text-center">
-          <p className="text-muted-foreground italic">
-            {t("thankYou")}
-          </p>
-        </div>
+        {categories.length > 0 && (
+          <div className="mt-12 text-center">
+            <p className="text-muted-foreground italic">
+              {t("thankYou")}
+            </p>
+          </div>
+        )}
       </div>
     </main>
   );

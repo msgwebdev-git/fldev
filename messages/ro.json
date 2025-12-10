@@ -284,6 +284,26 @@
     "title": "Partenerii Festivalului",
     "subtitle": "Mulțumim partenerilor noștri care fac posibil acest eveniment",
     "backToHome": "Înapoi la pagina principală",
+    "hero": {
+      "title": "Alăturați-vă nouă",
+      "subtitle": "Fii parte din cel mai mare festival din Moldova și creează experiențe de neuitat împreună cu noi",
+      "benefits": {
+        "audience": {
+          "title": "Audiență largă",
+          "description": "Peste 15.000 de vizitatori în cele 3 zile de festival"
+        },
+        "brand": {
+          "title": "Vizibilitate brand",
+          "description": "Expunere media și prezență pe toate platformele"
+        },
+        "impact": {
+          "title": "Impact social",
+          "description": "Sprijină dezvoltarea culturală și comunitatea locală"
+        }
+      },
+      "ctaButton": "Devino partener",
+      "contactButton": "Contactează-ne"
+    },
     "categories": {
       "patronage": "Sub egida",
       "generalPartner": "Partener General",
@@ -291,13 +311,56 @@
       "generalMediaPartner": "Partener Media General",
       "mediaPartners": "Parteneri Media"
     },
+    "form": {
+      "title": "Cerere de parteneriat",
+      "description": "Completează formularul și managerul nostru te va contacta în 24 de ore",
+      "contactName": "Persoană de contact",
+      "contactNamePlaceholder": "Nume și prenume",
+      "email": "Email",
+      "emailPlaceholder": "email@company.com",
+      "companyName": "Numele companiei",
+      "companyNamePlaceholder": "SRL \"Compania ta\"",
+      "website": "Site web",
+      "websiteDescription": "Opțional",
+      "category": "Categoria de parteneriat",
+      "categoryPlaceholder": "Alege categoria",
+      "categoryDescription": "Selectează categoria de colaborare care te interesează",
+      "categories": {
+        "patronage": "Sub egida",
+        "generalPartner": "Partener General",
+        "partners": "Partener",
+        "generalMediaPartner": "Partener Media General",
+        "mediaPartners": "Partener Media"
+      },
+      "logo": "Logo-ul companiei",
+      "logoUpload": "Click pentru a încărca logo-ul",
+      "logoDescription": "PNG, JPG sau SVG. Maximum 2MB. Opțional",
+      "logoTooLarge": "Fișierul este prea mare. Maximum 2MB",
+      "logoInvalidType": "Format invalid. Utilizează PNG, JPG sau SVG",
+      "message": "Mesaj",
+      "messagePlaceholder": "Descrie compania ta și interesul pentru parteneriat...",
+      "messageDescription": "Descrie obiectivele colaborării și ce te interesează",
+      "agreeTerms": "Sunt de acord cu prelucrarea datelor mele și cu condițiile de parteneriat",
+      "submit": "Trimite cererea",
+      "successMessage": "Cerere trimisă cu succes! Te vom contacta în curând.",
+      "errorMessage": "A apărut o eroare. Încearcă din nou sau contactează-ne direct.",
+      "nameRequired": "Introdu numele tău (minim 2 caractere)",
+      "emailInvalid": "Introdu o adresă de email validă",
+      "companyRequired": "Introdu numele companiei (minim 2 caractere)",
+      "websiteInvalid": "Introdu un URL valid (ex: https://example.com)",
+      "categoryRequired": "Alege categoria de parteneriat",
+      "messageRequired": "Introdu un mesaj (minim 10 caractere)",
+      "agreeRequired": "Trebuie să accepți condițiile"
+    },
     "cta": {
       "title": "Devino Partener",
       "description": "Vrei să faci parte din cel mai mare festival din Moldova? Contactează-ne pentru oportunități de parteneriat.",
       "button": "Scrie-ne",
       "callUs": "Sună-ne"
     },
-    "thankYou": "Mulțumim tuturor partenerilor pentru susținerea acordată!"
+    "thankYou": "Mulțumim tuturor partenerilor pentru susținerea acordată!",
+    "noPartnersYet": "Partenerii vor apărea în curând",
+    "noPartnersDescription": "Lucrăm la formarea listei de parteneri pentru noul sezon al festivalului. Dacă dorești să devii partener, apasă butonul de mai sus."
   },
   "Program": {
     "badge": "Program Festival",

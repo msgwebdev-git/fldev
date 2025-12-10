@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil, Trash2, Handshake, ExternalLink } from "lucide-react";
 
 interface Partner {
@@ -37,7 +36,6 @@ interface Partner {
 
 interface PartnersTableProps {
   partners: Partner[];
-  years: string[];
 }
 
 const categoryLabels: Record<string, string> = {
@@ -56,20 +54,17 @@ const categoryColors: Record<string, string> = {
   mediaPartners: "bg-pink-100 text-pink-800 border-pink-200",
 };
 
-export function PartnersTable({ partners, years }: PartnersTableProps) {
+export function PartnersTable({ partners }: PartnersTableProps) {
   const router = useRouter();
   const [editingItem, setEditingItem] = useState<Partner | null>(null);
   const [deletingItem, setDeletingItem] = useState<Partner | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
   const [editCategory, setEditCategory] = useState("partners");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const filteredPartners = partners.filter((p) => p.year === selectedYear);
-
   // Группируем по категориям
   const partnersByCategory: Record<string, Partner[]> = {};
-  filteredPartners.forEach((partner) => {
+  partners.forEach((partner) => {
     if (!partnersByCategory[partner.category]) {
       partnersByCategory[partner.category] = [];
     }
@@ -95,7 +90,14 @@ export function PartnersTable({ partners, years }: PartnersTableProps) {
         .from("partners")
         .upload(fileName, imageFile);
 
-      if (!uploadError && uploadData) {
+      if (uploadError) {
+        console.error("Error uploading image:", uploadError);
+        alert(`Ошибка загрузки изображения: ${uploadError.message}`);
+        setIsLoading(false);
+        return;
+      }
+
+      if (uploadData) {
         const { data: urlData } = supabase.storage
           .from("partners")
           .getPublicUrl(fileName);
@@ -103,17 +105,23 @@ export function PartnersTable({ partners, years }: PartnersTableProps) {
       }
     }
 
-    await supabase
+    const { error } = await supabase
       .from("partners")
       .update({
         name: formData.get("name") as string,
         logo_url: logoUrl || null,
         website: formData.get("website") as string || null,
         category: editCategory,
-        year: formData.get("year") as string,
         sort_order: parseInt(formData.get("sort_order") as string) || 0,
       })
       .eq("id", editingItem.id);
+
+    if (error) {
+      console.error("Error updating partner:", error);
+      alert(`Ошибка обновления партнера: ${error.message || JSON.stringify(error)}`);
+      setIsLoading(false);
+      return;
+    }
 
     setIsLoading(false);
     setEditingItem(null);
@@ -214,21 +222,8 @@ export function PartnersTable({ partners, years }: PartnersTableProps) {
 
   return (
     <>
-      {/* Year Tabs */}
-      <Tabs value={selectedYear} onValueChange={setSelectedYear}>
-        <TabsList className="bg-gray-100 mb-4">
-          {years.length > 0 ? (
-            years.map((year) => (
-              <TabsTrigger key={year} value={year}>
-                {year} ({partners.filter((p) => p.year === year).length})
-              </TabsTrigger>
-            ))
-          ) : (
-            <TabsTrigger value="2025">2025 (0)</TabsTrigger>
-          )}
-        </TabsList>
-
-        <TabsContent value={selectedYear} className="mt-0 space-y-6">
+      {Object.keys(partnersByCategory).length > 0 ? (
+        <div className="space-y-6">
           {Object.entries(partnersByCategory).map(([category, categoryPartners]) => (
             <div key={category}>
               <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
@@ -267,14 +262,13 @@ export function PartnersTable({ partners, years }: PartnersTableProps) {
               </div>
             </div>
           ))}
-
-          {filteredPartners.length === 0 && (
-            <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
-              <p className="text-gray-500">Нет партнёров за {selectedYear} год</p>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+        </div>
+      ) : (
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
+          <Handshake className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500">Нет партнёров. Добавьте первого!</p>
+        </div>
+      )}
 
       {/* Edit Dialog */}
       <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
@@ -294,33 +288,20 @@ export function PartnersTable({ partners, years }: PartnersTableProps) {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-year" className="text-gray-700">Год *</Label>
-                <Input
-                  id="edit-year"
-                  name="year"
-                  defaultValue={editingItem?.year}
-                  required
-                  className="bg-white border-gray-300 text-gray-900"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="edit-category" className="text-gray-700">Категория</Label>
-                <Select value={editCategory} onValueChange={setEditCategory}>
-                  <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                    <SelectValue placeholder="Категория" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="patronage">Патронаж</SelectItem>
-                    <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
-                    <SelectItem value="partners">Партнёры</SelectItem>
-                    <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
-                    <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-category" className="text-gray-700">Категория</Label>
+              <Select value={editCategory} onValueChange={setEditCategory}>
+                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                  <SelectValue placeholder="Категория" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="patronage">Патронаж</SelectItem>
+                  <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
+                  <SelectItem value="partners">Партнёры</SelectItem>
+                  <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
+                  <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

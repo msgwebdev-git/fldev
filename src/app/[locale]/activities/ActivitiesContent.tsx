@@ -25,7 +25,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppCTABlock } from "@/components/AppCTABlock";
 
 interface Activity {
-  id: number;
+  id: string;
   title: string;
   description: string | null;
   category: string;

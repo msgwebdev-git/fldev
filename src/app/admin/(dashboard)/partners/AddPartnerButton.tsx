@@ -23,15 +23,10 @@ import {
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 
-interface AddPartnerButtonProps {
-  years: string[];
-}
-
-export function AddPartnerButton({ years }: AddPartnerButtonProps) {
+export function AddPartnerButton() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
   const [selectedCategory, setSelectedCategory] = useState("partners");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -53,7 +48,14 @@ export function AddPartnerButton({ years }: AddPartnerButtonProps) {
         .from("partners")
         .upload(fileName, imageFile);
 
-      if (!uploadError && uploadData) {
+      if (uploadError) {
+        console.error("Error uploading image:", uploadError);
+        alert(`Ошибка загрузки изображения: ${uploadError.message}`);
+        setIsLoading(false);
+        return;
+      }
+
+      if (uploadData) {
         const { data: urlData } = supabase.storage
           .from("partners")
           .getPublicUrl(fileName);
@@ -66,12 +68,14 @@ export function AddPartnerButton({ years }: AddPartnerButtonProps) {
       logo_url: logoUrl || null,
       website: formData.get("website") as string || null,
       category: selectedCategory,
-      year: selectedYear,
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
     });
 
     if (error) {
       console.error("Error adding partner:", error);
+      alert(`Ошибка добавления партнера: ${error.message || JSON.stringify(error)}`);
+      setIsLoading(false);
+      return;
     }
 
     setIsLoading(false);
@@ -104,38 +108,20 @@ export function AddPartnerButton({ years }: AddPartnerButtonProps) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="year" className="text-gray-700">Год *</Label>
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                  <SelectValue placeholder="Выберите год" />
-                </SelectTrigger>
-                <SelectContent>
-                  {["2025", "2024", "2023", "2022", "2021"].map((year) => (
-                    <SelectItem key={year} value={year}>
-                      {year}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="category" className="text-gray-700">Категория</Label>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                  <SelectValue placeholder="Категория" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="patronage">Патронаж</SelectItem>
-                  <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
-                  <SelectItem value="partners">Партнёры</SelectItem>
-                  <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
-                  <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="category" className="text-gray-700">Категория</Label>
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                <SelectValue placeholder="Категория" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="patronage">Патронаж</SelectItem>
+                <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
+                <SelectItem value="partners">Партнёры</SelectItem>
+                <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
+                <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">

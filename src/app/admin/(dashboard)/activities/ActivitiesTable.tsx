@@ -27,9 +27,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil, Trash2, Sparkles, MapPin, Clock, Star } from "lucide-react";
 
 interface Activity {
-  id: number;
-  title: string;
-  description: string | null;
+  id: string;
+  title_ru: string;
+  title_ro: string;
+  description_ru: string | null;
+  description_ro: string | null;
   category: string;
   icon: string;
   location: string | null;
@@ -101,8 +103,10 @@ export function ActivitiesTable({ activities, years }: ActivitiesTableProps) {
     await supabase
       .from("activities")
       .update({
-        title: formData.get("title") as string,
-        description: formData.get("description") as string || null,
+        title_ru: formData.get("title_ru") as string,
+        title_ro: formData.get("title_ro") as string,
+        description_ru: formData.get("description_ru") as string || null,
+        description_ro: formData.get("description_ro") as string || null,
         category: editCategory,
         icon: editIcon,
         location: formData.get("location") as string || null,
@@ -151,7 +155,7 @@ export function ActivitiesTable({ activities, years }: ActivitiesTableProps) {
     <tr key={activity.id} className={`hover:bg-gray-50 ${activity.is_highlight ? "bg-primary/5" : ""}`}>
       <td className="px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="text-gray-900 font-medium">{activity.title}</span>
+          <span className="text-gray-900 font-medium">{activity.title_ru}</span>
           {activity.is_highlight && (
             <Badge variant="default" className="text-xs">
               <Star className="w-3 h-3 mr-1" />
@@ -159,8 +163,8 @@ export function ActivitiesTable({ activities, years }: ActivitiesTableProps) {
             </Badge>
           )}
         </div>
-        {activity.description && (
-          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{activity.description}</p>
+        {activity.description_ru && (
+          <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{activity.description_ru}</p>
         )}
       </td>
       <td className="px-4 py-3">
@@ -281,22 +285,44 @@ export function ActivitiesTable({ activities, years }: ActivitiesTableProps) {
           </DialogHeader>
           <form onSubmit={handleEdit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-title" className="text-gray-700">Название *</Label>
+              <Label htmlFor="edit-title_ru" className="text-gray-700">Название (RU) *</Label>
               <Input
-                id="edit-title"
-                name="title"
-                defaultValue={editingItem?.title}
+                id="edit-title_ru"
+                name="title_ru"
+                defaultValue={editingItem?.title_ru}
                 required
                 className="bg-white border-gray-300 text-gray-900"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-description" className="text-gray-700">Описание</Label>
+              <Label htmlFor="edit-title_ro" className="text-gray-700">Titlu (RO) *</Label>
+              <Input
+                id="edit-title_ro"
+                name="title_ro"
+                defaultValue={editingItem?.title_ro}
+                required
+                className="bg-white border-gray-300 text-gray-900"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description_ru" className="text-gray-700">Описание (RU)</Label>
               <Textarea
-                id="edit-description"
-                name="description"
-                defaultValue={editingItem?.description || ""}
+                id="edit-description_ru"
+                name="description_ru"
+                defaultValue={editingItem?.description_ru || ""}
+                className="bg-white border-gray-300 text-gray-900"
+                rows={3}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description_ro" className="text-gray-700">Descriere (RO)</Label>
+              <Textarea
+                id="edit-description_ro"
+                name="description_ro"
+                defaultValue={editingItem?.description_ro || ""}
                 className="bg-white border-gray-300 text-gray-900"
                 rows={3}
               />
@@ -412,7 +438,7 @@ export function ActivitiesTable({ activities, years }: ActivitiesTableProps) {
             <DialogTitle className="text-gray-900">Удалить активность?</DialogTitle>
           </DialogHeader>
           <p className="text-gray-500">
-            Вы уверены, что хотите удалить &quot;{deletingItem?.title}&quot;?
+            Вы уверены, что хотите удалить &quot;{deletingItem?.title_ru}&quot;?
           </p>
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setDeletingItem(null)}>

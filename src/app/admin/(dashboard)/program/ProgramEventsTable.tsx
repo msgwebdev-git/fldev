@@ -40,7 +40,6 @@ interface ProgramEvent {
 
 interface ProgramEventsTableProps {
   events: ProgramEvent[];
-  years: string[];
 }
 
 const stageLabels: Record<string, string> = {
@@ -55,22 +54,19 @@ const stageColors: Record<string, string> = {
   electronic: "bg-purple-100 text-purple-800 border-purple-200",
 };
 
-export function ProgramEventsTable({ events, years }: ProgramEventsTableProps) {
+export function ProgramEventsTable({ events }: ProgramEventsTableProps) {
   const router = useRouter();
   const [editingItem, setEditingItem] = useState<ProgramEvent | null>(null);
   const [deletingItem, setDeletingItem] = useState<ProgramEvent | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
   const [selectedDayTab, setSelectedDayTab] = useState("1");
   const [editIsHeadliner, setEditIsHeadliner] = useState(false);
   const [editDay, setEditDay] = useState("1");
   const [editStage, setEditStage] = useState("main");
 
-  const filteredEvents = events.filter((e) => e.year === selectedYear);
-
   // Группируем по дням
   const eventsByDay: Record<number, ProgramEvent[]> = {};
-  filteredEvents.forEach((event) => {
+  events.forEach((event) => {
     if (!eventsByDay[event.day]) {
       eventsByDay[event.day] = [];
     }
@@ -78,7 +74,7 @@ export function ProgramEventsTable({ events, years }: ProgramEventsTableProps) {
   });
 
   // Получаем уникальные дни
-  const days = [...new Set(filteredEvents.map((e) => e.day))].sort((a, b) => a - b);
+  const days = [...new Set(events.map((e) => e.day))].sort((a, b) => a - b);
 
   const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,7 +94,6 @@ export function ProgramEventsTable({ events, years }: ProgramEventsTableProps) {
         stage: editStage,
         genre: formData.get("genre") as string || null,
         is_headliner: editIsHeadliner,
-        year: formData.get("year") as string,
         sort_order: parseInt(formData.get("sort_order") as string) || 0,
       })
       .eq("id", editingItem.id);
@@ -193,76 +188,59 @@ export function ProgramEventsTable({ events, years }: ProgramEventsTableProps) {
 
   return (
     <>
-      {/* Year Tabs */}
-      <Tabs value={selectedYear} onValueChange={setSelectedYear}>
-        <TabsList className="bg-gray-100 mb-4">
-          {years.length > 0 ? (
-            years.map((year) => (
-              <TabsTrigger key={year} value={year}>
-                {year} ({events.filter((e) => e.year === year).length})
-              </TabsTrigger>
-            ))
-          ) : (
-            <TabsTrigger value="2025">2025 (0)</TabsTrigger>
-          )}
-        </TabsList>
+      {/* Day Tabs */}
+      {days.length > 0 ? (
+        <Tabs value={selectedDayTab} onValueChange={setSelectedDayTab}>
+          <TabsList className="bg-gray-100 mb-4">
+            {days.map((day) => {
+              const dayEvents = eventsByDay[day] || [];
+              const date = dayEvents[0]?.date || `День ${day}`;
+              return (
+                <TabsTrigger key={day} value={day.toString()}>
+                  {date} ({dayEvents.length})
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
 
-        <TabsContent value={selectedYear} className="mt-0">
-          {/* Day Tabs */}
-          {days.length > 0 ? (
-            <Tabs value={selectedDayTab} onValueChange={setSelectedDayTab}>
-              <TabsList className="bg-gray-100 mb-4">
-                {days.map((day) => {
-                  const dayEvents = eventsByDay[day] || [];
-                  const date = dayEvents[0]?.date || `День ${day}`;
-                  return (
-                    <TabsTrigger key={day} value={day.toString()}>
-                      {date} ({dayEvents.length})
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-
-              {days.map((day) => (
-                <TabsContent key={day} value={day.toString()} className="mt-0">
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200 bg-gray-50">
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
-                            Время
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                            Артист / Событие
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-40">
-                            Сцена
-                          </th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-20">
-                            Порядок
-                          </th>
-                          <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-24">
-                            Действия
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {(eventsByDay[day] || [])
-                          .sort((a, b) => a.sort_order - b.sort_order)
-                          .map(renderEventRow)}
-                      </tbody>
-                    </table>
-                  </div>
-                </TabsContent>
-              ))}
-            </Tabs>
-          ) : (
-            <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
-              <p className="text-gray-500">Нет событий за {selectedYear} год</p>
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+          {days.map((day) => (
+            <TabsContent key={day} value={day.toString()} className="mt-0">
+              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200 bg-gray-50">
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">
+                        Время
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        Артист / Событие
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-40">
+                        Сцена
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-20">
+                        Порядок
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase w-24">
+                        Действия
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {(eventsByDay[day] || [])
+                      .sort((a, b) => a.sort_order - b.sort_order)
+                      .map(renderEventRow)}
+                  </tbody>
+                </table>
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
+      ) : (
+        <div className="bg-white border border-gray-200 rounded-xl p-12 text-center">
+          <p className="text-gray-500">Нет событий. Добавьте первое!</p>
+        </div>
+      )}
 
       {/* Edit Dialog */}
       <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
@@ -308,31 +286,18 @@ export function ProgramEventsTable({ events, years }: ProgramEventsTableProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="edit-year" className="text-gray-700">Год *</Label>
-                <Input
-                  id="edit-year"
-                  name="year"
-                  defaultValue={editingItem?.year}
-                  required
-                  className="bg-white border-gray-300 text-gray-900"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="edit-day" className="text-gray-700">День</Label>
-                <Select value={editDay} onValueChange={setEditDay}>
-                  <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                    <SelectValue placeholder="День" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">День 1</SelectItem>
-                    <SelectItem value="2">День 2</SelectItem>
-                    <SelectItem value="3">День 3</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-day" className="text-gray-700">День</Label>
+              <Select value={editDay} onValueChange={setEditDay}>
+                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                  <SelectValue placeholder="День" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">День 1</SelectItem>
+                  <SelectItem value="2">День 2</SelectItem>
+                  <SelectItem value="3">День 3</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">

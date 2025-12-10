@@ -8,12 +8,8 @@ export default async function PartnersAdminPage() {
   const { data: partners } = await supabase
     .from("partners")
     .select("*")
-    .order("year", { ascending: false })
     .order("category", { ascending: true })
     .order("sort_order", { ascending: true });
-
-  // Получаем уникальные года
-  const years = [...new Set(partners?.map((p) => p.year) || [])];
 
   return (
     <div className="space-y-6">
@@ -22,10 +18,10 @@ export default async function PartnersAdminPage() {
           <h1 className="text-2xl font-bold text-gray-900">Партнёры</h1>
           <p className="text-gray-500 mt-1">Управление партнёрами фестиваля</p>
         </div>
-        <AddPartnerButton years={years} />
+        <AddPartnerButton />
       </div>
 
-      <PartnersTable partners={partners ?? []} years={years} />
+      <PartnersTable partners={partners ?? []} />
     </div>
   );
 }
