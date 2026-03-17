@@ -101,8 +101,7 @@ export function CreateInvitationForm({ tickets }: CreateInvitationFormProps) {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const response = await fetch(`${apiUrl}/api/admin/invitations`, {
+      const response = await fetch("/api/admin/invitations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

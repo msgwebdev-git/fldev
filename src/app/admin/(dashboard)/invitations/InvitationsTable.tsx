@@ -59,8 +59,7 @@ export function InvitationsTable({ invitations }: InvitationsTableProps) {
   const handleResend = async (orderId: string) => {
     setResending(orderId);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const response = await fetch(`${apiUrl}/api/admin/orders/${orderId}/resend-tickets`, {
+      const response = await fetch(`/api/admin/orders/${orderId}/resend-tickets`, {
         method: "POST",
       });
 
