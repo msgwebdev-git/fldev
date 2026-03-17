@@ -79,6 +79,22 @@ export function LineupContent({ artists, years }: LineupContentProps) {
           </p>
         </div>
 
+        {/* Empty State */}
+        {artists.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted mb-6">
+              <Music className="w-10 h-10 text-muted-foreground" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-3">{t("emptyTitle")}</h2>
+            <p className="text-muted-foreground max-w-md mx-auto mb-8">
+              {t("emptySubtitle")}
+            </p>
+            <Button asChild>
+              <Link href="/">{t("backToHome")}</Link>
+            </Button>
+          </div>
+        ) : (
+        <>
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-3xl mx-auto">
           <div className="text-center p-4 rounded-xl bg-muted/50">
@@ -239,6 +255,8 @@ export function LineupContent({ artists, years }: LineupContentProps) {
             );
           })}
         </Tabs>
+        </>
+        )}
       </div>
     </main>
   );

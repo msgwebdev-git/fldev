@@ -79,10 +79,10 @@ interface B2BPackageCalculatorProps {
 }
 
 const DISCOUNT_TIERS: DiscountTier[] = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 10, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 12, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 15, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 20, label: "200+" },
+  { minQuantity: 50, maxQuantity: 99, discountPercent: 3, label: "50-99" },
+  { minQuantity: 100, maxQuantity: 149, discountPercent: 5, label: "100-149" },
+  { minQuantity: 150, maxQuantity: 199, discountPercent: 7, label: "150-199" },
+  { minQuantity: 200, maxQuantity: null, discountPercent: 10, label: "200+" },
 ];
 
 const MIN_QUANTITY = 50;
@@ -232,8 +232,8 @@ export function B2BPackageCalculator({
                   key={tier.label}
                   className={`p-4 rounded-lg border-2 transition-all ${
                     isActive
-                      ? "border-primary bg-primary/5"
-                      : "border-muted bg-muted/30"
+                      ? "border-primary"
+                      : "border-muted"
                   }`}
                 >
                   <div className="text-sm text-muted-foreground mb-1">{tier.label}</div>

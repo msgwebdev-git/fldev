@@ -49,11 +49,100 @@ interface B2BOrderWizardProps {
 const MIN_QUANTITY = 50;
 
 const DISCOUNT_TIERS = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 10, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 12, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 15, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 20, label: "200+" },
+  { minQuantity: 50, maxQuantity: 99, discountPercent: 3, label: "50-99" },
+  { minQuantity: 100, maxQuantity: 149, discountPercent: 5, label: "100-149" },
+  { minQuantity: 150, maxQuantity: 199, discountPercent: 7, label: "150-199" },
+  { minQuantity: 200, maxQuantity: null, discountPercent: 10, label: "200+" },
 ];
+
+interface SummaryCardProps {
+  compact?: boolean;
+  tCalc: ReturnType<typeof useTranslations>;
+  isValidQuantity: boolean;
+  discountPercent: number;
+  nextTier: (typeof DISCOUNT_TIERS)[number] | undefined;
+  ticketsToNextTier: number;
+  totalQuantity: number;
+  subtotal: number;
+  discountAmount: number;
+  finalAmount: number;
+}
+
+function SummaryCard({
+  compact = false,
+  tCalc,
+  isValidQuantity,
+  discountPercent,
+  nextTier,
+  ticketsToNextTier,
+  totalQuantity,
+  subtotal,
+  discountAmount,
+  finalAmount,
+}: SummaryCardProps) {
+  return (
+    <Card className={compact ? "" : "sticky top-24"}>
+      <CardHeader className={compact ? "pb-3" : ""}>
+        <CardTitle className={compact ? "text-base" : ""}>{tCalc("summary")}</CardTitle>
+        {!compact && isValidQuantity && (
+          <CardDescription>
+            <div className="flex items-center gap-2 text-sm text-green-600">
+              <CheckCircle2 className="h-4 w-4" />
+              <span>{tCalc("discountApplied", { percent: discountPercent })}</span>
+            </div>
+          </CardDescription>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Next Tier Upsell */}
+        {!compact && isValidQuantity && nextTier && (
+          <Alert>
+            <TrendingUp className="h-4 w-4" />
+            <AlertDescription className="text-xs">
+              {tCalc("nextTierMessage", {
+                needed: ticketsToNextTier,
+                discount: nextTier.discountPercent,
+              })}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Amounts */}
+        <div className={compact ? "space-y-2" : "space-y-3"}>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{tCalc("totalTickets")}</span>
+            <span className="font-medium">{totalQuantity}</span>
+          </div>
+
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{tCalc("subtotal")}</span>
+            <span className="font-medium">{subtotal.toFixed(2)} MDL</span>
+          </div>
+
+          {discountPercent > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">
+                {tCalc("discount")} ({discountPercent}%)
+              </span>
+              <span className="font-medium text-green-600">
+                -{discountAmount.toFixed(2)} MDL
+              </span>
+            </div>
+          )}
+
+          <Separator />
+
+          <div className="flex justify-between items-center">
+            <span className={compact ? "font-bold" : "text-lg font-bold"}>{tCalc("total")}</span>
+            <span className={compact ? "text-xl font-bold text-primary" : "text-2xl font-bold text-primary"}>
+              {finalAmount.toFixed(2)} MDL
+            </span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 type Step = "tickets" | "info";
 
@@ -118,69 +207,17 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
   const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
   const progress = ((currentStepIndex + 1) / steps.length) * 100;
 
-  // Summary Component
-  const SummaryCard = ({ compact = false }: { compact?: boolean }) => (
-    <Card className={compact ? "" : "sticky top-24"}>
-      <CardHeader className={compact ? "pb-3" : ""}>
-        <CardTitle className={compact ? "text-base" : ""}>{tCalc("summary")}</CardTitle>
-        {!compact && isValidQuantity && (
-          <CardDescription>
-            <div className="flex items-center gap-2 text-sm text-green-600">
-              <CheckCircle2 className="h-4 w-4" />
-              <span>{tCalc("discountApplied", { percent: discountPercent })}</span>
-            </div>
-          </CardDescription>
-        )}
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Next Tier Upsell */}
-        {!compact && isValidQuantity && nextTier && (
-          <Alert>
-            <TrendingUp className="h-4 w-4" />
-            <AlertDescription className="text-xs">
-              {tCalc("nextTierMessage", {
-                needed: ticketsToNextTier,
-                discount: nextTier.discountPercent,
-              })}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Amounts */}
-        <div className={compact ? "space-y-2" : "space-y-3"}>
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{tCalc("totalTickets")}</span>
-            <span className="font-medium">{totalQuantity}</span>
-          </div>
-
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{tCalc("subtotal")}</span>
-            <span className="font-medium">{subtotal.toFixed(2)} MDL</span>
-          </div>
-
-          {discountPercent > 0 && (
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">
-                {tCalc("discount")} ({discountPercent}%)
-              </span>
-              <span className="font-medium text-green-600">
-                -{discountAmount.toFixed(2)} MDL
-              </span>
-            </div>
-          )}
-
-          <Separator />
-
-          <div className="flex justify-between items-center">
-            <span className={compact ? "font-bold" : "text-lg font-bold"}>{tCalc("total")}</span>
-            <span className={compact ? "text-xl font-bold text-primary" : "text-2xl font-bold text-primary"}>
-              {finalAmount.toFixed(2)} MDL
-            </span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const summaryCardProps = {
+    tCalc,
+    isValidQuantity,
+    discountPercent,
+    nextTier,
+    ticketsToNextTier,
+    totalQuantity,
+    subtotal,
+    discountAmount,
+    finalAmount,
+  };
 
   return (
     <div className="space-y-8">
@@ -206,7 +243,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
                   </div>
 
                   {/* Step Indicator */}
-                  <div className="relative z-10 bg-background px-4">
+                  <div className="relative z-10">
                     <div
                       className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all shadow-sm ${
                         isCompleted
@@ -284,7 +321,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
               {/* Summary Sidebar - Desktop Only */}
               <div className="hidden lg:block lg:col-span-1">
                 <div className="sticky top-24 space-y-6">
-                  <SummaryCard compact />
+                  <SummaryCard compact {...summaryCardProps} />
 
                   <div>
                     <Button
@@ -439,7 +476,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
             {/* Summary Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-24">
-                <SummaryCard compact />
+                <SummaryCard compact {...summaryCardProps} />
               </div>
             </div>
           </div>

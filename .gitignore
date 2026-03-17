@@ -40,3 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 server/
+
+# docs
+/docs
+
+#supabase
+/supabase
+/migrations

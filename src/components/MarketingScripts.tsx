@@ -1,3 +1,4 @@
+import DOMPurify from 'isomorphic-dompurify';
 import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 
@@ -107,7 +108,7 @@ export async function MarketingScriptsHead() {
 
       {/* Custom Head Scripts */}
       {settings.custom_head_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: settings.custom_head_scripts }} />
+        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(settings.custom_head_scripts, { ADD_TAGS: ['script'], ADD_ATTR: ['async', 'defer', 'src'] }) }} />
       )}
     </>
   );
@@ -158,7 +159,7 @@ export async function MarketingScriptsBody() {
 
       {/* Custom Body Scripts */}
       {settings.custom_body_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: settings.custom_body_scripts }} />
+        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(settings.custom_body_scripts, { ADD_TAGS: ['script'], ADD_ATTR: ['async', 'defer', 'src'] }) }} />
       )}
     </>
   );

@@ -105,6 +105,21 @@ export function ProgramContent({ events }: ProgramContentProps) {
           </p>
         </div>
 
+        {events.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted mb-6">
+              <Calendar className="w-10 h-10 text-muted-foreground" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-3">{t("emptyTitle")}</h2>
+            <p className="text-muted-foreground max-w-md mx-auto mb-8">
+              {t("emptySubtitle")}
+            </p>
+            <Button asChild>
+              <Link href="/">{t("backToHome")}</Link>
+            </Button>
+          </div>
+        ) : (
+        <>
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-12">
           <div className="text-center p-4 rounded-xl bg-muted/50">
@@ -126,79 +141,73 @@ export function ProgramContent({ events }: ProgramContentProps) {
         </div>
 
         {/* Program Tabs */}
-        {program.length > 0 ? (
-          <Tabs defaultValue="day1" className="max-w-4xl mx-auto">
-            <TabsList className="w-full grid grid-cols-3 mb-8 h-auto p-1">
-              {program.map((day, index) => (
-                <TabsTrigger
-                  key={day.dayName}
-                  value={day.dayName}
-                  className="flex flex-col py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                >
-                  <span className="text-xs opacity-70">{t("day")} {index + 1}</span>
-                  <span className="font-semibold">{day.date}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
+        <Tabs defaultValue="day1" className="max-w-4xl mx-auto">
+          <TabsList className="w-full grid grid-cols-3 mb-8 h-auto p-1">
+            {program.map((day, index) => (
+              <TabsTrigger
+                key={day.dayName}
+                value={day.dayName}
+                className="flex flex-col py-3 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                <span className="text-xs opacity-70">{t("day")} {index + 1}</span>
+                <span className="font-semibold">{day.date}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-            {program.map((day) => (
-              <TabsContent key={day.dayName} value={day.dayName} className="mt-0">
-                <div className="space-y-4">
-                  {day.events.map((event) => (
-                    <Card
-                      key={event.id}
-                      className={`transition-all hover:shadow-md ${
-                        event.is_headliner ? "border-primary/50 bg-primary/5" : ""
-                      }`}
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                          {/* Time */}
-                          <div className="flex items-center gap-2 min-w-[80px]">
-                            <Clock className="h-4 w-4 text-muted-foreground" />
-                            <span className="font-mono font-semibold">{event.time}</span>
-                          </div>
+          {program.map((day) => (
+            <TabsContent key={day.dayName} value={day.dayName} className="mt-0">
+              <div className="space-y-4">
+                {day.events.map((event) => (
+                  <Card
+                    key={event.id}
+                    className={`transition-all hover:shadow-md ${
+                      event.is_headliner ? "border-primary/50 bg-primary/5" : ""
+                    }`}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                        {/* Time */}
+                        <div className="flex items-center gap-2 min-w-[80px]">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span className="font-mono font-semibold">{event.time}</span>
+                        </div>
 
-                          {/* Artist */}
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className={`font-semibold ${event.is_headliner ? "text-lg" : ""}`}>
-                                {event.artist}
-                              </span>
-                              {event.is_headliner && (
-                                <Badge variant="default" className="text-xs">
-                                  {t("headliner")}
-                                </Badge>
-                              )}
-                            </div>
-                            {event.genre && (
-                              <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
-                                <Music className="h-3 w-3" />
-                                <span>{event.genre}</span>
-                              </div>
+                        {/* Artist */}
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className={`font-semibold ${event.is_headliner ? "text-lg" : ""}`}>
+                              {event.artist}
+                            </span>
+                            {event.is_headliner && (
+                              <Badge variant="default" className="text-xs">
+                                {t("headliner")}
+                              </Badge>
                             )}
                           </div>
-
-                          {/* Stage */}
-                          <Badge
-                            className={`${stageColors[event.stage] || "bg-muted"} whitespace-nowrap`}
-                          >
-                            <MapPin className="h-3 w-3 mr-1" />
-                            {getStageLabel(event.stage)}
-                          </Badge>
+                          {event.genre && (
+                            <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                              <Music className="h-3 w-3" />
+                              <span>{event.genre}</span>
+                            </div>
+                          )}
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">{t("noEvents") || "Программа скоро появится"}</p>
-          </div>
-        )}
+
+                        {/* Stage */}
+                        <Badge
+                          className={`${stageColors[event.stage] || "bg-muted"} whitespace-nowrap`}
+                        >
+                          <MapPin className="h-3 w-3 mr-1" />
+                          {getStageLabel(event.stage)}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          ))}
+        </Tabs>
 
         {/* Legend */}
         <div className="flex flex-wrap justify-center gap-4 mt-8 mb-12">
@@ -215,6 +224,8 @@ export function ProgramContent({ events }: ProgramContentProps) {
             <span className="text-sm text-muted-foreground">{t("stages.electronic")}</span>
           </div>
         </div>
+        </>
+        )}
 
         {/* App Download CTA */}
         <AppCTABlock namespace="Program" notificationText="Main Stage starts in 30 min!" />

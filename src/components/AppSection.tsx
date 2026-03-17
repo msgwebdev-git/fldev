@@ -53,13 +53,8 @@ export function AppSection() {
   return (
     <section
       ref={containerRef}
-      className="relative py-12 sm:py-16 md:py-24 overflow-hidden bg-gradient-to-b from-background via-primary/5 to-background"
+      className="relative py-12 sm:py-16 md:py-24 overflow-hidden"
     >
-      {/* Декоративные элементы фона */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-      </div>
 
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center">

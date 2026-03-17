@@ -1,3 +1,4 @@
+import DOMPurify from 'isomorphic-dompurify';
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -128,7 +129,7 @@ export default async function NewsPage({ params }: Props) {
         {content && (
           <div
             className="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-foreground/80 prose-a:text-primary"
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
           />
         )}
 

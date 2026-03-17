@@ -43,42 +43,6 @@ function getLocalizedField(
   return (item[localizedKey] as string) || (item[fallbackKey] as string) || (item[field] as string) || "";
 }
 
-// Fallback данные
-const fallbackNews: NewsItem[] = [
-  {
-    id: 1,
-    slug: "lineup-2025-announced",
-    title_ru: "Line-up 2025 объявлен!",
-    title_ro: "Line-up 2025 anunțat!",
-    excerpt_ru: "Мы рады представить полный состав артистов на фестиваль 2025 года. Более 50 исполнителей на 4 сценах.",
-    excerpt_ro: "Suntem bucuroși să prezentăm line-up-ul complet pentru festivalul 2025. Peste 50 de artiști pe 4 scene.",
-    image: "https://picsum.photos/seed/news1/800/500",
-    date: "2025-01-15",
-    category: "Анонс",
-  },
-  {
-    id: 2,
-    slug: "early-bird-tickets",
-    title_ru: "Старт продаж билетов Early Bird",
-    title_ro: "Începe vânzarea biletelor Early Bird",
-    excerpt_ru: "Успейте приобрести билеты по специальной цене. Количество ограничено!",
-    excerpt_ro: "Cumpărați bilete la preț special. Cantitatea este limitată!",
-    image: "https://picsum.photos/seed/news2/800/500",
-    date: "2025-01-10",
-    category: "Билеты",
-  },
-  {
-    id: 3,
-    slug: "new-camping-zone",
-    title_ru: "Новая зона кемпинга Premium",
-    title_ro: "Noua zonă de camping Premium",
-    excerpt_ru: "В этом году мы открываем новую премиум зону кемпинга с улучшенными удобствами.",
-    excerpt_ro: "Anul acesta deschidem o nouă zonă de camping premium cu facilități îmbunătățite.",
-    image: "https://picsum.photos/seed/news3/800/500",
-    date: "2025-01-05",
-    category: "Инфраструктура",
-  },
-];
 
 function formatDate(dateString: string, locale: string = "ru"): string {
   const date = new Date(dateString);
@@ -92,7 +56,7 @@ function formatDate(dateString: string, locale: string = "ru"): string {
 export function NewsSection() {
   const t = useTranslations("News");
   const locale = useLocale();
-  const [news, setNews] = React.useState<NewsItem[]>(fallbackNews);
+  const [news, setNews] = React.useState<NewsItem[]>([]);
 
   React.useEffect(() => {
     async function fetchNews() {
@@ -110,6 +74,8 @@ export function NewsSection() {
 
     fetchNews();
   }, []);
+
+  if (news.length === 0) return null;
 
   return (
     <section className="py-20 bg-muted/30">

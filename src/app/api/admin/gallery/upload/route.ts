@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { createClient as createAdminClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
+    // Auth check
+    const supabaseAuth = await createClient();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const thumbnail = formData.get('thumbnail') as File;
     const full = formData.get('full') as File;
@@ -21,8 +29,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create Supabase client with service key
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Create Supabase admin client with service key
+    const supabase = createAdminClient(supabaseUrl, supabaseServiceKey);
 
     // Upload thumbnail to Supabase Storage
     const thumbnailPath = `${year}/thumbnails/${filename}.webp`;

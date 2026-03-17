@@ -270,7 +270,7 @@ export function RulesContent({ rules, quickTopics }: RulesContentProps) {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/20 max-w-3xl mx-auto">
+        <div className="text-center mt-12 p-8 rounded-2xl border max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">{t("ctaTitle")}</h2>
           <p className="text-muted-foreground mb-6">{t("ctaDescription")}</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

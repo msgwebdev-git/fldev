@@ -54,13 +54,8 @@ export function AppCTABlock({ namespace, notificationText = "Main Stage in 30 mi
   return (
     <div
       ref={containerRef}
-      className="relative mt-12 py-12 sm:py-16 overflow-hidden rounded-2xl bg-gradient-to-b from-background via-primary/5 to-background border"
+      className="relative mt-12 py-12 sm:py-16 overflow-hidden rounded-2xl border"
     >
-      {/* Декоративные элементы фона */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
-      </div>
 
       <div className="px-4 sm:px-8">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">

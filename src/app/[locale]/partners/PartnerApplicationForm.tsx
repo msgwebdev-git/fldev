@@ -133,68 +133,71 @@ export function PartnerApplicationForm({ onSuccess }: PartnerApplicationFormProp
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Contact Name */}
-        <FormField
-          control={form.control}
-          name="contactName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("contactName")}</FormLabel>
-              <FormControl>
-                <Input placeholder={t("contactNamePlaceholder")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Two-column row: Contact Name + Email */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="contactName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("contactName")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("contactNamePlaceholder")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("email")}</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("email")}</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        {/* Company Name */}
-        <FormField
-          control={form.control}
-          name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("companyName")}</FormLabel>
-              <FormControl>
-                <Input placeholder={t("companyNamePlaceholder")} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Two-column row: Company Name + Website */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:items-start">
+          <FormField
+            control={form.control}
+            name="companyName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("companyName")}</FormLabel>
+                <FormControl>
+                  <Input placeholder={t("companyNamePlaceholder")} {...field} />
+                </FormControl>
+                <FormDescription className="invisible">&nbsp;</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Website */}
-        <FormField
-          control={form.control}
-          name="website"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("website")}</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com" {...field} />
-              </FormControl>
-              <FormDescription>{t("websiteDescription")}</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="website"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("website")}</FormLabel>
+                <FormControl>
+                  <Input placeholder="https://example.com" {...field} />
+                </FormControl>
+                <FormDescription>{t("websiteDescription")}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        {/* Category */}
+        {/* Category — full width */}
         <FormField
           control={form.control}
           name="category"
@@ -208,7 +211,6 @@ export function PartnerApplicationForm({ onSuccess }: PartnerApplicationFormProp
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="patronage">{t("categories.patronage")}</SelectItem>
                   <SelectItem value="generalPartner">{t("categories.generalPartner")}</SelectItem>
                   <SelectItem value="partners">{t("categories.partners")}</SelectItem>
                   <SelectItem value="generalMediaPartner">{t("categories.generalMediaPartner")}</SelectItem>
@@ -221,11 +223,11 @@ export function PartnerApplicationForm({ onSuccess }: PartnerApplicationFormProp
           )}
         />
 
-        {/* Logo Upload */}
+        {/* Logo Upload — full width */}
         <FormItem>
           <FormLabel>{t("logo")}</FormLabel>
           <FormControl>
-            <div className="space-y-4">
+            <div>
               {logoPreview ? (
                 <div className="relative w-32 h-32 border-2 border-dashed rounded-lg overflow-hidden">
                   <img src={logoPreview} alt="Logo preview" className="w-full h-full object-contain" />
@@ -240,8 +242,8 @@ export function PartnerApplicationForm({ onSuccess }: PartnerApplicationFormProp
                   </Button>
                 </div>
               ) : (
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                  <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  <Upload className="h-6 w-6 text-muted-foreground mb-1" />
                   <span className="text-sm text-muted-foreground">{t("logoUpload")}</span>
                   <input
                     type="file"
@@ -256,7 +258,7 @@ export function PartnerApplicationForm({ onSuccess }: PartnerApplicationFormProp
           <FormDescription>{t("logoDescription")}</FormDescription>
         </FormItem>
 
-        {/* Message */}
+        {/* Message — full width */}
         <FormField
           control={form.control}
           name="message"

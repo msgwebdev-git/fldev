@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import Image from "next/image";
 import {
   MapPin,
   Phone,
@@ -85,7 +86,6 @@ export function Footer() {
   const partnerLinks = [
     { href: "/partners", label: t("partners.ourPartners") },
     { href: "/become-partner", label: t("partners.becomePartner") },
-    { href: "/perform", label: t("partners.perform") },
   ];
 
   return (
@@ -96,9 +96,7 @@ export function Footer() {
           {/* Brand & Description */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <h3 className="text-2xl font-bold text-white">
-                FESTIVALUL LUPILOR
-              </h3>
+              <Image src="/logo-fl.png" alt="Festivalul Lupilor" width={140} height={48} className="h-12 w-auto" />
             </Link>
             <p className="text-zinc-400 mb-6 max-w-sm leading-relaxed">
               {t("description")}
@@ -161,31 +159,31 @@ export function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="https://maps.google.com/?q=Saharna,Moldova"
+                  href="https://maps.google.com/?q=str.+Petricani+17,+Chisinau,+Moldova"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 text-zinc-400 hover:text-white transition-colors"
                 >
                   <MapPin className="h-5 w-5 mt-0.5 shrink-0" />
-                  <span>Saharna, Rezina, Moldova</span>
+                  <span>GOQODE AGENCY S.R.L.<br />str. Petricani 17</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+37360000000"
+                  href="tel:+37379660101"
                   className="flex items-center gap-3 text-zinc-400 hover:text-white transition-colors"
                 >
                   <Phone className="h-5 w-5 shrink-0" />
-                  <span>+373 60 000 000</span>
+                  <span>+373 796 60 101</span>
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@festivalullupilor.md"
+                  href="mailto:sales@festivalul-lupilor.md"
                   className="flex items-center gap-3 text-zinc-400 hover:text-white transition-colors"
                 >
                   <Mail className="h-5 w-5 shrink-0" />
-                  <span>info@festivalullupilor.md</span>
+                  <span>sales@festivalul-lupilor.md</span>
                 </a>
               </li>
             </ul>

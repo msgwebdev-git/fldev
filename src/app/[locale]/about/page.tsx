@@ -47,11 +47,8 @@ const features = [
 ];
 
 const headliners = [
-  "Dubioza Kolektiv",
-  "Zdob și Zdub",
+  "Alternosfera",
   "Subcarpați",
-  "Shantel",
-  "La Caravane Passe",
   "Lupii lui Calancea",
   "Vali Boghean Band",
   "Gândul Mâței",
@@ -142,6 +139,7 @@ export default function AboutPage() {
                     {artist}
                   </Badge>
                 ))}
+                <Badge variant="outline">{t("andOthers")}</Badge>
               </div>
             </div>
           </div>
@@ -229,7 +227,7 @@ export default function AboutPage() {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-16 p-8 rounded-2xl bg-primary/5 border border-primary/20">
+        <div className="text-center mt-16 p-8 rounded-2xl border">
           <h2 className="text-2xl font-bold mb-4">{t("ctaTitle")}</h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
             {t("ctaDescription")}

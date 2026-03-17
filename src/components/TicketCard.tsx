@@ -156,7 +156,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
     }
   };
 
-  const InfoContent = () => (
+  const infoContent = (
     <div className="space-y-4">
       {(dates || location) && (
         <div className="flex flex-col gap-2">
@@ -223,7 +223,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           <DialogTitle>{ticketName}</DialogTitle>
           <DialogDescription>{ticketDescription}</DialogDescription>
         </DialogHeader>
-        <InfoContent />
+        {infoContent}
       </DialogContent>
     </Dialog>
   ) : (
@@ -240,7 +240,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           <DrawerDescription>{ticketDescription}</DrawerDescription>
         </DrawerHeader>
         <div className="px-4 pb-4">
-          <InfoContent />
+          {infoContent}
         </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
@@ -251,7 +251,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
     </Drawer>
   );
 
-  const OptionsDialogContent = () => (
+  const optionsDialogContent = (
     <div className="space-y-3">
       <RadioGroup
         value={tempSelectedOptionId}
@@ -265,7 +265,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
               key={option.id}
               className={`relative p-4 rounded-xl border-2 transition-all cursor-pointer ${
                 isSelected
-                  ? "border-primary bg-primary/5"
+                  ? "border-primary"
                   : "border-border hover:border-primary/30 bg-background"
               }`}
               onClick={() => setTempSelectedOptionId(option.id)}
@@ -314,7 +314,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           <DialogTitle>{ticketName}</DialogTitle>
           <DialogDescription>{ticketDescription}</DialogDescription>
         </DialogHeader>
-        <OptionsDialogContent />
+        {optionsDialogContent}
         <DialogFooter>
           <Button variant="outline" onClick={() => setOptionsOpen(false)}>
             {t("close")}
@@ -333,7 +333,7 @@ export function TicketCard({ ticket }: TicketCardProps) {
           <DrawerDescription>{ticketDescription}</DrawerDescription>
         </DrawerHeader>
         <div className="px-4 pb-4">
-          <OptionsDialogContent />
+          {optionsDialogContent}
         </div>
         <DrawerFooter className="pt-2">
           <Button onClick={handleAddWithOption} disabled={!tempSelectedOptionId}>

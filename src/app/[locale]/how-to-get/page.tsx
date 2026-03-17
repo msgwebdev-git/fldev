@@ -107,7 +107,7 @@ export default function HowToGetPage() {
                 </div>
 
                 {/* Action Bar */}
-                <div className="p-4 md:p-6 bg-gradient-to-r from-primary/5 to-primary/10 border-t">
+                <div className="p-4 md:p-6 border-t">
                   <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-2 rounded-full bg-primary/10">
@@ -205,7 +205,7 @@ export default function HowToGetPage() {
             </Card>
 
             {/* Parking Info */}
-            <Card className="border-primary/20 bg-primary/5">
+            <Card className="border">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <Car className="h-5 w-5 text-primary mt-0.5" />
@@ -239,7 +239,7 @@ export default function HowToGetPage() {
               <Card key={num} className="group hover:shadow-md transition-shadow">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary font-bold group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold transition-colors">
                       {num}
                     </div>
                     <div>
@@ -257,7 +257,7 @@ export default function HowToGetPage() {
 
         {/* CTA Section */}
         <div className="mt-16 text-center">
-          <Card className="max-w-2xl mx-auto bg-gradient-to-br from-primary/10 via-background to-primary/5 border-primary/20">
+          <Card className="max-w-2xl mx-auto border">
             <CardContent className="p-8 md:p-12">
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 {t("cta.title")}

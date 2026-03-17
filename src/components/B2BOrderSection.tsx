@@ -164,7 +164,7 @@ export function B2BOrderSection() {
   }
 
   return (
-    <div className="py-20 bg-muted/20 -mx-4">
+    <div className="py-20 bg-muted/50 -mx-4 border-y">
       <div className="px-4">
         <div className="text-center mb-12">
           <Badge variant="outline" className="mb-4">

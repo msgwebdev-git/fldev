@@ -41,7 +41,7 @@ interface PartnersContentProps {
 }
 
 // Порядок категорий
-const categoryOrder = ["patronage", "generalPartner", "partners", "generalMediaPartner", "mediaPartners"];
+const categoryOrder = ["generalPartner", "partners", "generalMediaPartner", "mediaPartners"];
 
 export function PartnersContent({ partners }: PartnersContentProps) {
   const t = useTranslations("Partners");
@@ -116,7 +116,7 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                   {t("hero.ctaButton")}
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="text-2xl">{t("form.title")}</DialogTitle>
                   <DialogDescription>{t("form.description")}</DialogDescription>

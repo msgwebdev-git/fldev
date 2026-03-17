@@ -140,26 +140,77 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
 
     setIsLoading(true);
     const supabase = createClient();
-
-    // Удаляем старые опции
-    await supabase.from("ticket_options").delete().eq("ticket_id", optionsItem.id);
-
-    // Добавляем новые
+    const ticketId = optionsItem.id;
     const validOptions = options.filter((o) => o.name_ro.trim() !== "" || o.name_ru.trim() !== "");
-    if (validOptions.length > 0) {
-      await supabase.from("ticket_options").insert(
-        validOptions.map((o, index) => ({
-          ticket_id: optionsItem.id,
-          name: o.name || o.name_ro.toLowerCase().replace(/\s+/g, ''),
+
+    // Разделяем на существующие (update) и новые (insert)
+    const existingOptions = validOptions.filter((o) => !o.id.startsWith("new-"));
+    const newOptions = validOptions.filter((o) => o.id.startsWith("new-"));
+    const existingIds = existingOptions.map((o) => o.id);
+
+    // Удаляем только те опции, которые были убраны из списка
+    const originalIds = (optionsItem.ticket_options || []).map((o) => o.id);
+    const idsToDelete = originalIds.filter((id) => !existingIds.includes(id));
+
+    if (idsToDelete.length > 0) {
+      const { error: deleteError } = await supabase
+        .from("ticket_options")
+        .delete()
+        .in("id", idsToDelete);
+
+      if (deleteError) {
+        // FK constraint — опция используется в заказах, деактивируем вместо удаления
+        console.warn("Cannot delete options (used in orders), skipping:", deleteError.message);
+      }
+    }
+
+    // Обновляем существующие опции
+    for (let i = 0; i < existingOptions.length; i++) {
+      const o = existingOptions[i];
+      const { error } = await supabase
+        .from("ticket_options")
+        .update({
+          name: o.name || o.name_ro.toLowerCase().replace(/\s+/g, ""),
           name_ro: o.name_ro,
           name_ru: o.name_ru,
           description_ro: o.description_ro || null,
           description_ru: o.description_ru || null,
           price_modifier: o.price_modifier || 0,
           is_default: o.is_default,
-          sort_order: index + 1,
+          sort_order: i + 1,
+        })
+        .eq("id", o.id);
+
+      if (error) {
+        console.error("Error updating option:", error);
+        alert(`Ошибка обновления опции: ${error.message}`);
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    // Добавляем новые опции
+    if (newOptions.length > 0) {
+      const { error: insertError } = await supabase.from("ticket_options").insert(
+        newOptions.map((o, index) => ({
+          ticket_id: ticketId,
+          name: o.name || o.name_ro.toLowerCase().replace(/\s+/g, ""),
+          name_ro: o.name_ro,
+          name_ru: o.name_ru,
+          description_ro: o.description_ro || null,
+          description_ru: o.description_ru || null,
+          price_modifier: o.price_modifier || 0,
+          is_default: o.is_default,
+          sort_order: existingOptions.length + index + 1,
         }))
       );
+
+      if (insertError) {
+        console.error("Error inserting options:", insertError);
+        alert(`Ошибка добавления опций: ${insertError.message}`);
+        setIsLoading(false);
+        return;
+      }
     }
 
     setIsLoading(false);
@@ -220,8 +271,8 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
   };
 
   const addOption = () => {
-    setOptions([
-      ...options,
+    setOptions((prev) => [
+      ...prev,
       {
         id: `new-${Date.now()}`,
         name: "",
@@ -231,25 +282,27 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
         description_ru: null,
         price_modifier: 0,
         is_default: false,
-        sort_order: options.length + 1
+        sort_order: prev.length + 1
       },
     ]);
   };
 
   const updateOption = (index: number, field: keyof TicketOption, value: string | number | boolean | null) => {
-    const newOptions = [...options];
-    newOptions[index] = { ...newOptions[index], [field]: value };
-    // Если устанавливаем is_default, снимаем у остальных
-    if (field === "is_default" && value === true) {
-      newOptions.forEach((o, i) => {
-        if (i !== index) o.is_default = false;
-      });
-    }
-    setOptions(newOptions);
+    setOptions((prev) =>
+      prev.map((o, i) => {
+        if (i === index) {
+          return { ...o, [field]: value };
+        }
+        if (field === "is_default" && value === true) {
+          return { ...o, is_default: false };
+        }
+        return o;
+      })
+    );
   };
 
   const removeOption = (index: number) => {
-    setOptions(options.filter((_, i) => i !== index));
+    setOptions((prev) => prev.filter((_, i) => i !== index));
   };
 
   if (tickets.length === 0) {

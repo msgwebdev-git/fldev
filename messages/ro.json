@@ -200,7 +200,8 @@
     "historyP1": "Din 2021, Festivalul Lupilor a devenit o tradiție de trei zile de imersiune în lumea muzicii live, tradițiilor și naturii uimitoare, unde folk-rock, ritmuri balcanice, etno, alternative și muzică electronică răsună printre stâncile milenare și meandrele râului Răut.",
     "historyP2": "De-a lungul celor cinci ani, pe cele două scene ale festivalului au urcat peste 150 de artiști din Moldova, România, Ucraina, Balcani și din toată Europa.",
     "musicTitle": "Muzica",
-    "musicP1": "Rezidenții permanenți sunt Lupii lui Calancea și Tudor Ungureanu, Vali Boghean Band, Gândul Mâței, Snails, iar printre headlinerii edițiilor trecute se numără Dubioza Kolektiv, Zdob și Zdub, Subcarpați, Shantel, La Caravane Passe și mulți alții.",
+    "musicP1": "Rezidenții permanenți sunt Lupii lui Calancea și Tudor Ungureanu, Vali Boghean Band, Gândul Mâței, Snails, iar printre headlinerii edițiilor trecute se numără Alternosfera, Subcarpați, Carla's Dreams, The Motans, Irina Rimes, Sunstroke Project, Travka și mulți alții.",
+    "andOthers": "și alții",
     "featuresTitle": "Ce te așteaptă",
     "features": {
       "crafts": "Târg de meșteșuguri",
@@ -244,6 +245,8 @@
       "days": "Zile"
     },
     "totalArtists": "artiști în total",
+    "emptyTitle": "Line-up-ul va fi anunțat în curând",
+    "emptySubtitle": "Rămâi la curent — vom anunța în curând artiștii festivalului!",
     "stages": {
       "main": "Scena Principală",
       "stage2": "Scena 2",
@@ -380,6 +383,8 @@
       "stage2": "Scena 2",
       "electronic": "Scena Electronică"
     },
+    "emptyTitle": "Programul va fi anunțat în curând",
+    "emptySubtitle": "Rămâi la curent — vom publica în curând programul spectacolelor!",
     "ctaTitle": "Nu rata niciun moment!",
     "ctaSubtitle": "Cumpără biletele acum și bucură-te de 3 zile de muzică live",
     "ctaButton": "Cumpără bilete",
@@ -933,28 +938,30 @@
     }
   },
   "CheckoutSuccess": {
-    "title": "Comandă finalizată cu succes!",
-    "subtitle": "Mulțumim pentru achiziție! Biletele au fost trimise pe email.",
+    "title": "Plata a fost efectuată cu succes!",
+    "subtitle": "Biletele sunt deja pe drum spre email-ul tău",
+    "noOrder": "Comanda nu a fost găsită",
     "orderNumber": "Număr comandă",
-    "eventDate": "Data evenimentului",
+    "yourTickets": "Biletele tale",
+    "eventDate": "Data",
+    "eventDateValue": "7–9 august 2026",
     "eventLocation": "Locația",
-    "confirmationEmail": "Confirmare",
+    "eventLocationValue": "Orheiul Vechi, Moldova",
     "emailSent": "Email-ul cu biletele a fost trimis",
-    "downloadTicket": "Descarcă biletul",
-    "downloadTickets": "Descarcă biletele",
+    "downloadTicket": "Descarcă biletul (PDF)",
+    "downloadTickets": "Descarcă toate biletele (ZIP)",
     "downloading": "Se descarcă...",
-    "loading": "Se încarcă...",
+    "loading": "Se pregătesc biletele...",
     "ticketsNotReady": "Biletele se pregătesc...",
-    "downloadError": "Nu s-au putut descărca biletele. Vă rugăm să încercați din nou.",
-    "ticketsCountLabel": "{count, plural, one {# bilet} few {# bilete} other {# bilete}} în arhivă",
+    "timedOut": "Biletele se generează încă. Verifică email-ul în câteva minute.",
     "whatsNext": {
       "title": "Ce urmează?",
-      "step1": "Verifică email-ul — acolo vei găsi biletele electronice în format PDF",
+      "step1": "Verifică email-ul — biletele PDF vor ajunge în maxim un minut",
       "step2": "Salvează biletele în telefon sau printează-le",
-      "step3": "Vino la festival și arată biletul la intrare"
+      "step3": "La intrare arată codul QR de pe bilet"
     },
     "backToHome": "Acasă",
-    "viewProgram": "Vezi programul"
+    "viewProgram": "Programul"
   },
   "B2B": {
     "badge": "Colaborare corporativă",
@@ -1035,7 +1042,7 @@
     "faq": {
       "q1": {
         "question": "Care este dimensiunea minimă a comenzii corporate?",
-        "answer": "Comanda minimă începe de la 20 de bilete. Pentru grupuri de peste 50 de persoane oferim condiții speciale și bonusuri suplimentare, inclusiv zone exclusive și servicii personalizate."
+        "answer": "Comanda minimă începe de la 50 de bilete. Oferim condiții speciale și bonusuri suplimentare, inclusiv zone exclusive și servicii personalizate."
       },
       "q2": {
         "question": "Pot organiza un eveniment privat pe teritoriul festivalului?",
@@ -1147,7 +1154,7 @@
     }
   },
   "Footer": {
-    "description": "Cel mai mare festival de muzică din Moldova. Trei zile de muzică, artă și experiențe de neuitat în locația pitorească Saharna.",
+    "description": "Cel mai mare festival de muzică din Moldova. Trei zile de muzică, artă și experiențe de neuitat în locația pitorească Orheiul Vechi.",
     "navTitle": "Navigare",
     "nav": {
       "home": "Acasă",
@@ -1174,5 +1181,119 @@
     "rights": "Toate drepturile rezervate.",
     "privacy": "Politica de confidențialitate",
     "terms": "Termeni și condiții"
+  },
+  "TermsPage": {
+    "backToHome": "Înapoi la pagina principală",
+    "badge": "Termeni și condiții",
+    "pageTitle": "Termeni și condiții",
+    "pageSubtitle": "Vă rugăm să citiți cu atenție termenii și condițiile de utilizare a serviciilor noastre.",
+    "sections": {
+      "purchase": {
+        "title": "Procesul de cumpărare",
+        "items": {
+          "0": "– Biletele pot fi achitate cu cardul Visa sau Mastercard pe site-ul evenimentului prin intermediul companiei licențiate la nivel național MAIB.",
+          "1": "– Plata este acceptată în favoarea GOQODE AGENCY S.R.L.",
+          "2": "– În procesul de achitare pot apărea taxe de procesare, fiți atenți la informația afișată pe ecran în procesul procurării."
+        }
+      },
+      "tickets": {
+        "title": "Despre bilete",
+        "items": {
+          "0": "– Prestatorul nu poartă răspundere pentru pierderea, deteriorarea sau multiplicarea biletelor.",
+          "1": "– Fiecare utilizator răspunde individual pentru siguranța biletelor personale.",
+          "2": "– Cumpăratorului nu îi este permis să vândă sau să înstrăineze biletul cumpărat de la prestator către o terță parte în scopul obținerii de avantaje materiale sau în scop promoțional. Organizatorul evenimentului poate refuza participarea deținătorilor unor astfel de bilete la eveniment sau îi poate evacua din locație.",
+          "3": "– Prestatorul nu își asumă răspunderea pentru eventualele întârzieri, amânări sau anulări ale evenimentului pentru care au fost cumpărate biletele și restricționări impuse de organizator sau de instituții ale statului (privind numărul de bilete ce pot fi cumpărate de o persoană sau persoane individuale supuse unor restricționări legale, alte restricționări), cumpărătorii trebuind să se adreseze organizatorului evenimentului pentru eventualele pretenții."
+        }
+      },
+      "refund": {
+        "title": "Procesul de returnare",
+        "items": {
+          "0": "– După achiziționare, biletele la festival nu pot fi returnate sau schimbate, cu excepția cazurilor prevăzute de legislația Republicii Moldova, cum ar fi anularea sau amânarea evenimentului din vina organizatorului.",
+          "1": "– Organizatorii își rezervă dreptul de a refuza returnarea biletelor din motive particulare, după cum urmează:",
+          "2": "• Modificări în programul festivalului: Modificarea sau înlocuirea artiștilor, a orelor de spectacole și a altor aspecte ale programului nu constituie motive pentru rambursarea biletului, dacă evenimentul are loc în ansamblu.",
+          "3": "• Amânarea festivalului: În cazul amânării datei festivalului, biletele rămân valabile pentru noua dată. Rambursarea biletelor în acest caz nu se efectuează, dacă noua dată a fost anunțată în prealabil și respectă cerințele legislației.",
+          "4": "• Renunțarea la participare: Dacă participantul decide din motive personale să renunțe la participarea la festival, rambursarea biletelor nu este posibilă.",
+          "5": "• Forță majoră: Rambursarea biletelor nu se efectuează în caz de anulare sau amânare a evenimentului din motive independente de organizatori (de exemplu, calamități naturale, pandemii, situații de urgență), în conformitate cu condițiile contractului de vânzare-cumpărare și prevederile legislației civile a Republicii Moldova.",
+          "6": "• Cazuri speciale: În conformitate cu legislația Republicii Moldova, rambursarea biletului poate fi efectuată în cazuri justificate, cum ar fi motive medicale grave, confirmate prin documente corespunzătoare."
+        }
+      },
+      "important": {
+        "title": "Important!",
+        "items": {
+          "0": "– Biletele pentru evenimentele programate pot fi păstrate și sunt active pentru noile dăți când evenimentele vor avea loc.",
+          "1": "– Returnarea banilor pentru bilete în numerar către posesor, are loc cu reținerea unui comision, ce variază între 12%, în dependență de evenimentul programat.",
+          "2": "– Pentru evenimentele anulate banii se întorc către posesor, cu comision 0%, excepție făcând plățile prin terminalele de plată și biletele fizice la care se reține un comision de 5%."
+        }
+      },
+      "adminFee": {
+        "title": "Taxa de administrare",
+        "items": {
+          "0": "Prestatorul poate percepe taxe de administrare a comenzilor. Ele variază între 3 și 50 lei în dependență de suma comenzilor.",
+          "1": "Aceste taxe sunt afișate după rezervarea biletelor la etapa finală a efectuării comenzii."
+        }
+      },
+      "privacy": {
+        "title": "Confidențialitate",
+        "items": {
+          "0": "– Prestatorul nu împarte datele cu caracter personal altor persoane sau companii decât celor implicate nemijlocit în procesul de achitare."
+        }
+      }
+    },
+    "ctaTitle": "Aveți întrebări?",
+    "ctaDescription": "Nu ezitați să ne contactați pentru orice nelămurire legată de termenii și condițiile noastre.",
+    "ctaBuyTickets": "Cumpără bilete",
+    "ctaContacts": "Contactează-ne"
+  },
+  "PrivacyPage": {
+    "backToHome": "Înapoi la pagina principală",
+    "badge": "Confidențialitate",
+    "pageTitle": "Politica de confidențialitate",
+    "pageSubtitle": "Vă rugăm să citiți cu atenție politica noastră de confidențialitate.",
+    "sections": {
+      "intro": {
+        "title": "Informații generale",
+        "items": {
+          "0": "festivalul-lupilor.md este reprezentat de către GOQODE AGENCY S.R.L.",
+          "1": "În timp ce navigați pe website-ul festivalul-lupilor.md ne furnizați 2 tipuri de informație: informația personală pe care o furnizați la momentul efectuării cumpărăturilor (atunci, când indicați datele personale despre numele, prenumele, adresa, numărul de telefon etc.) și informația despre utilizarea site-ului nostru în timp ce navigați pe el (informația se culege în regimul independent cu ajutorul instrumentelor noastre de analizare).",
+          "2": "GOQODE AGENCY S.R.L. prelucrează datele cu caracter personal din contul utilizatorului online de pe website-ul festivalul-lupilor.md conform principiilor, regulilor și prevederilor descrise ulterior. GOQODE AGENCY S.R.L. nu dezvăluie terților persoane, datele personale introduse pe site."
+        }
+      },
+      "personalInfo": {
+        "title": "Informația personală",
+        "items": {
+          "0": "festivalul-lupilor.md nu va transmite informația furnizată de dvs. către terți. Datele dvs. se vor păstra confidențial și nu sunt supuse vânzării sau schimbului."
+        }
+      },
+      "websiteUsage": {
+        "title": "Informația despre utilizarea website-ului",
+        "items": {
+          "0": "La fel ca și alte site-uri comerciale, site-ul festivalul-lupilor.md utilizează jurnale web pentru a colecta informații despre modul în care site-ul nostru este utilizat. Informațiile colectate prin cookie-uri și jurnalele serverului web pot include data și ora vizitelor, paginile vizualizate, timpul petrecut pe site-ul nostru și site-urile vizitate chiar înainte și după site-ul nostru. Aceste informații sunt colectate în mod cumulativ. Niciuna dintre aceste informații nu este asociată cu dvs. fie ca persoană fizică, fie ca utilizator individual."
+        }
+      },
+      "cookies": {
+        "title": "Ce prezintă fișiere Cookies?",
+        "items": {
+          "0": "Fișiere cookies sunt fișierele mici, ce se păstrează în memoria calculatorului dvs. în timp ce navigați pe website-ul nostru. Cu ajutorul informației care se depozitează în aceste fișiere cookies site-ul nostru memorizează preferințele dvs. când vă întoarceți pe web-site. Astfel site-ul se adaptează mai bine nevoilor dvs.",
+          "1": "Dacă doriți să deconectați fișierele cookies puteți să modificați setările browser-ului dvs. Dar vă aducem la cunoștință, că aceasta poate dăuna funcționării corecte a unor părți importante a website-ului nostru. Aceasta poate dăuna la fel și furnizării serviciilor noastre."
+        }
+      },
+      "contentUsage": {
+        "title": "Utilizarea informației de pe web-site",
+        "items": {
+          "0": "Conținutul acestui site poate fi utilizat de dvs. doar în scopuri personale, informative și/sau necomerciale și nu poate fi modificat de dvs. în nici un fel. Cu excepția cazurilor menționate direct în acest document, nu aveți dreptul să utilizați, să încărcați, să publicați, să copiați, să tipăriți, să afișați, să efectuați, să reproduceți, să licențiați, să transmiteți sau să distribuiți toate informațiile din acest site integral sau parțial fără consimțământul prealabil scris al site-ului festivalul-lupilor.md."
+        }
+      },
+      "agreement": {
+        "title": "Acord",
+        "items": {
+          "0": "Prin utilizarea site-ului festivalul-lupilor.md sunteți de acord în mod automat cu colectarea și utilizarea informațiilor personale, așa cum este descris în această politică de confidențialitate. Dacă ne schimbăm politicile și procedurile de confidențialitate, vom posta aceste modificări pe site-ul nostru, astfel încât să știți ce informații colectăm, cum le folosim și în ce circumstanțe le putem dezvălui.",
+          "1": "Dacă nu sunteți de acord cu aceste modificări, singurul remediu este să opriți utilizarea site-ului festivalul-lupilor.md."
+        }
+      }
+    },
+    "ctaTitle": "Aveți întrebări?",
+    "ctaDescription": "Nu ezitați să ne contactați pentru orice nelămurire legată de politica noastră de confidențialitate.",
+    "ctaBuyTickets": "Cumpără bilete",
+    "ctaContacts": "Contactează-ne"
   }
 }

@@ -120,7 +120,19 @@
   body {
     @apply bg-background text-foreground;
   }
-
+  button,
+  [role="button"],
+  a,
+  select,
+  summary,
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
 }
 
 /* Autofill - убираем синюю заливку браузера */

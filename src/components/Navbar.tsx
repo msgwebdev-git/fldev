@@ -51,7 +51,6 @@ export function Navbar() {
 
   const moreItems = [
     { href: "/how-to-get", label: t("howToGet") },
-    { href: "/perform", label: t("perform") },
     { href: "/activities", label: t("activities") },
     { href: "/b2b", label: t("b2b") },
     { href: "#news", label: t("news") },
@@ -74,7 +73,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/logo.png"
+            src="/logo-fl.png"
             alt="Logo"
             width={120}
             height={40}

@@ -277,7 +277,7 @@ export function FAQClient({ faqData }: FAQClientProps) {
 
         {/* Still Have Questions CTA */}
         <div className="max-w-3xl mx-auto mt-12">
-          <Card className="p-6 md:p-8 text-center bg-primary/5 border-primary/20">
+          <Card className="p-6 md:p-8 text-center">
             <HelpCircle className="h-10 w-10 mx-auto mb-4 text-primary" />
             <h2 className="text-2xl font-bold mb-2">{t("stillHaveQuestions")}</h2>
             <p className="text-muted-foreground mb-6">
@@ -295,7 +295,7 @@ export function FAQClient({ faqData }: FAQClientProps) {
         </div>
 
         {/* Buy Tickets CTA */}
-        <div className="text-center mt-12 p-8 rounded-2xl bg-primary/5 border border-primary/20 max-w-3xl mx-auto">
+        <div className="text-center mt-12 p-8 rounded-2xl border max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold mb-4">{t("ctaTitle")}</h2>
           <p className="text-muted-foreground mb-6">{t("ctaDescription")}</p>
           <Button size="lg" asChild>

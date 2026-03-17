@@ -101,7 +101,7 @@ export function B2BContent() {
             <div className="text-sm text-muted-foreground">{t("stats.visitors")}</div>
           </div>
           <div className="text-center p-6 rounded-xl bg-muted/50">
-            <div className="text-4xl font-bold text-primary mb-2">100+</div>
+            <div className="text-4xl font-bold text-primary mb-2">50+</div>
             <div className="text-sm text-muted-foreground">{t("stats.companies")}</div>
           </div>
           <div className="text-center p-6 rounded-xl bg-muted/50">
@@ -118,7 +118,6 @@ export function B2BContent() {
         <div className="mb-20">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4">
-              <Sparkles className="h-3 w-3 mr-1" />
               {t("benefitsBadge")}
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("benefitsTitle")}</h2>
@@ -154,7 +153,7 @@ export function B2BContent() {
         <B2BOrderSection />
 
         {/* FAQ Section */}
-        <div className="mb-20 max-w-4xl mx-auto">
+        <div className="mt-20 mb-20 max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("faqTitle")}</h2>
             <p className="text-muted-foreground">{t("faqSubtitle")}</p>
