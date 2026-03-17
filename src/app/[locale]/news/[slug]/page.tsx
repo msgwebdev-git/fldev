@@ -1,4 +1,3 @@
-import DOMPurify from 'isomorphic-dompurify';
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -7,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SanitizedHtml } from "@/components/SanitizedHtml";
 
 interface Props {
   params: Promise<{
@@ -127,9 +127,9 @@ export default async function NewsPage({ params }: Props) {
         )}
 
         {content && (
-          <div
+          <SanitizedHtml
+            html={content}
             className="prose prose-lg max-w-none prose-headings:font-bold prose-p:text-foreground/80 prose-a:text-primary"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
           />
         )}
 
