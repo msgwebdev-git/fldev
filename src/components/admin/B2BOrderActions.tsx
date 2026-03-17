@@ -23,23 +23,22 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAction = async (action: string, endpoint: string, method: string = "POST") => {
+  const handleAction = async (action: string, endpoint: string, method: string = "POST", body?: Record<string, unknown>) => {
     setLoading(action);
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const response = await fetch(`${apiUrl}/api/b2b/${endpoint}`, {
+      const response = await fetch(`/api/admin/b2b/${endpoint}`, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ orderId: order.id }),
+        ...(body ? { body: JSON.stringify(body) } : {}),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to ${action}`);
+        throw new Error(errorData.error || errorData.message || `Failed to ${action}`);
       }
 
       const result = await response.json();
@@ -155,8 +154,9 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
       {canCancel && (
         <Button
           onClick={() => {
-            if (confirm("Вы уверены, что хотите отменить этот заказ?")) {
-              handleAction("cancel", `orders/${order.id}/cancel`, "PATCH");
+            const reason = prompt("Укажите причину отмены:");
+            if (reason && reason.trim()) {
+              handleAction("cancel", `orders/${order.id}/cancel`, "PATCH", { reason: reason.trim() });
             }
           }}
           disabled={loading !== null}

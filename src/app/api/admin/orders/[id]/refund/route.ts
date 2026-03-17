@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -28,12 +31,11 @@ export async function POST(
     }
 
     // Call the backend API to process refund
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-
-    const response = await fetch(`${apiUrl}/api/admin/orders/${id}/refund`, {
+    const response = await fetch(`${API_URL}/api/admin/orders/${id}/refund`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": ADMIN_API_KEY,
       },
       body: JSON.stringify({
         reason,
