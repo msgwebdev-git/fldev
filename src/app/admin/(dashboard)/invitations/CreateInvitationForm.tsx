@@ -349,7 +349,15 @@ export function CreateInvitationForm({ tickets }: CreateInvitationFormProps) {
                       >
                         <Minus className="w-3 h-3" />
                       </Button>
-                      <span className="w-8 text-center font-medium">{item.quantity}</span>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateItem(index, { quantity: Math.max(1, parseInt(e.target.value) || 1) })
+                        }
+                        className="h-8 w-16 text-center font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
                       <Button
                         type="button"
                         variant="outline"
