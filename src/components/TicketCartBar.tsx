@@ -300,9 +300,14 @@ export function TicketCartBar() {
   if (pathname.includes("/b2b")) return null;
   if (items.length === 0) return null;
 
+  // Spacer to prevent content from being hidden behind fixed bar
+  const spacer = <div className="h-20 md:h-16" />;
+
   // Mobile version with drawer
   if (!isDesktop) {
     return (
+      <>
+      {spacer}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
         <motion.div
           initial={{ y: 100, opacity: 0 }}
@@ -417,11 +422,14 @@ export function TicketCartBar() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+      </>
     );
   }
 
   // Desktop version — clean expandable bar
   return (
+    <>
+    {spacer}
     <AnimatePresence>
       <motion.div
         initial={{ y: 100, opacity: 0 }}
@@ -571,5 +579,6 @@ export function TicketCartBar() {
         </div>
       </motion.div>
     </AnimatePresence>
+    </>
   );
 }

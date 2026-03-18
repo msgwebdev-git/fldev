@@ -94,25 +94,6 @@ export function B2BContent() {
           </p>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-20">
-          <div className="text-center p-6 rounded-xl bg-muted/50">
-            <div className="text-4xl font-bold text-primary mb-2">15,000+</div>
-            <div className="text-sm text-muted-foreground">{t("stats.visitors")}</div>
-          </div>
-          <div className="text-center p-6 rounded-xl bg-muted/50">
-            <div className="text-4xl font-bold text-primary mb-2">50+</div>
-            <div className="text-sm text-muted-foreground">{t("stats.companies")}</div>
-          </div>
-          <div className="text-center p-6 rounded-xl bg-muted/50">
-            <div className="text-4xl font-bold text-primary mb-2">3</div>
-            <div className="text-sm text-muted-foreground">{t("stats.days")}</div>
-          </div>
-          <div className="text-center p-6 rounded-xl bg-muted/50">
-            <div className="text-4xl font-bold text-primary mb-2">24/7</div>
-            <div className="text-sm text-muted-foreground">{t("stats.visibility")}</div>
-          </div>
-        </div>
 
         {/* Benefits Section */}
         <div className="mb-20">

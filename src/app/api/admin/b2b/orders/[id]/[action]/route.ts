@@ -35,11 +35,13 @@ async function handleRequest(
 
   try {
     let body: string | undefined;
-    try {
-      const json = await request.json();
-      body = JSON.stringify(json);
-    } catch {
-      // No body is fine for some actions
+    if (request.method !== "GET") {
+      try {
+        const json = await request.json();
+        body = JSON.stringify(json);
+      } catch {
+        // No body is fine for some actions
+      }
     }
 
     const response = await fetch(`${API_URL}/api/b2b/orders/${id}/${action}`, {
@@ -51,6 +53,20 @@ async function handleRequest(
       ...(body ? { body } : {}),
     });
 
+    // Binary responses (PDF downloads) — stream through
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/pdf") || contentType.includes("application/zip")) {
+      const blob = await response.blob();
+      return new NextResponse(blob, {
+        status: response.status,
+        headers: {
+          "Content-Type": contentType,
+          "Content-Disposition": response.headers.get("content-disposition") || "attachment",
+          "Cache-Control": "private, max-age=3600",
+        },
+      });
+    }
+
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch {
@@ -58,5 +74,6 @@ async function handleRequest(
   }
 }
 
+export const GET = handleRequest;
 export const POST = handleRequest;
 export const PATCH = handleRequest;

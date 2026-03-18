@@ -46,9 +46,10 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
       // Refresh the page to show updated data
       router.refresh();
 
-      // Handle invoice download
-      if (action === "generate-invoice" && result.data?.invoiceUrl) {
-        window.open(result.data.invoiceUrl, "_blank");
+      // After generating invoice, trigger download via public endpoint
+      if (action === "generate-invoice") {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+        window.open(`${apiUrl}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
       }
     } catch (err: any) {
       console.error(`Error ${action}:`, err);
@@ -92,7 +93,10 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
       {/* Download Invoice */}
       {order.invoice_url && (
         <Button
-          onClick={() => window.open(order.invoice_url, "_blank")}
+          onClick={() => {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+            window.open(`${apiUrl}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
+          }}
           className="w-full"
           variant="outline"
         >
