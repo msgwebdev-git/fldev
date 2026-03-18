@@ -79,10 +79,10 @@ interface B2BPackageCalculatorProps {
 }
 
 const DISCOUNT_TIERS: DiscountTier[] = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 3, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 5, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 7, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 10, label: "200+" },
+  { minQuantity: 50, maxQuantity: 99, discountPercent: 5, label: "50-99" },
+  { minQuantity: 100, maxQuantity: 149, discountPercent: 7, label: "100-149" },
+  { minQuantity: 150, maxQuantity: 199, discountPercent: 10, label: "150-199" },
+  { minQuantity: 200, maxQuantity: null, discountPercent: 15, label: "200+" },
 ];
 
 const MIN_QUANTITY = 50;
@@ -210,60 +210,37 @@ export function B2BPackageCalculator({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Discount Tiers Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-primary" />
-            {t("discountTiers")}
-          </CardTitle>
-          <CardDescription>{t("discountTiersDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {DISCOUNT_TIERS.map((tier) => {
-              const isActive =
-                totalQuantity >= tier.minQuantity &&
-                (tier.maxQuantity === null || totalQuantity <= tier.maxQuantity);
+    <div className="space-y-4">
+      {/* Discount Tiers — inline */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        {DISCOUNT_TIERS.map((tier) => {
+          const isActive =
+            totalQuantity >= tier.minQuantity &&
+            (tier.maxQuantity === null || totalQuantity <= tier.maxQuantity);
 
-              return (
-                <div
-                  key={tier.label}
-                  className={`p-4 rounded-lg border-2 transition-all ${
-                    isActive
-                      ? "border-primary"
-                      : "border-muted"
-                  }`}
-                >
-                  <div className="text-sm text-muted-foreground mb-1">{tier.label}</div>
-                  <div className="text-2xl font-bold text-primary">
-                    {tier.discountPercent}%
-                  </div>
-                  {isActive && (
-                    <Badge variant="default" className="mt-2">
-                      {t("active")}
-                    </Badge>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+          return (
+            <div
+              key={tier.label}
+              className={`flex-1 min-w-[72px] py-2 px-2 rounded-xl border text-center transition-all ${
+                isActive
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border"
+              }`}
+            >
+              <div className={`text-[10px] ${isActive ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{tier.label}</div>
+              <div className={`text-lg font-bold ${isActive ? "text-primary-foreground" : "text-primary"}`}>
+                {tier.discountPercent}%
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
-      {/* Ticket Selection */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("selectTickets")}</CardTitle>
-          <CardDescription>{t("selectTicketsDescription")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Tickets */}
+      <div className="space-y-2">
             {tickets.map((ticket) => {
               const qty = selections[ticket.id] || 0;
               const ticketName = locale === "ro" ? ticket.name_ro : ticket.name_ru;
-              const ticketDesc = locale === "ro" ? ticket.description_ro : ticket.description_ru;
 
               let displayPrice = ticket.price;
               if (ticket.has_options && selectedOptions[ticket.id]) {
@@ -276,189 +253,62 @@ export function B2BPackageCalculator({
               }
 
               return (
-                <Card
+                <div
                   key={ticket.id}
-                  className={`flex flex-col transition-all hover:shadow-lg ${
-                    qty > 0 ? "ring-2 ring-primary/20 shadow-sm" : ""
+                  className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border transition-all ${
+                    qty > 0
+                      ? "border-primary/30"
+                      : "border-border"
                   }`}
                 >
-                  <CardHeader className="pb-1.5 pt-3 text-center">
-                    <CardTitle className="text-base font-semibold">{ticketName}</CardTitle>
-                  </CardHeader>
-
-                  <CardContent className="flex-1 space-y-1.5 flex flex-col items-center pb-2">
-                    {/* Price */}
-                    <div className="flex items-baseline gap-1.5 justify-center">
-                      <span className="text-xl font-bold text-primary">
-                        {displayPrice.toFixed(2)}
-                      </span>
-                      <span className="text-xs font-medium text-muted-foreground">MDL</span>
-                    </div>
-
-                    {/* Info Button */}
-                    {ticketDesc && (
-                      <>
-                        {isDesktop ? (
-                          <Dialog open={infoModalOpen[ticket.id]} onOpenChange={(open) => setInfoModalOpen((prev) => ({ ...prev, [ticket.id]: open }))}>
-                            <DialogTrigger asChild>
-                              <Button variant="outline" size="sm" className="gap-1 h-7 text-xs">
-                                <Info className="h-3 w-3" />
-                                {t("aboutTicket")}
-                              </Button>
-                            </DialogTrigger>
-                            <DialogContent className="sm:max-w-md">
-                              <DialogHeader>
-                                <DialogTitle>{ticketName}</DialogTitle>
-                                <DialogDescription>{ticketDesc}</DialogDescription>
-                              </DialogHeader>
-
-                              <div className="space-y-4">
-                                {/* Features */}
-                                {((locale === "ro" ? ticket.features_ro : ticket.features_ru) || []).length > 0 && (
-                                  <>
-                                    <Separator />
-                                    <div>
-                                      <h4 className="font-medium mb-3">{t("included")}</h4>
-                                      <ul className="space-y-2">
-                                        {(locale === "ro" ? ticket.features_ro : ticket.features_ru)?.map((feature, index) => (
-                                          <li key={index} className="flex items-start gap-2 text-sm">
-                                            <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                                            <span>{feature}</span>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </div>
-                                  </>
-                                )}
-
-                                <Separator />
-
-                                {/* Price */}
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm text-muted-foreground">{t("price")}</span>
-                                  <div className="flex items-center gap-2">
-                                    {ticket.original_price && (
-                                      <span className="text-sm text-muted-foreground line-through">
-                                        {ticket.original_price.toFixed(2)} {ticket.currency || "MDL"}
-                                      </span>
-                                    )}
-                                    <span className="text-lg font-bold text-primary">
-                                      {ticket.price.toFixed(2)} {ticket.currency || "MDL"}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </DialogContent>
-                          </Dialog>
-                        ) : (
-                          <Drawer open={infoModalOpen[ticket.id]} onOpenChange={(open) => setInfoModalOpen((prev) => ({ ...prev, [ticket.id]: open }))}>
-                            <DrawerTrigger asChild>
-                              <Button variant="outline" size="sm" className="gap-1 h-7 text-xs">
-                                <Info className="h-3 w-3" />
-                                {t("aboutTicket")}
-                              </Button>
-                            </DrawerTrigger>
-                            <DrawerContent>
-                              <DrawerHeader className="text-left">
-                                <DrawerTitle>{ticketName}</DrawerTitle>
-                                <DrawerDescription>{ticketDesc}</DrawerDescription>
-                              </DrawerHeader>
-                              <div className="px-4 pb-4">
-                                <div className="space-y-4">
-                                  {/* Features */}
-                                  {((locale === "ro" ? ticket.features_ro : ticket.features_ru) || []).length > 0 && (
-                                    <>
-                                      <Separator />
-                                      <div>
-                                        <h4 className="font-medium mb-3">{t("included")}</h4>
-                                        <ul className="space-y-2">
-                                          {(locale === "ro" ? ticket.features_ro : ticket.features_ru)?.map((feature, index) => (
-                                            <li key={index} className="flex items-start gap-2 text-sm">
-                                              <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                                              <span>{feature}</span>
-                                            </li>
-                                          ))}
-                                        </ul>
-                                      </div>
-                                    </>
-                                  )}
-
-                                  <Separator />
-
-                                  {/* Price */}
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-sm text-muted-foreground">{t("price")}</span>
-                                    <div className="flex items-center gap-2">
-                                      {ticket.original_price && (
-                                        <span className="text-sm text-muted-foreground line-through">
-                                          {ticket.original_price.toFixed(2)} {ticket.currency || "MDL"}
-                                        </span>
-                                      )}
-                                      <span className="text-lg font-bold text-primary">
-                                        {ticket.price.toFixed(2)} {ticket.currency || "MDL"}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <DrawerFooter className="pt-2">
-                                <DrawerClose asChild>
-                                  <Button variant="outline">{tTickets("close")}</Button>
-                                </DrawerClose>
-                              </DrawerFooter>
-                            </DrawerContent>
-                          </Drawer>
-                        )}
-                      </>
-                    )}
-
+                  {/* Name + Price */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm sm:text-[15px] leading-tight">{ticketName}</p>
+                    <p className="text-base sm:text-lg font-bold text-primary mt-0.5">
+                      {Math.round(displayPrice).toLocaleString()} <span className="text-xs font-normal text-muted-foreground">MDL</span>
+                    </p>
                     {/* Selected Option Badge */}
                     {ticket.has_options && selectedOptions[ticket.id] && qty > 0 && (
-                      <Badge variant="secondary" className="text-xs">
-                        {ticket.ticket_options?.find((o) => o.id === selectedOptions[ticket.id])
+                      <Badge variant="secondary" className="text-[10px] mt-1">
+                        {ticket.ticket_options?.find((o: any) => o.id === selectedOptions[ticket.id])
                           ? locale === "ro"
-                            ? ticket.ticket_options.find((o) => o.id === selectedOptions[ticket.id])?.name_ro
-                            : ticket.ticket_options.find((o) => o.id === selectedOptions[ticket.id])?.name_ru
+                            ? ticket.ticket_options.find((o: any) => o.id === selectedOptions[ticket.id])?.name_ro
+                            : ticket.ticket_options.find((o: any) => o.id === selectedOptions[ticket.id])?.name_ru
                           : ""}
                       </Badge>
                     )}
-                  </CardContent>
+                  </div>
 
-                  <CardContent className="flex-col gap-1.5 pt-0 pb-3">
-                    {/* Quantity Controls */}
-                    <div className="flex items-center justify-center gap-2 w-full">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => handleQuantityChange(ticket, -1)}
-                        disabled={qty === 0}
-                      >
-                        <Minus className="h-3.5 w-3.5" />
-                      </Button>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={qty}
-                        onChange={(e) => handleQuantityInput(ticket, e.target.value)}
-                        className="h-8 w-16 text-center font-semibold text-base px-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      />
-                      <Button
-                        variant="default"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => handleQuantityChange(ticket, 1)}
-                      >
-                        <Plus className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  {/* Quantity Controls */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-9 w-9 rounded-full"
+                      onClick={() => handleQuantityChange(ticket, -1)}
+                      disabled={qty === 0}
+                    >
+                      <Minus className="h-3.5 w-3.5" />
+                    </Button>
+                    <Input
+                      type="number"
+                      min="0"
+                      value={qty}
+                      onChange={(e) => handleQuantityInput(ticket, e.target.value)}
+                      className="h-9 w-14 text-center font-semibold text-base rounded-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <Button
+                      size="icon"
+                      className="h-9 w-9 rounded-full"
+                      onClick={() => handleQuantityChange(ticket, 1)}
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
               );
             })}
-          </div>
-        </CardContent>
-      </Card>
+      </div>
 
       {/* Options Modals */}
       {tickets.map((ticket) => {

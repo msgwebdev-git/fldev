@@ -95,8 +95,11 @@ export function B2BContent() {
         </div>
 
 
+        {/* B2B Order Section */}
+        <B2BOrderSection />
+
         {/* Benefits Section */}
-        <div className="mb-20">
+        <div className="mt-20 mb-20">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4">
               {t("benefitsBadge")}
@@ -129,9 +132,6 @@ export function B2BContent() {
             })}
           </div>
         </div>
-
-        {/* B2B Order Section */}
-        <B2BOrderSection />
 
         {/* FAQ Section */}
         <div className="mt-20 mb-20 max-w-4xl mx-auto">
@@ -188,125 +188,6 @@ export function B2BContent() {
           </Accordion>
         </div>
 
-        {/* Contact Form Section */}
-        <div className="max-w-4xl mx-auto">
-          <Card className="border-2">
-            <CardHeader className="text-center">
-              <Badge variant="outline" className="mb-4 mx-auto">
-                <MessageSquare className="h-3 w-3 mr-1" />
-                {t("contactBadge")}
-              </Badge>
-              <CardTitle className="text-3xl mb-2">{t("contactTitle")}</CardTitle>
-              <CardDescription className="text-base">
-                {t("contactSubtitle")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="company">{t("form.company")}</Label>
-                    <Input
-                      id="company"
-                      name="company"
-                      placeholder={t("form.companyPlaceholder")}
-                      value={formData.company}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="name">{t("form.name")}</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      placeholder={t("form.namePlaceholder")}
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t("form.email")}</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder={t("form.emailPlaceholder")}
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">{t("form.phone")}</Label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder={t("form.phonePlaceholder")}
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">{t("form.message")}</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder={t("form.messagePlaceholder")}
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={5}
-                    required
-                  />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <Button type="submit" size="lg" className="flex-1">
-                    <Mail className="mr-2 h-4 w-4" />
-                    {t("form.submit")}
-                  </Button>
-                  <Button type="button" variant="outline" size="lg" asChild className="flex-1">
-                    <Link href="/contacts">
-                      <Phone className="mr-2 h-4 w-4" />
-                      {t("form.callUs")}
-                    </Link>
-                  </Button>
-                </div>
-              </form>
-
-              {/* Contact Info */}
-              <div className="mt-8 pt-8 border-t">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Mail className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className="text-sm font-medium">corporate@festival.md</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Phone className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className="text-sm font-medium">+373 XX XXX XXX</span>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <CalendarCheck className="h-5 w-5 text-primary" />
-                    </div>
-                    <span className="text-sm font-medium">{t("availability")}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </main>
   );

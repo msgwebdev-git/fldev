@@ -121,13 +121,9 @@ export function B2BOrderSection() {
   }
 
   return (
-    <div className="py-20 bg-muted/50 -mx-4 border-y">
+    <div className="py-20 bg-muted/50 rounded-3xl">
       <div className="px-4">
         <div className="text-center mb-12">
-          <Badge variant="outline" className="mb-4">
-            <ShoppingCart className="h-3 w-3 mr-1" />
-            {t("orderBadge")}
-          </Badge>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("orderTitle")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             {t("orderSubtitle")}

@@ -49,10 +49,10 @@ interface B2BOrderWizardProps {
 const MIN_QUANTITY = 50;
 
 const DISCOUNT_TIERS = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 3, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 5, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 7, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 10, label: "200+" },
+  { minQuantity: 50, maxQuantity: 99, discountPercent: 5, label: "50-99" },
+  { minQuantity: 100, maxQuantity: 149, discountPercent: 7, label: "100-149" },
+  { minQuantity: 150, maxQuantity: 199, discountPercent: 10, label: "150-199" },
+  { minQuantity: 200, maxQuantity: null, discountPercent: 15, label: "200+" },
 ];
 
 interface SummaryCardProps {
@@ -116,7 +116,7 @@ function SummaryCard({
 
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">{tCalc("subtotal")}</span>
-            <span className="font-medium">{subtotal.toFixed(2)} MDL</span>
+            <span className="font-medium">{Math.round(subtotal).toLocaleString()} MDL</span>
           </div>
 
           {discountPercent > 0 && (
@@ -125,7 +125,7 @@ function SummaryCard({
                 {tCalc("discount")} ({discountPercent}%)
               </span>
               <span className="font-medium text-green-600">
-                -{discountAmount.toFixed(2)} MDL
+                -{Math.round(discountAmount).toLocaleString()} MDL
               </span>
             </div>
           )}
@@ -135,7 +135,7 @@ function SummaryCard({
           <div className="flex justify-between items-center">
             <span className={compact ? "font-bold" : "text-lg font-bold"}>{tCalc("total")}</span>
             <span className={compact ? "text-xl font-bold text-primary" : "text-2xl font-bold text-primary"}>
-              {finalAmount.toFixed(2)} MDL
+              {Math.round(finalAmount).toLocaleString()} MDL
             </span>
           </div>
         </div>
@@ -221,72 +221,34 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
 
   return (
     <div className="space-y-8">
-      {/* Stepper Header */}
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="relative">
-          {/* Steps */}
-          <div className="flex justify-between items-start">
-            {steps.map((step, index) => {
-              const isActive = step.id === currentStep;
-              const isCompleted = index < currentStepIndex;
-              const StepIcon = step.icon;
+      {/* Stepper — compact pills */}
+      <div className="flex items-center justify-center gap-3 px-4">
+        {steps.map((step, index) => {
+          const isActive = step.id === currentStep;
+          const isCompleted = index < currentStepIndex;
 
-              return (
-                <div key={step.id} className="relative flex flex-col items-center gap-3 flex-1 group">
-                  {/* Step Number Label */}
-                  <div className="text-center">
-                    <p className={`text-xs font-medium uppercase tracking-wide ${
-                      isActive ? "text-primary" : isCompleted ? "text-primary" : "text-muted-foreground"
-                    }`}>
-                      {t("step")} {index + 1}
-                    </p>
-                  </div>
-
-                  {/* Step Indicator */}
-                  <div className="relative z-10">
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all shadow-sm ${
-                        isCompleted
-                          ? "bg-primary border-primary text-primary-foreground shadow-primary/20"
-                          : isActive
-                          ? "bg-primary border-primary text-primary-foreground shadow-primary/20 ring-4 ring-primary/10"
-                          : "bg-muted border-border text-muted-foreground"
-                      }`}
-                    >
-                      {isCompleted ? (
-                        <Check className="h-6 w-6" />
-                      ) : (
-                        <StepIcon className="h-6 w-6" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Step Info */}
-                  <div className="text-center space-y-1">
-                    <p className={`text-sm font-semibold ${isActive ? "text-foreground" : "text-muted-foreground"}`}>
-                      {step.title}
-                    </p>
-                    <p className={`text-xs hidden md:block ${isActive ? "text-muted-foreground" : "text-muted-foreground/70"}`}>
-                      {step.description}
-                    </p>
-                  </div>
-
-                  {/* Connector Line */}
-                  {index < steps.length - 1 && (
-                    <div className="absolute top-6 left-[calc(50%+32px)] right-[calc(-50%+32px)] h-0.5 -z-0">
-                      <div className="h-full bg-border" />
-                      <div
-                        className={`h-full bg-primary transition-all duration-500 absolute top-0 left-0 ${
-                          isCompleted ? "w-full" : "w-0"
-                        }`}
-                      />
-                    </div>
-                  )}
+          return (
+            <React.Fragment key={step.id}>
+              {index > 0 && (
+                <div className={`h-px w-8 sm:w-12 ${isCompleted ? "bg-primary" : "bg-border"}`} />
+              )}
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
+                    isCompleted || isActive
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground border border-border"
+                  }`}
+                >
+                  {isCompleted ? <Check className="h-3.5 w-3.5" /> : index + 1}
                 </div>
-              );
-            })}
-          </div>
-        </div>
+                <span className={`text-sm font-medium hidden sm:inline ${isActive ? "text-foreground" : "text-muted-foreground"}`}>
+                  {step.title}
+                </span>
+              </div>
+            </React.Fragment>
+          );
+        })}
       </div>
 
       {/* Step Content */}
@@ -296,11 +258,6 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Ticket Selection - Takes 2 columns */}
               <div className="lg:col-span-2 space-y-6 pb-32 lg:pb-0">
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">{t("stepTickets")}</h2>
-                  <p className="text-muted-foreground">{t("stepTicketsDesc")}</p>
-                </div>
-
                 <B2BPackageCalculator
                   tickets={tickets}
                   locale={locale}
@@ -353,7 +310,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
                         <div className="text-left">
                           <p className="text-xs text-muted-foreground">{tCalc("total")}</p>
                           <div className="flex items-baseline gap-2">
-                            <p className="text-xl font-bold text-primary">{finalAmount.toFixed(2)} MDL</p>
+                            <p className="text-xl font-bold text-primary">{Math.round(finalAmount).toLocaleString()} MDL</p>
                             {discountPercent > 0 && (
                               <Badge variant="secondary" className="text-xs">-{discountPercent}%</Badge>
                             )}
@@ -408,7 +365,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
 
                     <div className="flex justify-between items-center py-3 border-b">
                       <span className="text-sm text-muted-foreground">{tCalc("subtotal")}</span>
-                      <span className="text-lg font-medium">{subtotal.toFixed(2)} MDL</span>
+                      <span className="text-lg font-medium">{Math.round(subtotal).toLocaleString()} MDL</span>
                     </div>
 
                     {discountPercent > 0 && (
@@ -417,7 +374,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
                           {tCalc("discount")} ({discountPercent}%)
                         </span>
                         <span className="text-lg font-medium text-green-600">
-                          -{discountAmount.toFixed(2)} MDL
+                          -{Math.round(discountAmount).toLocaleString()} MDL
                         </span>
                       </div>
                     )}
@@ -425,7 +382,7 @@ export function B2BOrderWizard({ tickets, locale, onSubmit, isSubmitting }: B2BO
                     <div className="flex justify-between items-center py-4 bg-primary/5 rounded-lg px-4">
                       <span className="text-lg font-bold">{tCalc("total")}</span>
                       <span className="text-2xl font-bold text-primary">
-                        {finalAmount.toFixed(2)} MDL
+                        {Math.round(finalAmount).toLocaleString()} MDL
                       </span>
                     </div>
                   </div>

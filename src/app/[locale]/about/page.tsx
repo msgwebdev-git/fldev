@@ -226,21 +226,6 @@ export default function AboutPage() {
           </Accordion>
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-16 p-8 rounded-2xl border">
-          <h2 className="text-2xl font-bold mb-4">{t("ctaTitle")}</h2>
-          <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            {t("ctaDescription")}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
-              <Link href="/tickets">{t("ctaBuyTickets")}</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/lineup">{t("ctaViewLineup")}</Link>
-            </Button>
-          </div>
-        </div>
       </div>
     </main>
   );
