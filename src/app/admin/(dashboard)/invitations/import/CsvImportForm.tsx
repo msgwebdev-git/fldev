@@ -146,19 +146,43 @@ export function CsvImportForm({ tickets }: CsvImportFormProps) {
         note: r.raw.note?.trim() || undefined,
       }));
 
-      const res = await fetch("/api/admin/invitations/batch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invitations }),
-      });
+      // Split into chunks of 200 to avoid body size limits and timeouts
+      const CHUNK_SIZE = 200;
+      const totalResult = { created: 0, failed: 0, errors: [] as Array<{ row: number; error: string }> };
+      let offset = 0;
 
-      const data = await res.json();
+      for (let i = 0; i < invitations.length; i += CHUNK_SIZE) {
+        const chunk = invitations.slice(i, i + CHUNK_SIZE);
 
-      if (!res.ok) {
-        throw new Error(data.error || "Import failed");
+        const res = await fetch("/api/admin/invitations/batch", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ invitations: chunk }),
+        });
+
+        let data: any;
+        try {
+          data = await res.json();
+        } catch {
+          throw new Error(`Chunk ${Math.floor(i / CHUNK_SIZE) + 1}: сервер вернул невалидный ответ (статус ${res.status})`);
+        }
+
+        if (!res.ok) {
+          throw new Error(data.error || `Chunk ${Math.floor(i / CHUNK_SIZE) + 1} failed`);
+        }
+
+        totalResult.created += data.created || 0;
+        totalResult.failed += data.failed || 0;
+        // Adjust row numbers to global offset
+        if (data.errors) {
+          totalResult.errors.push(
+            ...data.errors.map((e: any) => ({ row: e.row + offset, error: e.error }))
+          );
+        }
+        offset += chunk.length;
       }
 
-      setImportResult(data);
+      setImportResult(totalResult);
       setState("done");
       router.refresh();
     } catch (err: any) {
