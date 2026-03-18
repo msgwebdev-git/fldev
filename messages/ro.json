@@ -844,7 +844,11 @@
     "tickets": "bilete",
     "yourCart": "Coșul tău",
     "yourTickets": "Biletele tale",
-    "continueShopping": "Continuă cumpărăturile"
+    "continueShopping": "Continuă cumpărăturile",
+    "quantity": "cantitate",
+    "decrease": "Micșorează",
+    "increase": "Mărește",
+    "close": "Închide"
   },
   "Checkout": {
     "title": "Finalizare comandă",

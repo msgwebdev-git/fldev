@@ -435,7 +435,7 @@ export default function CheckoutPage() {
                           className="flex items-start gap-3 p-3 rounded-lg bg-muted/50"
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium truncate">{item.ticket.name}</p>
+                            <p className="font-medium truncate">{locale === 'ru' ? item.ticket.nameRu : item.ticket.nameRo}</p>
                             <p className="text-sm text-muted-foreground">
                               {item.ticket.price} MDL × {item.quantity}
                             </p>

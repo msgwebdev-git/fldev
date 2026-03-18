@@ -844,7 +844,11 @@
     "tickets": "билетов",
     "yourCart": "Ваша корзина",
     "yourTickets": "Ваши билеты",
-    "continueShopping": "Продолжить покупки"
+    "continueShopping": "Продолжить покупки",
+    "quantity": "количество",
+    "decrease": "Уменьшить",
+    "increase": "Увеличить",
+    "close": "Закрыть"
   },
   "Checkout": {
     "title": "Оформление заказа",
