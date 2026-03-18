@@ -1128,7 +1128,7 @@
     "companyInfoDescription": "Introduceți datele oficiale ale companiei",
     "companyName": "Numele companiei",
     "companyNamePlaceholder": "S.R.L. \"Compania ta\"",
-    "taxId": "IDNO / Cod fiscal",
+    "taxId": "Cod fiscal",
     "taxIdPlaceholder": "1234567890123",
     "address": "Adresa juridică",
     "addressPlaceholder": "mun. Chișinău, str. Exemple, 123",

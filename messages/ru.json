@@ -1128,7 +1128,7 @@
     "companyInfoDescription": "Введите официальные данные компании",
     "companyName": "Название компании",
     "companyNamePlaceholder": "ООО \"Ваша компания\"",
-    "taxId": "IDNO / ИНН",
+    "taxId": "Фискальный код",
     "taxIdPlaceholder": "1234567890123",
     "address": "Юридический адрес",
     "addressPlaceholder": "г. Кишинёв, ул. Примерная, 123",
