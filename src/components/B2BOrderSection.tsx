@@ -4,13 +4,12 @@ import * as React from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, AlertCircle, CheckCircle2, Mail, ArrowRight } from "lucide-react";
+import { ShoppingCart, AlertCircle } from "lucide-react";
 import { B2BOrderWizard } from "@/components/B2BOrderWizard";
 import type { B2BOrderFormData } from "@/components/B2BOrderForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 interface TicketSelection {
   ticketId: string;
@@ -24,10 +23,10 @@ export function B2BOrderSection() {
   const locale = useLocale() as "ro" | "ru";
   const supabase = createClient();
 
+  const router = useRouter();
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Load tickets
@@ -100,8 +99,9 @@ export function B2BOrderSection() {
         return;
       }
 
-      // If invoice, show success message
-      setSuccess(true);
+      // Redirect to thank-you page
+      const orderNumber = result.data?.orderNumber || "";
+      router.push(`/${locale}/b2b/thank-you?order=${orderNumber}`);
     } catch (err: any) {
       console.error("Error creating order:", err);
       setError(err.message || t("errorCreatingOrder"));
@@ -116,49 +116,6 @@ export function B2BOrderSection() {
     return (
       <div className="py-20">
         <div className="text-center">{t("loading")}</div>
-      </div>
-    );
-  }
-
-  if (success) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center py-20 px-4">
-        <Card className="max-w-lg w-full border-green-200 shadow-xl">
-          <CardContent className="pt-12 pb-8 px-6 text-center">
-            <div className="mb-6 flex justify-center">
-              <div className="relative">
-                <div className="absolute inset-0 bg-green-500 rounded-full blur-2xl opacity-20 animate-pulse" />
-                <div className="relative bg-gradient-to-br from-green-500 to-green-600 rounded-full p-6">
-                  <CheckCircle2 className="h-12 w-12 text-white" strokeWidth={2.5} />
-                </div>
-              </div>
-            </div>
-
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-              {t("orderSuccess")}
-            </h2>
-
-            <div className="space-y-4 mb-8">
-              <p className="text-base text-gray-600 leading-relaxed">
-                {t("orderSuccessMessage")}
-              </p>
-
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 bg-gray-50 rounded-lg py-3 px-4">
-                <Mail className="h-4 w-4" />
-                <span>Проверьте вашу почту для получения деталей</span>
-              </div>
-            </div>
-
-            <Button
-              size="lg"
-              onClick={() => setSuccess(false)}
-              className="w-full group"
-            >
-              Создать новый заказ
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     );
   }
