@@ -15,7 +15,6 @@ import {
   XCircle,
   ArrowRight,
 } from "lucide-react";
-import { TicketCacheStatus } from "@/components/admin/TicketCacheStatus";
 
 export const dynamic = "force-dynamic";
 
@@ -288,12 +287,6 @@ export default async function AdminDashboardPage() {
             <ArrowRight className="w-4 h-4 text-yellow-600 ml-auto" />
           </Link>
         )}
-      </section>
-
-      {/* Ticket Cache Status */}
-      <section>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Сканирование</h2>
-        <TicketCacheStatus />
       </section>
 
       {/* Content Stats */}
