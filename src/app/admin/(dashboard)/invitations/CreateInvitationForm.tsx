@@ -80,6 +80,38 @@ export function CreateInvitationForm({ tickets }: CreateInvitationFormProps) {
     setItems(newItems);
   };
 
+  const pollJobProgress = async (jobId: string, orderNumber: string) => {
+    const maxAttempts = 120; // 2 min max (200+ PDFs)
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise((r) => setTimeout(r, 1000));
+      try {
+        const res = await fetch(`/api/admin/invitations/job/${jobId}`);
+        if (!res.ok) continue;
+        const data = await res.json();
+
+        if (data.status === 'completed') {
+          setSuccess(
+            `Приглашение ${orderNumber}: ${data.sent} билетов создано и отправлено на ${email}`
+          );
+          return;
+        }
+
+        if (data.status === 'failed') {
+          setError(`Ошибка генерации билетов. Создано: ${data.sent}, ошибок: ${data.failed}`);
+          return;
+        }
+
+        // Still processing — update progress
+        setSuccess(
+          `Приглашение ${orderNumber}: генерация билетов ${data.processed}/${data.total}...`
+        );
+      } catch {
+        // Network error — keep trying
+      }
+    }
+    setSuccess(`Приглашение ${orderNumber} создано. Билеты генерируются на сервере.`);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -129,7 +161,13 @@ export function CreateInvitationForm({ tickets }: CreateInvitationFormProps) {
         throw new Error(data.error || "Failed to create invitation");
       }
 
-      setSuccess(`Приглашение ${data.orderNumber} создано и отправлено на ${email}`);
+      // Poll job progress if jobId returned
+      if (data.jobId) {
+        setSuccess(`Приглашение ${data.orderNumber} создано. Генерация билетов...`);
+        await pollJobProgress(data.jobId, data.orderNumber);
+      } else {
+        setSuccess(`Приглашение ${data.orderNumber} создано и отправлено на ${email}`);
+      }
 
       // Reset form
       setFirstName("");
