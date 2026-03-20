@@ -1,10 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { ActivitiesContent } from "./ActivitiesContent";
+import { generatePageMetadata } from "@/lib/seo";
 
 interface ActivitiesPageProps {
   params: Promise<{
     locale: string;
   }>;
+}
+
+export async function generateMetadata({ params }: ActivitiesPageProps) {
+  return generatePageMetadata({ params, page: "activities" });
 }
 
 interface ActivityDB {

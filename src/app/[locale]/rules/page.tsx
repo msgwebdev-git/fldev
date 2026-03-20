@@ -1,10 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { RulesContent, Rule } from "./RulesContent";
+import { generatePageMetadata } from "@/lib/seo";
 
 interface RulesPageProps {
   params: Promise<{
     locale: string;
   }>;
+}
+
+export async function generateMetadata({ params }: RulesPageProps) {
+  return generatePageMetadata({ params, page: "rules" });
 }
 
 interface RuleDB {

@@ -1302,5 +1302,75 @@
     "ctaDescription": "Nu ezitați să ne contactați pentru orice nelămurire legată de politica noastră de confidențialitate.",
     "ctaBuyTickets": "Cumpără bilete",
     "ctaContacts": "Contactează-ne"
+  },
+  "Metadata": {
+    "siteName": "Festivalul Lupilor",
+    "titleTemplate": "%s | Festivalul Lupilor",
+    "defaultTitle": "Festivalul Lupilor 2026 — 7-9 August, Orheiul Vechi",
+    "defaultDescription": "Cel mai mare festival de muzică din Moldova. 7-9 August 2026, Orheiul Vechi. Cumpără bilete online, vezi line-up-ul și programul festivalului.",
+    "home": {
+      "title": "Festivalul Lupilor 2026 — Cel mai mare festival din Moldova",
+      "description": "Festivalul Lupilor — 7-9 August 2026, Orheiul Vechi, Moldova. Artiști internaționali, 3 zile de muzică, camping, activități. Cumpără bilete online."
+    },
+    "tickets": {
+      "title": "Cumpără Bilete",
+      "description": "Bilete pentru Festivalul Lupilor 2026. Alege tipul de bilet potrivit — Early Bird, Standard sau VIP. 7-9 August, Orheiul Vechi."
+    },
+    "lineup": {
+      "title": "Line-up Artiști",
+      "description": "Descoperă artiștii care vor performa la Festivalul Lupilor 2026. Line-up complet cu headlineri și programul pe zile."
+    },
+    "program": {
+      "title": "Programul Festivalului",
+      "description": "Programul complet al Festivalului Lupilor 2026. Orarul pe zile, scene și artiști. 7-9 August, Orheiul Vechi."
+    },
+    "news": {
+      "title": "Noutăți",
+      "description": "Ultimele noutăți despre Festivalul Lupilor 2026. Anunțuri, artiști noi, informații utile."
+    },
+    "gallery": {
+      "title": "Galerie Foto",
+      "description": "Galerie foto de la edițiile anterioare ale Festivalului Lupilor. Cele mai frumoase momente surprinse în imagini."
+    },
+    "about": {
+      "title": "Despre Festival",
+      "description": "Descoperă povestea Festivalului Lupilor — cel mai mare festival de muzică din Moldova, desfășurat anual la Orheiul Vechi."
+    },
+    "faq": {
+      "title": "Întrebări Frecvente",
+      "description": "Răspunsuri la cele mai frecvente întrebări despre Festivalul Lupilor 2026 — bilete, transport, camping, reguli."
+    },
+    "contacts": {
+      "title": "Contacte",
+      "description": "Contactează echipa Festivalului Lupilor. Informații de contact pentru bilete, parteneriate, presă și organizare."
+    },
+    "partners": {
+      "title": "Parteneri",
+      "description": "Partenerii oficiali ai Festivalului Lupilor 2026. Mulțumim sponsorilor și partenerilor noștri."
+    },
+    "activities": {
+      "title": "Activități",
+      "description": "Activitățile disponibile la Festivalul Lupilor 2026. Nu doar muzică — descoperă experiențe unice."
+    },
+    "b2b": {
+      "title": "Pachete Corporate B2B",
+      "description": "Oferte speciale pentru companii. Cumpără bilete în cantitate mare cu reduceri progresive pentru Festivalul Lupilor 2026."
+    },
+    "howToGet": {
+      "title": "Cum Ajungi",
+      "description": "Informații despre cum ajungi la Festivalul Lupilor 2026 — Orheiul Vechi, Moldova. Transport, parcare, direcții."
+    },
+    "privacy": {
+      "title": "Politica de Confidențialitate",
+      "description": "Politica de confidențialitate a Festivalului Lupilor. Cum colectăm și protejăm datele tale personale."
+    },
+    "terms": {
+      "title": "Termeni și Condiții",
+      "description": "Termenii și condițiile de utilizare a site-ului și de achiziție a biletelor pentru Festivalul Lupilor."
+    },
+    "rules": {
+      "title": "Regulile Festivalului",
+      "description": "Regulile oficiale ale Festivalului Lupilor 2026. Ce este permis și ce este interzis pe teritoriul festivalului."
+    }
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Navbar } from "@/components/Navbar";
@@ -10,6 +11,8 @@ import { TicketCartBar } from "@/components/TicketCartBar";
 import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
 import { Toaster } from "sonner";
 import "../globals.css";
+
+const SITE_URL = "https://festivalul-lupilor.md";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,15 +24,62 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "FL Site",
-  description: "FL Site",
-};
-
 type Props = {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  const otherLocale = locale === "ro" ? "ru" : "ro";
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      template: t("titleTemplate"),
+      default: t("defaultTitle"),
+    },
+    description: t("defaultDescription"),
+    alternates: {
+      canonical: `${SITE_URL}/${locale}`,
+      languages: {
+        ro: `${SITE_URL}/ro`,
+        ru: `${SITE_URL}/ru`,
+      },
+    },
+    openGraph: {
+      type: "website",
+      siteName: t("siteName"),
+      locale: locale === "ro" ? "ro_RO" : "ru_RU",
+      alternateLocale: otherLocale === "ro" ? "ro_RO" : "ru_RU",
+      title: t("defaultTitle"),
+      description: t("defaultDescription"),
+      url: `${SITE_URL}/${locale}`,
+      images: [
+        {
+          url: `${SITE_URL}/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: t("siteName"),
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("defaultTitle"),
+      description: t("defaultDescription"),
+      images: [`${SITE_URL}/og-image.jpg`],
+    },
+    icons: {
+      icon: "/favicon.ico",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;

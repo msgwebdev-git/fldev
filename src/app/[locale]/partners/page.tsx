@@ -1,5 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { PartnersContent } from "./PartnersContent";
+import { generatePageMetadata } from "@/lib/seo";
+
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  return generatePageMetadata({ params, page: "partners" });
+}
 
 export default async function PartnersPage() {
   const supabase = await createClient();

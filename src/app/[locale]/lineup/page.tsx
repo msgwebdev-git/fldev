@@ -1,5 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { LineupContent } from "./LineupContent";
+import { generatePageMetadata } from "@/lib/seo";
+
+type Props = { params: Promise<{ locale: string }> };
+
+export async function generateMetadata({ params }: Props) {
+  return generatePageMetadata({ params, page: "lineup" });
+}
 
 export default async function LineupPage() {
   const supabase = await createClient();
