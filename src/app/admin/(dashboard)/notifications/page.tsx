@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 interface DeviceStats {
   total: number;
@@ -31,6 +32,8 @@ interface PushHistoryItem {
   id: string;
   title: string;
   body: string;
+  title_ru?: string;
+  body_ru?: string;
   type: string;
   target: string;
   target_value: string;
@@ -47,7 +50,7 @@ const NOTIFICATION_TYPES = [
 ];
 
 const ACTION_ROUTES = [
-  { value: "", label: "Без ссылки" },
+  { value: "none", label: "Без ссылки" },
   { value: "/news", label: "Новости" },
   { value: "/lineup", label: "Лайнап" },
   { value: "/tickets", label: "Билеты" },
@@ -56,10 +59,12 @@ const ACTION_ROUTES = [
 ];
 
 export default function NotificationsPage() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [titleRo, setTitleRo] = useState("");
+  const [bodyRo, setBodyRo] = useState("");
+  const [titleRu, setTitleRu] = useState("");
+  const [bodyRu, setBodyRu] = useState("");
   const [type, setType] = useState("general");
-  const [actionRoute, setActionRoute] = useState("");
+  const [actionRoute, setActionRoute] = useState("none");
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
 
@@ -87,7 +92,7 @@ export default function NotificationsPage() {
   }
 
   async function handleSend() {
-    if (!title.trim() || !body.trim()) return;
+    if (!titleRo.trim() || !bodyRo.trim()) return;
 
     setSending(true);
     setResult(null);
@@ -97,21 +102,25 @@ export default function NotificationsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: title.trim(),
-          body: body.trim(),
+          titleRo: titleRo.trim(),
+          bodyRo: bodyRo.trim(),
+          ...(titleRu.trim() && { titleRu: titleRu.trim() }),
+          ...(bodyRu.trim() && { bodyRu: bodyRu.trim() }),
           type,
-          ...(actionRoute && { actionRoute }),
+          ...(actionRoute !== "none" && { actionRoute }),
         }),
       });
 
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setResult({ success: true, message: "Уведомление отправлено" });
-        setTitle("");
-        setBody("");
+        setResult({ success: true, message: `Отправлено: ${data.sent ?? 0} устройств` });
+        setTitleRo("");
+        setBodyRo("");
+        setTitleRu("");
+        setBodyRu("");
         setType("general");
-        setActionRoute("");
+        setActionRoute("none");
         loadStats();
       } else {
         setResult({ success: false, message: data.error || "Ошибка отправки" });
@@ -125,7 +134,6 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-semibold text-gray-900">Push-уведомления</h1>
         <p className="text-gray-500 mt-1">Отправка уведомлений пользователям приложения</p>
@@ -183,35 +191,68 @@ export default function NotificationsPage() {
               Отправить уведомление
             </CardTitle>
             <CardDescription>
-              Будет отправлено всем пользователям с установленным приложением
+              Каждый получит push на своём языке. Румынский — обязательный.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Заголовок</Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Новый артист в лайнапе!"
-                maxLength={100}
-              />
-              <p className="text-xs text-gray-400">{title.length}/100</p>
+          <CardContent className="space-y-5">
+            {/* Romanian (required) */}
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-gray-700">🇷🇴 Română (обязательно)</p>
+              <div className="space-y-2">
+                <Label htmlFor="titleRo">Заголовок</Label>
+                <Input
+                  id="titleRo"
+                  value={titleRo}
+                  onChange={(e) => setTitleRo(e.target.value)}
+                  placeholder="Artist nou în lineup!"
+                  maxLength={100}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bodyRo">Текст</Label>
+                <Textarea
+                  id="bodyRo"
+                  value={bodyRo}
+                  onChange={(e) => setBodyRo(e.target.value)}
+                  placeholder="Am adăugat un headliner nou..."
+                  maxLength={500}
+                  rows={2}
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="body">Текст</Label>
-              <Textarea
-                id="body"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder="Мы добавили нового хедлайнера..."
-                maxLength={500}
-                rows={3}
-              />
-              <p className="text-xs text-gray-400">{body.length}/500</p>
+            <Separator />
+
+            {/* Russian (optional) */}
+            <div className="space-y-3">
+              <p className="text-sm font-medium text-gray-700">🇷🇺 Русский (необязательно)</p>
+              <div className="space-y-2">
+                <Label htmlFor="titleRu">Заголовок</Label>
+                <Input
+                  id="titleRu"
+                  value={titleRu}
+                  onChange={(e) => setTitleRu(e.target.value)}
+                  placeholder="Новый артист в лайнапе!"
+                  maxLength={100}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bodyRu">Текст</Label>
+                <Textarea
+                  id="bodyRu"
+                  value={bodyRu}
+                  onChange={(e) => setBodyRu(e.target.value)}
+                  placeholder="Мы добавили нового хедлайнера..."
+                  maxLength={500}
+                  rows={2}
+                />
+              </div>
+              <p className="text-xs text-gray-400">Если не заполнено — русскоязычные получат румынский текст</p>
             </div>
 
+            <Separator />
+
+            {/* Type + route */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Тип</Label>
@@ -228,16 +269,15 @@ export default function NotificationsPage() {
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="space-y-2">
                 <Label>Ссылка в приложении</Label>
                 <Select value={actionRoute} onValueChange={setActionRoute}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Без ссылки" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {ACTION_ROUTES.map((r) => (
-                      <SelectItem key={r.value || "none"} value={r.value || "none"}>
+                      <SelectItem key={r.value} value={r.value}>
                         {r.label}
                       </SelectItem>
                     ))}
@@ -250,30 +290,20 @@ export default function NotificationsPage() {
               <div className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
                 result.success ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
               }`}>
-                {result.success ? (
-                  <CheckCircle className="h-4 w-4" />
-                ) : (
-                  <AlertCircle className="h-4 w-4" />
-                )}
+                {result.success ? <CheckCircle className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
                 {result.message}
               </div>
             )}
 
             <Button
               onClick={handleSend}
-              disabled={sending || !title.trim() || !body.trim()}
+              disabled={sending || !titleRo.trim() || !bodyRo.trim()}
               className="w-full"
             >
               {sending ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Отправка...
-                </>
+                <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Отправка...</>
               ) : (
-                <>
-                  <Send className="h-4 w-4 mr-2" />
-                  Отправить всем
-                </>
+                <><Send className="h-4 w-4 mr-2" />Отправить всем</>
               )}
             </Button>
           </CardContent>
@@ -295,10 +325,7 @@ export default function NotificationsPage() {
             ) : (
               <div className="space-y-3 max-h-[500px] overflow-y-auto">
                 {history.map((item) => (
-                  <div
-                    key={item.id}
-                    className="border rounded-lg p-3 space-y-1"
-                  >
+                  <div key={item.id} className="border rounded-lg p-3 space-y-1">
                     <div className="flex items-center justify-between">
                       <p className="font-medium text-sm">{item.title}</p>
                       <span className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">
@@ -306,6 +333,9 @@ export default function NotificationsPage() {
                       </span>
                     </div>
                     <p className="text-sm text-gray-500 line-clamp-2">{item.body}</p>
+                    {item.title_ru && (
+                      <p className="text-xs text-gray-400">🇷🇺 {item.title_ru}</p>
+                    )}
                     <div className="flex items-center justify-between text-xs text-gray-400">
                       <span>{item.target_value}</span>
                       <span>
