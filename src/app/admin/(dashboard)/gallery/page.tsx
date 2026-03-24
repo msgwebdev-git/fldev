@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn, getYears } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
 interface UploadFile {
@@ -59,7 +59,7 @@ export default function GalleryAdminPage() {
   const [activeTab, setActiveTab] = React.useState("upload");
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const years = ["2025", "2024", "2023", "2022", "2021"];
+  const years = getYears();
 
   // Load existing photos when year or tab changes
   React.useEffect(() => {

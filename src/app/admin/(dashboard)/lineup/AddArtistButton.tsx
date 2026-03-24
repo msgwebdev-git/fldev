@@ -23,17 +23,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import { getYears } from "@/lib/utils";
+
+const years = getYears();
 
 interface AddArtistButtonProps {
   years: string[];
 }
 
-export function AddArtistButton({ years }: AddArtistButtonProps) {
+export function AddArtistButton({}: AddArtistButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isHeadliner, setIsHeadliner] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
+  const [selectedYear, setSelectedYear] = useState(years[0]);
   const [selectedDay, setSelectedDay] = useState("1");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -118,7 +121,7 @@ export function AddArtistButton({ years }: AddArtistButtonProps) {
                   <SelectValue placeholder="Выберите год" />
                 </SelectTrigger>
                 <SelectContent>
-                  {["2025", "2024", "2023", "2022", "2021"].map((year) => (
+                  {years.map((year) => (
                     <SelectItem key={year} value={year}>
                       {year}
                     </SelectItem>

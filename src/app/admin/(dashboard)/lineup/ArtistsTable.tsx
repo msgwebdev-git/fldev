@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil, Trash2, Star, Music } from "lucide-react";
+import { getYears } from "@/lib/utils";
 
 interface Artist {
   id: number;
@@ -49,7 +50,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
   const [editingItem, setEditingItem] = useState<Artist | null>(null);
   const [deletingItem, setDeletingItem] = useState<Artist | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
+  const [selectedYear, setSelectedYear] = useState(years[0] || getYears()[0]);
   const [editIsHeadliner, setEditIsHeadliner] = useState(false);
   const [editDay, setEditDay] = useState("1");
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -209,7 +210,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
               </TabsTrigger>
             ))
           ) : (
-            <TabsTrigger value="2025">2025 (0)</TabsTrigger>
+            <TabsTrigger value={getYears()[0]}>{getYears()[0]} (0)</TabsTrigger>
           )}
         </TabsList>
 

@@ -24,6 +24,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import { getYears } from "@/lib/utils";
+
+const years = getYears();
 
 interface AddActivityButtonProps {
   years: string[];
@@ -41,11 +44,11 @@ const iconOptions = [
   { value: "treePine", label: "Природа" },
 ];
 
-export function AddActivityButton({ years }: AddActivityButtonProps) {
+export function AddActivityButton({}: AddActivityButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(years[0] || "2025");
+  const [selectedYear, setSelectedYear] = useState(years[0]);
   const [selectedCategory, setSelectedCategory] = useState("entertainment");
   const [selectedIcon, setSelectedIcon] = useState("sparkles");
   const [isHighlight, setIsHighlight] = useState(false);
@@ -146,7 +149,7 @@ export function AddActivityButton({ years }: AddActivityButtonProps) {
                   <SelectValue placeholder="Выберите год" />
                 </SelectTrigger>
                 <SelectContent>
-                  {["2025", "2024", "2023", "2022", "2021"].map((year) => (
+                  {years.map((year) => (
                     <SelectItem key={year} value={year}>
                       {year}
                     </SelectItem>
