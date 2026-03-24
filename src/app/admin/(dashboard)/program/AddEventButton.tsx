@@ -23,6 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import { getYears } from "@/lib/utils";
+
+const years = getYears();
 
 export function AddEventButton() {
   const router = useRouter();
@@ -31,15 +34,18 @@ export function AddEventButton() {
   const [isHeadliner, setIsHeadliner] = useState(false);
   const [selectedDay, setSelectedDay] = useState("1");
   const [selectedStage, setSelectedStage] = useState("main");
+  const [selectedYear, setSelectedYear] = useState(years[0]);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
     const formData = new FormData(e.currentTarget);
     const supabase = createClient();
 
-    const { error } = await supabase.from("program_events").insert({
+    const { error: insertError } = await supabase.from("program_events").insert({
       date: formData.get("date") as string,
       day: parseInt(selectedDay),
       time: formData.get("time") as string,
@@ -48,15 +54,20 @@ export function AddEventButton() {
       genre: formData.get("genre") as string || null,
       is_headliner: isHeadliner,
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
+      year: selectedYear,
     });
 
-    if (error) {
-      console.error("Error adding event:", error);
+    setIsLoading(false);
+
+    if (insertError) {
+      console.error("Error adding event:", insertError);
+      setError("Ошибка при добавлении: " + insertError.message);
+      return;
     }
 
-    setIsLoading(false);
     setOpen(false);
     setIsHeadliner(false);
+    setError("");
     router.refresh();
   };
 
@@ -94,18 +105,36 @@ export function AddEventButton() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="day" className="text-gray-700">День</Label>
-            <Select value={selectedDay} onValueChange={setSelectedDay}>
-              <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                <SelectValue placeholder="День" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">День 1</SelectItem>
-                <SelectItem value="2">День 2</SelectItem>
-                <SelectItem value="3">День 3</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="year" className="text-gray-700">Год *</Label>
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                  <SelectValue placeholder="Выберите год" />
+                </SelectTrigger>
+                <SelectContent>
+                  {years.map((year) => (
+                    <SelectItem key={year} value={year}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="day" className="text-gray-700">День</Label>
+              <Select value={selectedDay} onValueChange={setSelectedDay}>
+                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                  <SelectValue placeholder="День" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">День 1</SelectItem>
+                  <SelectItem value="2">День 2</SelectItem>
+                  <SelectItem value="3">День 3</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -178,6 +207,10 @@ export function AddEventButton() {
               Хедлайнер
             </Label>
           </div>
+
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">{error}</p>
+          )}
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>

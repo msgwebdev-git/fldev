@@ -118,8 +118,13 @@ export default function CheckoutPage() {
     setPromoApplied(null);
   };
 
-  // Calculate discount
-  const discountAmount = promoApplied?.discountAmount ?? (promoApplied ? Math.round(totalPrice * promoApplied.discount / 100) : 0);
+  // Calculate discount: percentage promos recalculate on every totalPrice change,
+  // fixed-amount promos use the stored value
+  const discountAmount = promoApplied
+    ? promoApplied.discount > 0
+      ? Math.round(totalPrice * promoApplied.discount / 100)
+      : (promoApplied.discountAmount ?? 0)
+    : 0;
   const finalPrice = totalPrice - discountAmount;
 
   // Redirect if cart is empty (only after hydration)
