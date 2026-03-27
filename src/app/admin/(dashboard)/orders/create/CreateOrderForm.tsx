@@ -62,6 +62,10 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
     { ticketId: "", quantity: 1 },
   ]);
 
+  const isGiveaway = source === "giveaway";
+  const isFree = isGiveaway;
+  const SourceIcon = isGiveaway ? Trophy : source === "offline" ? ShoppingBag : PenLine;
+
   const addItem = () => {
     setItems([...items, { ticketId: "", quantity: 1 }]);
   };
@@ -192,10 +196,6 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
       setLoading(false);
     }
   };
-
-  const isGiveaway = source === "giveaway";
-  const isFree = isGiveaway;
-  const SourceIcon = isGiveaway ? Trophy : source === "offline" ? ShoppingBag : PenLine;
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6">
