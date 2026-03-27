@@ -283,6 +283,7 @@ CREATE TABLE public.program_events (
   stage character varying NOT NULL,
   genre character varying,
   is_headliner boolean DEFAULT false,
+  year character varying(10) NOT NULL,
   sort_order integer DEFAULT 0,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()),
   CONSTRAINT program_events_pkey PRIMARY KEY (id)

@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { OrdersTable } from "./OrdersTable";
 import { OrderStats } from "./OrderStats";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -110,9 +112,18 @@ export default async function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Заказы</h1>
-        <p className="text-gray-500 mt-1">Управление заказами и просмотр статистики продаж</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900">Заказы</h1>
+          <p className="text-gray-500 mt-1">Управление заказами и просмотр статистики продаж</p>
+        </div>
+        <Link
+          href="/admin/orders/create"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
+        >
+          <Plus className="w-4 h-4" />
+          Создать заказ
+        </Link>
       </div>
 
       <OrderStats stats={stats} />
