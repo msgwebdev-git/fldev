@@ -194,25 +194,19 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           <span className="font-mono font-medium text-primary">
             {row.getValue("order_number")}
           </span>
-          {(() => {
-            const orderNum = row.getValue("order_number") as string;
-            if (orderNum.startsWith("GW")) return (
-              <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-xs">
-                <Gift className="w-3 h-3 mr-1" />Розыгрыш
-              </Badge>
-            );
-            if (orderNum.startsWith("MAN") || orderNum.startsWith("OFF")) return (
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
-                <Gift className="w-3 h-3 mr-1" />Вручную
-              </Badge>
-            );
-            if (row.original.is_invitation) return (
-              <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
-                <Gift className="w-3 h-3 mr-1" />Приглашение
-              </Badge>
-            );
-            return null;
-          })()}
+          {String(row.getValue("order_number") || "").startsWith("GW") ? (
+            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-xs">
+              <Gift className="w-3 h-3 mr-1" />Розыгрыш
+            </Badge>
+          ) : String(row.getValue("order_number") || "").startsWith("MAN") || String(row.getValue("order_number") || "").startsWith("OFF") ? (
+            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
+              <Gift className="w-3 h-3 mr-1" />Вручную
+            </Badge>
+          ) : row.original.is_invitation ? (
+            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
+              <Gift className="w-3 h-3 mr-1" />Приглашение
+            </Badge>
+          ) : null}
         </div>
       ),
     },
