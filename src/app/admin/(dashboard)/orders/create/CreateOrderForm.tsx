@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ShoppingBag, Trophy, Plus, Minus, Loader2, CheckCircle, X } from "lucide-react";
+import { ShoppingBag, Trophy, PenLine, Plus, Minus, Loader2, CheckCircle, X } from "lucide-react";
 
 interface TicketOption {
   id: string;
@@ -43,7 +43,7 @@ interface OrderItem {
   quantity: number;
 }
 
-type OrderSource = "offline" | "giveaway";
+type OrderSource = "offline" | "giveaway" | "manual";
 
 export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
   const router = useRouter();
@@ -51,7 +51,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [source, setSource] = useState<OrderSource>("offline");
+  const [source, setSource] = useState<OrderSource>("manual");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -85,7 +85,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
 
   // Calculate total
   const total = items.reduce((sum, item) => {
-    if (source === "giveaway") return 0;
+    if (isFree) return 0;
     const ticket = getTicketById(item.ticketId);
     if (!ticket) return sum;
     let price = ticket.price;
@@ -194,8 +194,8 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
   };
 
   const isGiveaway = source === "giveaway";
-  const SourceIcon = isGiveaway ? Trophy : ShoppingBag;
-  const sourceColor = isGiveaway ? "purple" : "blue";
+  const isFree = isGiveaway;
+  const SourceIcon = isGiveaway ? Trophy : source === "offline" ? ShoppingBag : PenLine;
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6">
@@ -206,11 +206,23 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
             <SourceIcon className={`w-5 h-5 ${isGiveaway ? "text-purple-600" : "text-blue-600"}`} />
           </div>
           <h2 className="text-lg font-semibold text-gray-900">
-            {isGiveaway ? "Розыгрыш" : "Оффлайн продажа"}
+            {source === "giveaway" ? "Розыгрыш" : source === "offline" ? "Оффлайн продажа" : "Ручной заказ"}
           </h2>
         </div>
 
         <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
+          <button
+            type="button"
+            onClick={() => setSource("manual")}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              source === "manual"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <PenLine className="w-4 h-4 inline mr-1.5" />
+            Вручную
+          </button>
           <button
             type="button"
             onClick={() => setSource("offline")}
@@ -240,9 +252,11 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
 
       {/* Source description */}
       <div className={`mb-6 p-3 rounded-lg text-sm ${isGiveaway ? "bg-purple-50 text-purple-700" : "bg-blue-50 text-blue-700"}`}>
-        {isGiveaway
+        {source === "giveaway"
           ? "Бесплатный билет за конкурс/розыгрыш. Не учитывается в выручке."
-          : "Оплата наличными или переводом. Учитывается в выручке по текущей цене."}
+          : source === "offline"
+            ? "Оплата наличными или переводом. Учитывается в выручке по текущей цене."
+            : "Ручное создание заказа (как при покупке на сайте). Учитывается в выручке."}
       </div>
 
       {/* Messages */}
@@ -330,7 +344,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
             {items.map((item, index) => {
               const selectedTicket = getTicketById(item.ticketId);
               const hasOptions = selectedTicket?.has_options && selectedTicket?.ticket_options?.length > 0;
-              const itemPrice = source === "giveaway" ? 0 : (selectedTicket?.price || 0);
+              const itemPrice = isFree ? 0 : (selectedTicket?.price || 0);
 
               return (
                 <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-3">
@@ -350,7 +364,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
                     <SelectContent>
                       {tickets.map((ticket) => (
                         <SelectItem key={ticket.id} value={ticket.id}>
-                          {ticket.name_ru} {source !== "giveaway" && `— ${ticket.price} MDL`}
+                          {ticket.name_ru} {!isFree && `— ${ticket.price} MDL`}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -365,7 +379,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
                         {selectedTicket?.ticket_options?.map((option) => (
                           <SelectItem key={option.id} value={option.id}>
                             {option.name_ru}
-                            {source !== "giveaway" && option.price_modifier > 0 && ` (+${option.price_modifier} MDL)`}
+                            {!isFree && option.price_modifier > 0 && ` (+${option.price_modifier} MDL)`}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -392,7 +406,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
                     </div>
                     {selectedTicket && (
                       <span className="text-sm font-medium text-gray-500">
-                        {isGiveaway ? "0 MDL" : `${itemPrice * item.quantity} MDL`}
+                        {isFree ? "0 MDL" : `${itemPrice * item.quantity} MDL`}
                       </span>
                     )}
                   </div>
@@ -406,7 +420,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
             <div className="flex items-center justify-between">
               <span className={`font-medium ${isGiveaway ? "text-purple-700" : "text-blue-700"}`}>Итого:</span>
               <span className={`text-xl font-bold ${isGiveaway ? "text-purple-700" : "text-blue-700"}`}>
-                {isGiveaway ? "0" : total.toLocaleString()} MDL
+                {isFree ? "0" : total.toLocaleString()} MDL
               </span>
             </div>
           </div>
@@ -424,7 +438,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
           ) : (
             <>
               <SourceIcon className="w-4 h-4 mr-2" />
-              {isGiveaway ? "Создать розыгрыш" : "Создать заказ"}
+              {source === "giveaway" ? "Создать розыгрыш" : "Создать заказ"}
             </>
           )}
         </Button>
