@@ -85,8 +85,10 @@ interface OrderPageClientProps {
 export function OrderPageClient({ order: initialOrder, customerHistory }: OrderPageClientProps) {
   const router = useRouter();
   const [order, setOrder] = React.useState(initialOrder);
-  const [isEditingEmail, setIsEditingEmail] = React.useState(false);
+  const [editingField, setEditingField] = React.useState<string | null>(null);
   const [email, setEmail] = React.useState(order.customer_email);
+  const [name, setName] = React.useState(order.customer_name);
+  const [phone, setPhone] = React.useState(order.customer_phone);
   const [isSaving, setIsSaving] = React.useState(false);
   const [copied, setCopied] = React.useState<string | null>(null);
   const [isResending, setIsResending] = React.useState(false);
@@ -108,9 +110,19 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const handleSaveEmail = async () => {
-    if (!email || email === order.customer_email) {
-      setIsEditingEmail(false);
+  const handleSaveField = async (field: string) => {
+    const fieldMap: Record<string, { body: Record<string, string>; orderKey: string; value: string }> = {
+      email: { body: { email }, orderKey: "customer_email", value: email },
+      name: { body: { name }, orderKey: "customer_name", value: name },
+      phone: { body: { phone }, orderKey: "customer_phone", value: phone },
+    };
+
+    const config = fieldMap[field];
+    if (!config) return;
+
+    // Skip if unchanged
+    if (config.value === (order as any)[config.orderKey]) {
+      setEditingField(null);
       return;
     }
 
@@ -119,15 +131,34 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
       const response = await fetch(`/api/admin/orders/${order.id}/update-email`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(config.body),
       });
 
       if (response.ok) {
-        setOrder({ ...order, customer_email: email });
-        setIsEditingEmail(false);
+        setOrder({ ...order, [config.orderKey]: config.value });
+        setEditingField(null);
       }
     } catch (error) {
-      console.error("Failed to update email:", error);
+      console.error(`Failed to update ${field}:`, error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSaveLanguage = async (lang: string) => {
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${order.id}/update-email`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ language: lang }),
+      });
+
+      if (response.ok) {
+        setOrder({ ...order, language: lang });
+      }
+    } catch (error) {
+      console.error("Failed to update language:", error);
     } finally {
       setIsSaving(false);
     }
@@ -353,14 +384,42 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
               </div>
 
               <div className="space-y-4">
+                {/* Name - editable */}
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Имя</p>
-                  <p className="font-medium text-gray-900">{order.customer_name}</p>
+                  {editingField === "name" ? (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="flex-1"
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleSaveField("name");
+                          if (e.key === "Escape") { setName(order.customer_name); setEditingField(null); }
+                        }}
+                      />
+                      <Button size="icon" variant="ghost" onClick={() => handleSaveField("name")} disabled={isSaving}>
+                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4 text-green-600" />}
+                      </Button>
+                      <Button size="icon" variant="ghost" onClick={() => { setName(order.customer_name); setEditingField(null); }}>
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 group">
+                      <p className="font-medium text-gray-900">{order.customer_name}</p>
+                      <button onClick={() => { setName(order.customer_name); setEditingField("name"); }} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">
+                        <Pencil className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
+                {/* Email - editable */}
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Email</p>
-                  {isEditingEmail ? (
+                  {editingField === "email" ? (
                     <div className="flex items-center gap-2">
                       <Input
                         type="email"
@@ -369,24 +428,14 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
                         className="flex-1"
                         autoFocus
                         onKeyDown={(e) => {
-                          if (e.key === "Enter") handleSaveEmail();
-                          if (e.key === "Escape") {
-                            setEmail(order.customer_email);
-                            setIsEditingEmail(false);
-                          }
+                          if (e.key === "Enter") handleSaveField("email");
+                          if (e.key === "Escape") { setEmail(order.customer_email); setEditingField(null); }
                         }}
                       />
-                      <Button size="icon" variant="ghost" onClick={handleSaveEmail} disabled={isSaving}>
+                      <Button size="icon" variant="ghost" onClick={() => handleSaveField("email")} disabled={isSaving}>
                         {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4 text-green-600" />}
                       </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        onClick={() => {
-                          setEmail(order.customer_email);
-                          setIsEditingEmail(false);
-                        }}
-                      >
+                      <Button size="icon" variant="ghost" onClick={() => { setEmail(order.customer_email); setEditingField(null); }}>
                         <X className="h-4 w-4" />
                       </Button>
                     </div>
@@ -395,33 +444,71 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
                       <a href={`mailto:${order.customer_email}`} className="font-medium text-primary hover:underline">
                         {order.customer_email}
                       </a>
-                      <button
-                        onClick={() => setIsEditingEmail(true)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded"
-                      >
+                      <button onClick={() => { setEmail(order.customer_email); setEditingField("email"); }} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">
                         <Pencil className="w-4 h-4 text-gray-400" />
                       </button>
-                      <button
-                        onClick={() => handleCopy(order.customer_email, "email")}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded"
-                      >
+                      <button onClick={() => handleCopy(order.customer_email, "email")} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">
                         {copied === "email" ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
                       </button>
                     </div>
                   )}
                 </div>
 
+                {/* Phone - editable */}
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Телефон</p>
-                  <div className="flex items-center gap-2 group">
-                    <a href={`tel:${order.customer_phone}`} className="font-medium text-primary hover:underline">
-                      {order.customer_phone}
-                    </a>
+                  {editingField === "phone" ? (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="flex-1"
+                        autoFocus
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleSaveField("phone");
+                          if (e.key === "Escape") { setPhone(order.customer_phone); setEditingField(null); }
+                        }}
+                      />
+                      <Button size="icon" variant="ghost" onClick={() => handleSaveField("phone")} disabled={isSaving}>
+                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4 text-green-600" />}
+                      </Button>
+                      <Button size="icon" variant="ghost" onClick={() => { setPhone(order.customer_phone); setEditingField(null); }}>
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 group">
+                      <a href={`tel:${order.customer_phone}`} className="font-medium text-primary hover:underline">
+                        {order.customer_phone || "—"}
+                      </a>
+                      <button onClick={() => { setPhone(order.customer_phone); setEditingField("phone"); }} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">
+                        <Pencil className="w-4 h-4 text-gray-400" />
+                      </button>
+                      <button onClick={() => handleCopy(order.customer_phone, "phone")} className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">
+                        {copied === "phone" ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Language - toggle */}
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Язык</p>
+                  <div className="flex gap-2">
                     <button
-                      onClick={() => handleCopy(order.customer_phone, "phone")}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded"
+                      onClick={() => handleSaveLanguage("ro")}
+                      disabled={isSaving}
+                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${order.language === "ro" ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
                     >
-                      {copied === "phone" ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      Romana
+                    </button>
+                    <button
+                      onClick={() => handleSaveLanguage("ru")}
+                      disabled={isSaving}
+                      className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${order.language === "ru" ? "bg-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                    >
+                      Русский
                     </button>
                   </div>
                 </div>

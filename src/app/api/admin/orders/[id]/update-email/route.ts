@@ -7,48 +7,60 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { email } = await request.json();
-
-    if (!email || !email.includes("@")) {
-      return NextResponse.json(
-        { error: "Invalid email" },
-        { status: 400 }
-      );
-    }
+    const body = await request.json();
 
     const supabase = await createClient();
 
-    // Check if user is authenticated (admin)
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Update the order email
+    // Build update object from provided fields
+    const update: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
+
+    if (body.email !== undefined) {
+      if (!body.email || !body.email.includes("@")) {
+        return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+      }
+      update.customer_email = body.email;
+    }
+
+    if (body.name !== undefined) {
+      if (!body.name || body.name.trim().length === 0) {
+        return NextResponse.json({ error: "Name is required" }, { status: 400 });
+      }
+      update.customer_name = body.name.trim();
+    }
+
+    if (body.phone !== undefined) {
+      update.customer_phone = body.phone.trim();
+    }
+
+    if (body.language !== undefined) {
+      if (!["ro", "ru"].includes(body.language)) {
+        return NextResponse.json({ error: "Language must be ro or ru" }, { status: 400 });
+      }
+      update.language = body.language;
+    }
+
     const { data, error } = await supabase
       .from("orders")
-      .update({ customer_email: email, updated_at: new Date().toISOString() })
+      .update(update)
       .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      console.error("Error updating email:", error);
-      return NextResponse.json(
-        { error: "Failed to update email" },
-        { status: 500 }
-      );
+      console.error("Error updating order:", error);
+      return NextResponse.json({ error: "Failed to update order" }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
-    console.error("Error in update-email:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error("Error in update-order:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
