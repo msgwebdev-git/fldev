@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { ShoppingBag, Trophy, PenLine, Plus, Minus, Loader2, CheckCircle, X } from "lucide-react";
+import { ShoppingBag, Trophy, PenLine, Plus, Minus, Loader2, CheckCircle, X, Send } from "lucide-react";
 
 interface TicketOption {
   id: string;
@@ -50,6 +50,9 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const [source, setSource] = useState<OrderSource>("manual");
   const [firstName, setFirstName] = useState("");
@@ -110,9 +113,7 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
         const data = await res.json();
 
         if (data.status === "completed") {
-          setSuccess(
-            `Заказ ${orderNumber}: ${data.sent} билетов создано и отправлено на ${email}`
-          );
+          setSuccess(`Заказ ${orderNumber}: ${data.sent} билетов создано. Нажмите "Отправить билеты" чтобы отправить на email.`);
           return;
         }
         if (data.status === "failed") {
@@ -125,6 +126,27 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
       }
     }
     setSuccess(`Заказ ${orderNumber} создан. Билеты генерируются на сервере.`);
+  };
+
+  const handleSendTickets = async () => {
+    if (!createdOrderId) return;
+    setSending(true);
+    try {
+      const res = await fetch(`/api/admin/orders/${createdOrderId}/resend-tickets`, {
+        method: "POST",
+      });
+      if (res.ok) {
+        setSent(true);
+        setSuccess((prev) => (prev || "").replace(/Нажмите.*$/, "Билеты отправлены на email!"));
+      } else {
+        const data = await res.json();
+        setError(data.error || "Ошибка при отправке билетов");
+      }
+    } catch {
+      setError("Ошибка при отправке билетов");
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -174,11 +196,14 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
         throw new Error(data.error || "Failed to create order");
       }
 
+      setCreatedOrderId(data.orderId);
+      setSent(false);
+
       if (data.jobId) {
         setSuccess(`Заказ ${data.orderNumber} создан. Генерация билетов...`);
         await pollJobProgress(data.jobId, data.orderNumber);
       } else {
-        setSuccess(`Заказ ${data.orderNumber} создан и отправлен на ${email}`);
+        setSuccess(`Заказ ${data.orderNumber} создан.`);
       }
 
       // Reset form
@@ -261,12 +286,31 @@ export function CreateOrderForm({ tickets }: CreateOrderFormProps) {
 
       {/* Messages */}
       {success && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-          <p className="text-green-800">{success}</p>
-          <button type="button" onClick={() => setSuccess(null)} className="ml-auto text-green-600 hover:text-green-800">
-            <X className="w-4 h-4" />
-          </button>
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+            <p className="text-green-800 flex-1">{success}</p>
+            <button type="button" onClick={() => { setSuccess(null); setCreatedOrderId(null); setSent(false); }} className="text-green-600 hover:text-green-800">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          {createdOrderId && !sent && (
+            <div className="mt-3 flex gap-2">
+              <Button
+                type="button"
+                size="sm"
+                onClick={handleSendTickets}
+                disabled={sending}
+                className="gap-2"
+              >
+                {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                {sending ? "Отправка..." : "Отправить билеты на email"}
+              </Button>
+            </div>
+          )}
+          {sent && (
+            <p className="mt-2 text-sm text-green-700 font-medium">Билеты отправлены!</p>
+          )}
         </div>
       )}
       {error && (
