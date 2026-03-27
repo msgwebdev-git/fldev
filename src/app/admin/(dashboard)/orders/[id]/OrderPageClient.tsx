@@ -44,7 +44,33 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select as SelectUI,
+  SelectContent as SelectContentUI,
+  SelectItem as SelectItemUI,
+  SelectTrigger as SelectTriggerUI,
+  SelectValue as SelectValueUI,
+} from "@/components/ui/select";
 import { OrderData, CustomerOrderHistory } from "./page";
+
+function getOrderType(order: { order_number: string; is_invitation: boolean }): string {
+  const num = order.order_number;
+  if (num.startsWith("GW")) return "giveaway";
+  if (num.startsWith("MAN")) return "manual";
+  if (num.startsWith("OFF")) return "offline";
+  if (num.startsWith("INV")) return "invitation";
+  if (num.startsWith("WP-")) return "manual";
+  if (order.is_invitation) return "invitation";
+  return "online";
+}
+
+const orderTypeLabels: Record<string, string> = {
+  online: "Онлайн покупка",
+  manual: "Вручную",
+  offline: "Оффлайн продажа",
+  giveaway: "Розыгрыш",
+  invitation: "Приглашение",
+};
 
 const statusConfig: Record<string, { label: string; className: string; icon: React.ElementType }> = {
   pending: { label: "Ожидает оплаты", className: "bg-yellow-100 text-yellow-800 border-yellow-200", icon: Clock },
@@ -159,6 +185,26 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
       }
     } catch (error) {
       console.error("Failed to update language:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleChangeOrderType = async (newType: string) => {
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/admin/orders/${order.id}/update-email`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderType: newType }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setOrder(data.data);
+      }
+    } catch (error) {
+      console.error("Failed to update order type:", error);
     } finally {
       setIsSaving(false);
     }
@@ -511,6 +557,23 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
                       Русский
                     </button>
                   </div>
+                </div>
+
+                {/* Order Type */}
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Тип заказа</p>
+                  <SelectUI value={getOrderType(order)} onValueChange={handleChangeOrderType} disabled={isSaving}>
+                    <SelectTriggerUI className="w-full">
+                      <SelectValueUI />
+                    </SelectTriggerUI>
+                    <SelectContentUI>
+                      <SelectItemUI value="online">Онлайн покупка</SelectItemUI>
+                      <SelectItemUI value="manual">Вручную</SelectItemUI>
+                      <SelectItemUI value="offline">Оффлайн продажа</SelectItemUI>
+                      <SelectItemUI value="giveaway">Розыгрыш</SelectItemUI>
+                      <SelectItemUI value="invitation">Приглашение</SelectItemUI>
+                    </SelectContentUI>
+                  </SelectUI>
                 </div>
               </div>
             </div>

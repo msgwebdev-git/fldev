@@ -46,6 +46,34 @@ export async function PATCH(
       update.language = body.language;
     }
 
+    if (body.orderType !== undefined) {
+      // Change order type: online, manual, offline, giveaway, invitation
+      const type = body.orderType;
+      if (type === "giveaway" || type === "invitation") {
+        update.is_invitation = true;
+      } else {
+        update.is_invitation = false;
+      }
+
+      // Update order_number prefix to match type
+      const currentOrder = await supabase.from("orders").select("order_number, created_at").eq("id", id).single();
+      if (currentOrder.data) {
+        const oldNum = currentOrder.data.order_number;
+        const datePart = oldNum.replace(/^(FL|INV|MAN|OFF|GW|WP)-?/, "");
+        const prefixMap: Record<string, string> = {
+          online: "FL",
+          manual: "MAN",
+          offline: "OFF",
+          giveaway: "GW",
+          invitation: "INV",
+        };
+        const newPrefix = prefixMap[type] || "FL";
+        // Keep the unique part, just change prefix
+        const uniquePart = oldNum.includes("-") ? oldNum.split("-").slice(1).join("-") : datePart;
+        update.order_number = `${newPrefix}-${uniquePart}`;
+      }
+    }
+
     const { data, error } = await supabase
       .from("orders")
       .update(update)

@@ -48,6 +48,7 @@ export interface OrderData {
   refund_reason: string | null;
   refunded_at: string | null;
   refunded_by: string | null;
+  is_invitation: boolean;
   items: OrderItem[];
 }
 
