@@ -3,6 +3,7 @@ import { SalesChart } from "./SalesChart";
 import { PopularTicketsChart } from "./PopularTicketsChart";
 import { AnalyticsStats } from "./AnalyticsStats";
 import { CampingStats } from "./CampingStats";
+import { PromoStats } from "./PromoStats";
 
 export const dynamic = "force-dynamic";
 
@@ -212,10 +213,81 @@ async function getCampingData(): Promise<{
   };
 }
 
+interface PromoCodeData {
+  code: string;
+  discountPercent: number | null;
+  discountAmount: number | null;
+  usageLimit: number | null;
+  usedCount: number;
+  isActive: boolean;
+  validUntil: string | null;
+  ordersCount: number;
+  totalDiscount: number;
+  totalRevenue: number;
+}
+
+async function getPromoData(): Promise<{
+  promoCodes: PromoCodeData[];
+  totalDiscountGiven: number;
+  totalOrdersWithPromo: number;
+}> {
+  const supabase = await createClient();
+
+  // Get all promo codes
+  const { data: codes } = await supabase
+    .from("promo_codes")
+    .select("*")
+    .order("used_count", { ascending: false });
+
+  // Get paid orders with promo codes
+  const { data: promoOrders } = await supabase
+    .from("orders")
+    .select("promo_code, total_amount, discount_amount, status")
+    .eq("status", "paid")
+    .not("promo_code", "is", null);
+
+  // Build stats per promo code
+  const ordersByCode = new Map<string, { count: number; discount: number; revenue: number }>();
+
+  for (const order of promoOrders || []) {
+    const code = order.promo_code;
+    if (!code) continue;
+    if (!ordersByCode.has(code)) {
+      ordersByCode.set(code, { count: 0, discount: 0, revenue: 0 });
+    }
+    const stats = ordersByCode.get(code)!;
+    stats.count++;
+    stats.discount += Number(order.discount_amount || 0);
+    stats.revenue += Number(order.total_amount) - Number(order.discount_amount || 0);
+  }
+
+  const promoCodes: PromoCodeData[] = (codes || []).map((c) => {
+    const orderStats = ordersByCode.get(c.code) || { count: 0, discount: 0, revenue: 0 };
+    return {
+      code: c.code,
+      discountPercent: c.discount_percent,
+      discountAmount: c.discount_amount,
+      usageLimit: c.usage_limit,
+      usedCount: c.used_count,
+      isActive: c.is_active,
+      validUntil: c.valid_until,
+      ordersCount: orderStats.count,
+      totalDiscount: orderStats.discount,
+      totalRevenue: orderStats.revenue,
+    };
+  });
+
+  const totalDiscountGiven = promoCodes.reduce((s, p) => s + p.totalDiscount, 0);
+  const totalOrdersWithPromo = promoOrders?.length || 0;
+
+  return { promoCodes, totalDiscountGiven, totalOrdersWithPromo };
+}
+
 export default async function AnalyticsPage() {
-  const [{ daily, ticketStats, totals }, campingData] = await Promise.all([
+  const [{ daily, ticketStats, totals }, campingData, promoData] = await Promise.all([
     getSalesData(),
     getCampingData(),
+    getPromoData(),
   ]);
 
   return (
@@ -247,15 +319,26 @@ export default async function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Camping Options */}
-      {campingData.totalCamping > 0 && (
+      {/* Promo Codes & Camping */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        {/* Promo Codes */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            Camping опции
+            Промокоды
           </h2>
-          <CampingStats data={campingData} />
+          <PromoStats data={promoData} />
         </div>
-      )}
+
+        {/* Camping Options */}
+        {campingData.totalCamping > 0 && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Camping опции
+            </h2>
+            <CampingStats data={campingData} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
