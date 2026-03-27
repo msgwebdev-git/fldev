@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SalesChart } from "./SalesChart";
 import { PopularTicketsChart } from "./PopularTicketsChart";
 import { AnalyticsStats } from "./AnalyticsStats";
+import { CampingStats } from "./CampingStats";
 
 export const dynamic = "force-dynamic";
 
@@ -146,8 +147,76 @@ async function getSalesData(): Promise<{
   };
 }
 
+interface CampingOptionStats {
+  optionName: string;
+  optionNameRu: string;
+  ticketType: string;
+  count: number;
+}
+
+async function getCampingData(): Promise<{
+  options: CampingOptionStats[];
+  totalCamping: number;
+  withOption: number;
+  withoutOption: number;
+}> {
+  const supabase = await createClient();
+
+  // Get all camping-related order items from paid orders
+  const { data: campingItems } = await supabase
+    .from("order_items")
+    .select(`
+      id,
+      ticket_option_id,
+      quantity,
+      ticket:tickets!inner (name, name_ru),
+      option:ticket_options (name, name_ro, name_ru),
+      order:orders!inner (status, is_invitation)
+    `)
+    .or("ticket_id.eq.dc85e3de-1b17-4c86-b4b5-a6f057ffef63,ticket_id.eq.d5da39b7-8afc-441c-be6f-36be47e396dc")
+    .eq("orders.status", "paid");
+
+  if (!campingItems || campingItems.length === 0) {
+    return { options: [], totalCamping: 0, withOption: 0, withoutOption: 0 };
+  }
+
+  const totalCamping = campingItems.reduce((s, i) => s + i.quantity, 0);
+  const withOption = campingItems.filter((i) => i.ticket_option_id).reduce((s, i) => s + i.quantity, 0);
+  const withoutOption = totalCamping - withOption;
+
+  // Group by option
+  const optionMap = new Map<string, CampingOptionStats>();
+
+  for (const item of campingItems) {
+    if (!item.ticket_option_id || !item.option) continue;
+    const opt = item.option as any;
+    const ticket = item.ticket as any;
+    const key = `${opt.name}_${ticket.name}`;
+
+    if (!optionMap.has(key)) {
+      optionMap.set(key, {
+        optionName: opt.name_ro || opt.name,
+        optionNameRu: opt.name_ru || opt.name,
+        ticketType: ticket.name_ru || ticket.name,
+        count: 0,
+      });
+    }
+    optionMap.get(key)!.count += item.quantity;
+  }
+
+  return {
+    options: Array.from(optionMap.values()).sort((a, b) => b.count - a.count),
+    totalCamping,
+    withOption,
+    withoutOption,
+  };
+}
+
 export default async function AnalyticsPage() {
-  const { daily, ticketStats, totals } = await getSalesData();
+  const [{ daily, ticketStats, totals }, campingData] = await Promise.all([
+    getSalesData(),
+    getCampingData(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -177,6 +246,16 @@ export default async function AnalyticsPage() {
           <PopularTicketsChart data={ticketStats} />
         </div>
       </div>
+
+      {/* Camping Options */}
+      {campingData.totalCamping > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Camping опции
+          </h2>
+          <CampingStats data={campingData} />
+        </div>
+      )}
     </div>
   );
 }
