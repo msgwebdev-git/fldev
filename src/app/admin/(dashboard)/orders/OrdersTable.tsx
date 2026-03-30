@@ -210,6 +210,10 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
               <Gift className="w-3 h-3 mr-1" />Приглашение
             </Badge>
+          ) : row.original.source === "app" ? (
+            <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs">
+              <Gift className="w-3 h-3 mr-1" />Приложение
+            </Badge>
           ) : null}
         </div>
       ),

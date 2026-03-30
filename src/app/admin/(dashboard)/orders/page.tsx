@@ -91,7 +91,7 @@ async function getOrderStats() {
   if (!orders) return { total: 0, paid: 0, pending: 0, failed: 0, revenue: 0, invitations: 0, giveaways: 0, manual: 0 };
 
   // Revenue sources: online, offline, manual (real money)
-  const revenueSources = ["online", "offline", "manual"];
+  const revenueSources = ["online", "offline", "manual", "app"];
   const salesOrders = orders.filter((o) => revenueSources.includes(o.source || "online"));
   const invitationOrders = orders.filter((o) => o.source === "invitation");
   const giveawayOrders = orders.filter((o) => o.source === "giveaway");

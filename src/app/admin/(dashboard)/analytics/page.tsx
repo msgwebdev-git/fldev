@@ -46,7 +46,7 @@ async function getSalesData(): Promise<{
       source
     `)
     .eq("status", "paid")
-    .in("source", ["online", "offline", "manual"])
+    .in("source", ["online", "offline", "manual", "app"])
     .order("created_at", { ascending: true });
 
   // Get order IDs of paid revenue orders
