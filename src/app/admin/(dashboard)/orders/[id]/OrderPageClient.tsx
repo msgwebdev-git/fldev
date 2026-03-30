@@ -53,15 +53,8 @@ import {
 } from "@/components/ui/select";
 import { OrderData, CustomerOrderHistory } from "./page";
 
-function getOrderType(order: { order_number: string; is_invitation: boolean }): string {
-  const num = order.order_number;
-  if (num.startsWith("GW")) return "giveaway";
-  if (num.startsWith("MAN")) return "manual";
-  if (num.startsWith("OFF")) return "offline";
-  if (num.startsWith("INV")) return "invitation";
-  if (num.startsWith("WP-")) return "manual";
-  if (order.is_invitation) return "invitation";
-  return "online";
+function getOrderType(order: { source?: string }): string {
+  return order.source || "online";
 }
 
 const orderTypeLabels: Record<string, string> = {

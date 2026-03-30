@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, CheckCircle, Clock, XCircle, DollarSign, Gift } from "lucide-react";
+import { ShoppingCart, CheckCircle, Clock, XCircle, DollarSign, Gift, Trophy, PenLine } from "lucide-react";
 
 interface OrderStatsProps {
   stats: {
@@ -10,6 +10,8 @@ interface OrderStatsProps {
     failed: number;
     revenue: number;
     invitations: number;
+    giveaways: number;
+    manual: number;
   };
 }
 
@@ -52,7 +54,21 @@ export function OrderStats({ stats }: OrderStatsProps) {
       icon: Gift,
       color: "bg-amber-50 text-amber-600",
     },
-  ];
+    {
+      title: "Розыгрыши",
+      value: stats.giveaways,
+      icon: Trophy,
+      color: "bg-purple-50 text-purple-600",
+      hide: stats.giveaways === 0,
+    },
+    {
+      title: "Вручную",
+      value: stats.manual,
+      icon: PenLine,
+      color: "bg-blue-50 text-blue-600",
+      hide: stats.manual === 0,
+    },
+  ].filter((c) => !(c as any).hide);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">

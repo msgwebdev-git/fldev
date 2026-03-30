@@ -139,12 +139,16 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   const filteredOrders = React.useMemo(() => {
     let result = orders;
 
-    // Filter by type (orders vs invitations)
+    // Filter by type
     if (typeFilter !== "all") {
       if (typeFilter === "invitation") {
-        result = result.filter((order) => order.is_invitation === true);
+        result = result.filter((order) => order.source === "invitation");
+      } else if (typeFilter === "giveaway") {
+        result = result.filter((order) => order.source === "giveaway");
+      } else if (typeFilter === "manual") {
+        result = result.filter((order) => order.source === "manual" || order.source === "offline");
       } else if (typeFilter === "order") {
-        result = result.filter((order) => !order.is_invitation);
+        result = result.filter((order) => order.source === "online" || !order.source);
       }
     }
 
@@ -194,15 +198,15 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           <span className="font-mono font-medium text-primary">
             {row.getValue("order_number")}
           </span>
-          {String(row.getValue("order_number") || "").startsWith("GW") ? (
+          {row.original.source === "giveaway" ? (
             <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-xs">
               <Gift className="w-3 h-3 mr-1" />Розыгрыш
             </Badge>
-          ) : String(row.getValue("order_number") || "").startsWith("MAN") || String(row.getValue("order_number") || "").startsWith("OFF") ? (
+          ) : row.original.source === "manual" || row.original.source === "offline" ? (
             <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-xs">
               <Gift className="w-3 h-3 mr-1" />Вручную
             </Badge>
-          ) : row.original.is_invitation ? (
+          ) : row.original.source === "invitation" ? (
             <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-xs">
               <Gift className="w-3 h-3 mr-1" />Приглашение
             </Badge>

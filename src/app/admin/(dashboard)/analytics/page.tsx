@@ -34,7 +34,7 @@ async function getSalesData(): Promise<{
 }> {
   const supabase = await createClient();
 
-  // Get all paid orders (excluding invitations)
+  // Get all paid orders with revenue (online, offline, manual)
   const { data: orders } = await supabase
     .from("orders")
     .select(`
@@ -43,16 +43,16 @@ async function getSalesData(): Promise<{
       total_amount,
       discount_amount,
       created_at,
-      is_invitation
+      source
     `)
     .eq("status", "paid")
-    .eq("is_invitation", false)
+    .in("source", ["online", "offline", "manual"])
     .order("created_at", { ascending: true });
 
-  // Get order IDs of paid orders (not invitations)
+  // Get order IDs of paid revenue orders
   const paidOrderIds = orders?.map((o) => o.id) || [];
 
-  // Get order items only from paid orders
+  // Get order items only from revenue orders
   const { data: orderItems } = paidOrderIds.length > 0
     ? await supabase
         .from("order_items")
@@ -62,14 +62,12 @@ async function getSalesData(): Promise<{
           ticket_id,
           unit_price,
           quantity,
-          is_invitation,
           ticket:tickets (
             id,
             name_ru
           )
         `)
         .in("order_id", paidOrderIds)
-        .eq("is_invitation", false)
     : { data: [] };
 
   // Process daily sales

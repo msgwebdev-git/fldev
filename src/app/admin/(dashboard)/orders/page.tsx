@@ -22,6 +22,7 @@ export interface OrderData {
   paid_at: string | null;
   failure_reason: string | null;
   is_invitation: boolean;
+  source: string;
   items: OrderItem[];
 }
 
@@ -85,13 +86,16 @@ async function getOrderStats() {
 
   const { data: orders } = await supabase
     .from("orders")
-    .select("status, payment_status, total_amount, discount_amount, is_invitation");
+    .select("status, payment_status, total_amount, discount_amount, is_invitation, source");
 
-  if (!orders) return { total: 0, paid: 0, pending: 0, failed: 0, revenue: 0, invitations: 0 };
+  if (!orders) return { total: 0, paid: 0, pending: 0, failed: 0, revenue: 0, invitations: 0, giveaways: 0, manual: 0 };
 
-  // Filter out invitations for sales stats
-  const salesOrders = orders.filter((o) => !o.is_invitation);
-  const invitationOrders = orders.filter((o) => o.is_invitation);
+  // Revenue sources: online, offline, manual (real money)
+  const revenueSources = ["online", "offline", "manual"];
+  const salesOrders = orders.filter((o) => revenueSources.includes(o.source || "online"));
+  const invitationOrders = orders.filter((o) => o.source === "invitation");
+  const giveawayOrders = orders.filter((o) => o.source === "giveaway");
+  const manualOrders = orders.filter((o) => o.source === "manual" || o.source === "offline");
 
   const stats = {
     total: salesOrders.length,
@@ -102,6 +106,8 @@ async function getOrderStats() {
       .filter((o) => o.status === "paid")
       .reduce((sum, o) => sum + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
     invitations: invitationOrders.length,
+    giveaways: giveawayOrders.length,
+    manual: manualOrders.length,
   };
 
   return stats;
