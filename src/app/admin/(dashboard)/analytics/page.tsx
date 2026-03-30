@@ -4,6 +4,7 @@ import { PopularTicketsChart } from "./PopularTicketsChart";
 import { AnalyticsStats } from "./AnalyticsStats";
 import { CampingStats } from "./CampingStats";
 import { PromoStats } from "./PromoStats";
+import { FreeTicketsStats } from "./FreeTicketsStats";
 
 export const dynamic = "force-dynamic";
 
@@ -283,11 +284,60 @@ async function getPromoData(): Promise<{
   return { promoCodes, totalDiscountGiven, totalOrdersWithPromo };
 }
 
+interface FreeTicketData {
+  type: "invitation" | "giveaway" | "manual" | "offline";
+  label: string;
+  orders: number;
+  tickets: number;
+}
+
+async function getFreeTicketsData(): Promise<FreeTicketData[]> {
+  const supabase = await createClient();
+
+  const { data: orders } = await supabase
+    .from("orders")
+    .select(`
+      id,
+      order_number,
+      is_invitation,
+      total_amount,
+      items:order_items (quantity)
+    `)
+    .eq("status", "paid")
+    .or("is_invitation.eq.true,order_number.like.MAN%,order_number.like.OFF%");
+
+  if (!orders || orders.length === 0) return [];
+
+  const stats = new Map<string, FreeTicketData>();
+  stats.set("invitation", { type: "invitation", label: "Приглашения", orders: 0, tickets: 0 });
+  stats.set("giveaway", { type: "giveaway", label: "Розыгрыши", orders: 0, tickets: 0 });
+  stats.set("manual", { type: "manual", label: "Вручную", orders: 0, tickets: 0 });
+  stats.set("offline", { type: "offline", label: "Оффлайн", orders: 0, tickets: 0 });
+
+  for (const order of orders) {
+    const num = order.order_number || "";
+    let type: string;
+
+    if (num.startsWith("GW")) type = "giveaway";
+    else if (num.startsWith("MAN")) type = "manual";
+    else if (num.startsWith("OFF")) type = "offline";
+    else if (num.startsWith("INV") || order.is_invitation) type = "invitation";
+    else continue;
+
+    const entry = stats.get(type)!;
+    entry.orders++;
+    entry.tickets += (order.items || []).reduce((s: number, i: any) => s + (i.quantity || 1), 0);
+  }
+
+  return Array.from(stats.values()).filter((s) => s.orders > 0);
+}
+
 export default async function AnalyticsPage() {
-  const [{ daily, ticketStats, totals }, campingData, promoData] = await Promise.all([
+  const [{ daily, ticketStats, totals }, campingData, promoData, freeTicketsData] = await Promise.all([
     getSalesData(),
     getCampingData(),
     getPromoData(),
+    getFreeTicketsData(),
   ]);
 
   return (
@@ -319,7 +369,16 @@ export default async function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Promo Codes & Camping */}
+      {/* Free Tickets, Promo Codes, Camping */}
+      {freeTicketsData.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Бесплатные и ручные билеты
+          </h2>
+          <FreeTicketsStats data={freeTicketsData} />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Promo Codes */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
