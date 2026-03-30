@@ -31,6 +31,10 @@ async function getSalesData(): Promise<{
     totalTickets: number;
     avgOrderValue: number;
   };
+  sourceStats: {
+    web: { orders: number; revenue: number; tickets: number };
+    app: { orders: number; revenue: number; tickets: number };
+  };
 }> {
   const supabase = await createClient();
 
@@ -126,6 +130,25 @@ async function getSalesData(): Promise<{
   const totalTickets = orderItems?.reduce((sum, i) => sum + i.quantity, 0) || 0;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
+  // Stats by source (site vs app)
+  const webOrders = orders?.filter((o) => o.source !== "app") || [];
+  const appOrders = orders?.filter((o) => o.source === "app") || [];
+  const webOrderIds = new Set(webOrders.map((o) => o.id));
+  const appOrderIds = new Set(appOrders.map((o) => o.id));
+
+  const sourceStats = {
+    web: {
+      orders: webOrders.length,
+      revenue: webOrders.reduce((s, o) => s + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
+      tickets: orderItems?.filter((i) => webOrderIds.has(i.order_id)).reduce((s, i) => s + i.quantity, 0) || 0,
+    },
+    app: {
+      orders: appOrders.length,
+      revenue: appOrders.reduce((s, o) => s + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
+      tickets: orderItems?.filter((i) => appOrderIds.has(i.order_id)).reduce((s, i) => s + i.quantity, 0) || 0,
+    },
+  };
+
   // Sort and format data
   const daily = Array.from(dailyMap.values()).sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -144,6 +167,7 @@ async function getSalesData(): Promise<{
       totalTickets,
       avgOrderValue,
     },
+    sourceStats,
   };
 }
 
@@ -331,7 +355,7 @@ async function getFreeTicketsData(): Promise<FreeTicketData[]> {
 }
 
 export default async function AnalyticsPage() {
-  const [{ daily, ticketStats, totals }, campingData, promoData, freeTicketsData] = await Promise.all([
+  const [{ daily, ticketStats, totals, sourceStats }, campingData, promoData, freeTicketsData] = await Promise.all([
     getSalesData(),
     getCampingData(),
     getPromoData(),
@@ -346,7 +370,7 @@ export default async function AnalyticsPage() {
       </div>
 
       {/* Stats Cards */}
-      <AnalyticsStats totals={totals} />
+      <AnalyticsStats totals={totals} sourceStats={sourceStats} />
 
       {/* Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
