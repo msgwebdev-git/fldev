@@ -14,7 +14,6 @@ import {
   Utensils,
   Palette,
   Baby,
-  Sparkles,
   Heart,
 } from "lucide-react";
 import Image from "next/image";
@@ -30,17 +29,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const stats = [
-  { value: "5", labelKey: "stats.years" },
-  { value: "150+", labelKey: "stats.artists" },
-  { value: "5000+", labelKey: "stats.visitors" },
-  { value: "2", labelKey: "stats.stages" },
-];
-
 const features = [
   { icon: Palette, labelKey: "features.crafts" },
   { icon: Music, labelKey: "features.workshops" },
-  { icon: Sparkles, labelKey: "features.artInstallations" },
   { icon: Utensils, labelKey: "features.foodCourt" },
   { icon: Tent, labelKey: "features.camping" },
   { icon: Baby, labelKey: "features.familyZone" },
@@ -100,18 +91,6 @@ export default function AboutPage() {
               <span className="text-lg font-medium">Orheiul Vechi, Moldova</span>
             </div>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => (
-            <Card key={index} className="p-6 text-center gap-0">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {stat.value}
-              </div>
-              <div className="text-muted-foreground">{t(stat.labelKey)}</div>
-            </Card>
-          ))}
         </div>
 
         {/* About Content */}

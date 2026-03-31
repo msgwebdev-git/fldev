@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/', '/checkout/mock-payment'],
+        disallow: ['/admin/', '/api/'],
       },
     ],
     sitemap: 'https://festivalul-lupilor.md/sitemap.xml',
