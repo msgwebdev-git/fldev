@@ -97,7 +97,8 @@ export async function submitPartnerApplication(formData: FormData) {
       `<b>Email:</b> ${email}\n` +
       `<b>Категория:</b> ${categoryLabels[category] || category}\n` +
       (website ? `<b>Сайт:</b> ${website}\n` : "") +
-      `<b>Сообщение:</b> ${message}`
+      `<b>Сообщение:</b> ${message}`,
+      logoUrl || undefined
     );
 
     return {
