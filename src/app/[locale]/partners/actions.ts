@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { sendTelegramMessage } from "@/lib/telegram";
 
 export async function submitPartnerApplication(formData: FormData) {
   try {
@@ -81,8 +82,23 @@ export async function submitPartnerApplication(formData: FormData) {
     // Revalidate the partners page
     revalidatePath("/partners");
 
-    // TODO: Send email notification to admin
-    // await sendEmailNotification({ contactName, email, companyName });
+    // Send Telegram notification
+    const categoryLabels: Record<string, string> = {
+      generalPartner: "Генеральный партнёр",
+      partners: "Партнёры",
+      generalMediaPartner: "Генеральный медиа-партнёр",
+      mediaPartners: "Медиа-партнёры",
+    };
+
+    await sendTelegramMessage(
+      `🤝 <b>Новая заявка на партнёрство</b>\n\n` +
+      `<b>Компания:</b> ${companyName}\n` +
+      `<b>Контакт:</b> ${contactName}\n` +
+      `<b>Email:</b> ${email}\n` +
+      `<b>Категория:</b> ${categoryLabels[category] || category}\n` +
+      (website ? `<b>Сайт:</b> ${website}\n` : "") +
+      `<b>Сообщение:</b> ${message}`
+    );
 
     return {
       success: true,

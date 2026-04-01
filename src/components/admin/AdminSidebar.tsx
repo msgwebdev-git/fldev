@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft, Inbox } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -55,6 +55,7 @@ const navigation: NavElement[] = [
     category: "Партнёры",
     items: [
       { name: "Партнёры", href: "/admin/partners", icon: Handshake },
+      { name: "Заявки", href: "/admin/partner-requests", icon: Inbox },
     ]
   },
   {
