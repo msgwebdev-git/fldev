@@ -189,7 +189,7 @@
     "badge": "Despre festival",
     "pageTitle": "Festivalul Lupilor",
     "backToHome": "Înapoi la pagina principală",
-    "heroDescription": "Cel mai mare festival open-air din Moldova, care de cinci ani consecutiv se desfășoară în august în rezervația natural-culturală unică Orheiul Vechi.",
+    "heroDescription": "Cel mai mare festival open-air din Moldova, care de cinci ani consecutiv se desfășoară în august în Rezervația Cultural-Naturală „Orheiul Vechi".",
     "stats": {
       "years": "Ani de festival",
       "artists": "Artiști pe scenă",
@@ -212,7 +212,7 @@
       "familyZone": "Zonă pentru familii"
     },
     "locationTitle": "Locația",
-    "locationDescription": "Festivalul se desfășoară în rezervația natural-culturală Orheiul Vechi, un loc unic unde muzica modernă întâlnește energia antică a pământului, iar mii de oameni devin în fiecare an o mare haită pentru trei zile cu adevărat de neuitat.",
+    "locationDescription": "Festivalul se desfășoară în Rezervația Cultural-Naturală „Orheiul Vechi", un loc unic unde muzica modernă întâlnește energia antică a pământului, iar mii de oameni devin în fiecare an o mare haită pentru trei zile cu adevărat de neuitat.",
     "dates": "7-9 August 2026",
     "distance": "50 km de la Chișinău",
     "faqTitle": "Întrebări frecvente",
@@ -503,7 +503,7 @@
   "HowToGet": {
     "badge": "Locație",
     "title": "Cum ajungi la festival",
-    "subtitle": "Festivalul se desfășoară în rezervația natural-culturală Orheiul Vechi, la doar 50 km de Chișinău",
+    "subtitle": "Festivalul se desfășoară în Rezervația Cultural-Naturală „Orheiul Vechi", la doar 50 km de Chișinău",
     "backToHome": "Înapoi la pagina principală",
     "mapTitle": "Hartă Festival",
     "getDirections": "În drum",
@@ -787,7 +787,7 @@
       "location": {
         "title": "Locație",
         "q1": "Unde are loc festivalul?",
-        "a1": "Festivalul se desfășoară în rezervația naturală Orheiul Vechi, în satul Trebujeni, la aproximativ 50 km de Chișinău.",
+        "a1": "Festivalul se desfășoară în Rezervația Cultural-Naturală „Orheiul Vechi", în satul Trebujeni, la aproximativ 50 km de Chișinău.",
         "q2": "Ce condiții meteo să mă aștept?",
         "a2": "În august, temperaturile sunt de obicei între 20-35°C ziua. Serile pot fi răcoroase. Recomandăm și haine de ploaie.",
         "q3": "Există loc de cazare în apropiere?",
