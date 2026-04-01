@@ -562,10 +562,6 @@ export default function CheckoutPage() {
                           <span>-{discountAmount} MDL</span>
                         </div>
                       )}
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{t("orderSummary.serviceFee")}</span>
-                        <span>0 MDL</span>
-                      </div>
                     </div>
 
                     <Separator />
