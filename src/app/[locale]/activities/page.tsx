@@ -47,12 +47,19 @@ export default async function ActivitiesPage({ params }: ActivitiesPageProps) {
   // Получаем текущий год для фильтрации
   const currentYear = "2025";
 
-  const { data: activitiesDB } = await supabase
-    .from("activities")
-    .select("*")
-    .eq("year", currentYear)
-    .order("category", { ascending: true })
-    .order("sort_order", { ascending: true });
+  const [{ data: activitiesDB }, { data: appSetting }] = await Promise.all([
+    supabase
+      .from("activities")
+      .select("*")
+      .eq("year", currentYear)
+      .order("category", { ascending: true })
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "show_mobile_app")
+      .single(),
+  ]);
 
   // Преобразуем данные для отображения с учётом локали
   const activities: Activity[] = (activitiesDB || []).map((activity: ActivityDB) => ({
@@ -68,5 +75,10 @@ export default async function ActivitiesPage({ params }: ActivitiesPageProps) {
     sort_order: activity.sort_order,
   }));
 
-  return <ActivitiesContent activities={activities} />;
+  return (
+    <ActivitiesContent
+      activities={activities}
+      showMobileApp={appSetting?.value === "true"}
+    />
+  );
 }

@@ -39,6 +39,7 @@ interface Activity {
 
 interface ActivitiesContentProps {
   activities: Activity[];
+  showMobileApp?: boolean;
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -55,7 +56,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 const categoryOrder = ["entertainment", "workshops", "relaxation", "food", "family"];
 
-export function ActivitiesContent({ activities }: ActivitiesContentProps) {
+export function ActivitiesContent({ activities, showMobileApp }: ActivitiesContentProps) {
   const t = useTranslations("Activities");
 
   // Группируем активности по категориям
@@ -200,7 +201,7 @@ export function ActivitiesContent({ activities }: ActivitiesContentProps) {
         )}
 
         {/* App Download CTA */}
-        <AppCTABlock namespace="Activities" notificationText="Workshop starts in 10 min!" />
+        {showMobileApp && <AppCTABlock namespace="Activities" notificationText="Workshop starts in 10 min!" />}
       </div>
     </main>
   );

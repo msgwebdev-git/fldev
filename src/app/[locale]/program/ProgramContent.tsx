@@ -34,6 +34,7 @@ interface DayProgram {
 
 interface ProgramContentProps {
   events: ProgramEvent[];
+  showMobileApp?: boolean;
 }
 
 const stageColors: Record<string, string> = {
@@ -42,7 +43,7 @@ const stageColors: Record<string, string> = {
   electronic: "bg-purple-600 text-white",
 };
 
-export function ProgramContent({ events }: ProgramContentProps) {
+export function ProgramContent({ events, showMobileApp }: ProgramContentProps) {
   const t = useTranslations("Program");
 
   // Группируем события по дням
@@ -228,7 +229,7 @@ export function ProgramContent({ events }: ProgramContentProps) {
         )}
 
         {/* App Download CTA */}
-        <AppCTABlock namespace="Program" notificationText="Main Stage starts in 30 min!" />
+        {showMobileApp && <AppCTABlock namespace="Program" notificationText="Main Stage starts in 30 min!" />}
       </div>
     </main>
   );

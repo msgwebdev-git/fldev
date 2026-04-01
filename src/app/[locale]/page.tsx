@@ -17,6 +17,14 @@ export async function generateMetadata({ params }: Props) {
 export default async function Home() {
   const supabase = await createClient();
 
+  // Проверяем видимость секции мобильного приложения
+  const { data: appSetting } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "show_mobile_app")
+    .single();
+  const showMobileApp = appSetting?.value === "true";
+
   // Загружаем билеты с опциями
   const { data: ticketsData } = await supabase
     .from("tickets")
@@ -83,7 +91,7 @@ export default async function Home() {
       <TicketsSection tickets={tickets} />
       <AftermovieSection />
       <GallerySection />
-      <AppSection />
+      {showMobileApp && <AppSection />}
       <NewsSection />
     </>
   );
