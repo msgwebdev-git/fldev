@@ -95,7 +95,7 @@ export function AddContactButton() {
               id="email"
               name="email"
               type="email"
-              placeholder="department@festivalullupilor.md"
+              placeholder="department@festivalul-lupilor.md"
               required
               className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
             />
