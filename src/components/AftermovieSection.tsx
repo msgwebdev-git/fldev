@@ -235,7 +235,7 @@ export function AftermovieSection() {
             { value: "15K+", label: t("stats.visitors") },
             { value: "50+", label: t("stats.artists") },
             { value: "3", label: t("stats.days") },
-            { value: "4", label: t("stats.stages") },
+            { value: "2", label: t("stats.stages") },
           ].map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-0.5 sm:mb-1">
