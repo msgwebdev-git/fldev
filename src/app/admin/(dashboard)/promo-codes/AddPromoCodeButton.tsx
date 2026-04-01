@@ -57,8 +57,8 @@ export function AddPromoCodeButton({ tickets }: AddPromoCodeButtonProps) {
       usage_limit: formData.get("usage_limit")
         ? parseInt(formData.get("usage_limit") as string)
         : null,
-      valid_from: (formData.get("valid_from") as string) || null,
-      valid_until: (formData.get("valid_until") as string) || null,
+      valid_from: formData.get("valid_from") ? new Date(formData.get("valid_from") as string).toISOString() : null,
+      valid_until: formData.get("valid_until") ? new Date(formData.get("valid_until") as string).toISOString() : null,
       is_active: formData.get("is_active") === "on",
       // New fields
       min_order_amount: formData.get("min_order_amount")

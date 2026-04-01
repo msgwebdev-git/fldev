@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+
+function toLocalDatetimeString(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  const h = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  return `${y}-${m}-${d}T${h}:${min}`;
+}
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -99,8 +108,8 @@ export function PromoCodesTable({ promoCodes, tickets }: PromoCodesTableProps) {
       usage_limit: formData.usage_limit
         ? parseInt(formData.usage_limit)
         : null,
-      valid_from: formData.valid_from || null,
-      valid_until: formData.valid_until || null,
+      valid_from: formData.valid_from ? new Date(formData.valid_from).toISOString() : null,
+      valid_until: formData.valid_until ? new Date(formData.valid_until).toISOString() : null,
       is_active: formData.is_active,
       min_order_amount: formData.min_order_amount
         ? parseFloat(formData.min_order_amount)
@@ -147,10 +156,10 @@ export function PromoCodesTable({ promoCodes, tickets }: PromoCodesTableProps) {
       discount_amount: promo.discount_amount?.toString() || "",
       usage_limit: promo.usage_limit?.toString() || "",
       valid_from: promo.valid_from
-        ? new Date(promo.valid_from).toISOString().slice(0, 16)
+        ? toLocalDatetimeString(new Date(promo.valid_from))
         : "",
       valid_until: promo.valid_until
-        ? new Date(promo.valid_until).toISOString().slice(0, 16)
+        ? toLocalDatetimeString(new Date(promo.valid_until))
         : "",
       is_active: promo.is_active,
       min_order_amount: promo.min_order_amount?.toString() || "",
