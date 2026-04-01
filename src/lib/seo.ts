@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-const SITE_URL = "https://festivalul-lupilor.md";
+const SITE_URL = "https://www.festivalul-lupilor.md";
 
 /**
  * Generate page-specific metadata with locale support.
@@ -44,6 +44,7 @@ export async function generatePageMetadata({
       title,
       description,
       url: `${SITE_URL}/${locale}${pagePath}`,
+      images: [`${SITE_URL}/og.png`],
     },
     ...(noindex && {
       robots: { index: false, follow: false },

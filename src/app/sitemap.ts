@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
-const SITE_URL = 'https://festivalul-lupilor.md';
+const SITE_URL = 'https://www.festivalul-lupilor.md';
 const LOCALES = ['ro', 'ru'] as const;
 
 // Static public pages (without locale prefix)

@@ -12,7 +12,7 @@ import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/Marketi
 import { Toaster } from "sonner";
 import "../globals.css";
 
-const SITE_URL = "https://festivalul-lupilor.md";
+const SITE_URL = "https://www.festivalul-lupilor.md";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
