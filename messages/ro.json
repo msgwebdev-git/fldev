@@ -27,7 +27,7 @@
     "activities": "Activități",
     "news": "Noutăți",
     "becomePartner": "Devino partener",
-    "b2b": "Pachete Corporate",
+    "b2b": "Pachete corporative",
     "rules": "Regulile festivalului",
     "faq": "Întrebări frecvente",
     "organizers": "Contacte organizatori",
@@ -969,7 +969,7 @@
   },
   "B2B": {
     "badge": "Colaborare corporativă",
-    "title": "Pachete Corporate",
+    "title": "Pachete corporative",
     "subtitle": "Descoperă noi oportunități pentru afacerea ta la cel mai mare festival din Moldova. Peste 15.000 de vizitatori în 3 zile — platforma perfectă pentru promovarea brandului tău.",
     "backToHome": "Înapoi la pagina principală",
     "stats": {
@@ -1354,7 +1354,7 @@
       "description": "Activitățile disponibile la Festivalul Lupilor 2026. Nu doar muzică — descoperă experiențe unice."
     },
     "b2b": {
-      "title": "Pachete Corporate B2B",
+      "title": "Pachete corporative B2B",
       "description": "Oferte speciale pentru companii. Cumpără bilete în cantitate mare cu reduceri progresive pentru Festivalul Lupilor 2026."
     },
     "howToGet": {
