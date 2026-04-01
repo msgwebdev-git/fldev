@@ -94,33 +94,14 @@ export default function AboutPage() {
         </div>
 
         {/* About Content */}
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Heart className="h-6 w-6 text-primary" />
-              {t("historyTitle")}
-            </h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>{t("historyP1")}</p>
-              <p>{t("historyP2")}</p>
-            </div>
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Music className="h-6 w-6 text-primary" />
-              {t("musicTitle")}
-            </h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>{t("musicP1")}</p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {headliners.map((artist) => (
-                  <Badge key={artist} variant="secondary">
-                    {artist}
-                  </Badge>
-                ))}
-                <Badge variant="outline">{t("andOthers")}</Badge>
-              </div>
-            </div>
+        <div className="max-w-3xl mx-auto mb-16">
+          <h2 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
+            <Heart className="h-6 w-6 text-primary" />
+            {t("historyTitle")}
+          </h2>
+          <div className="space-y-4 text-muted-foreground leading-relaxed text-center">
+            <p>{t("historyP1")}</p>
+            <p>{t("historyP2")}</p>
           </div>
         </div>
 

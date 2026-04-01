@@ -620,11 +620,11 @@ export default function CheckoutPage() {
                         />
                         <span className="text-xs leading-relaxed">
                           {t("terms.accept")}{" "}
-                          <Link href="/rules" className="text-primary hover:underline">
+                          <Link href="/terms" className="text-primary hover:underline">
                             {t("terms.termsLink")}
                           </Link>{" "}
                           {t("terms.and")}{" "}
-                          <Link href="/rules" className="text-primary hover:underline">
+                          <Link href="/privacy" className="text-primary hover:underline">
                             {t("terms.privacyLink")}
                           </Link>
                           {errors.terms && (

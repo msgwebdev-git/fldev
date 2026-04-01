@@ -22,12 +22,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -133,60 +127,6 @@ export function B2BContent() {
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-20 mb-20 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t("faqTitle")}</h2>
-            <p className="text-muted-foreground">{t("faqSubtitle")}</p>
-          </div>
-
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger className="text-left">
-                {t("faq.q1.question")}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {t("faq.q1.answer")}
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-2">
-              <AccordionTrigger className="text-left">
-                {t("faq.q2.question")}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {t("faq.q2.answer")}
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-3">
-              <AccordionTrigger className="text-left">
-                {t("faq.q3.question")}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {t("faq.q3.answer")}
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-4">
-              <AccordionTrigger className="text-left">
-                {t("faq.q4.question")}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {t("faq.q4.answer")}
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-5">
-              <AccordionTrigger className="text-left">
-                {t("faq.q5.question")}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground">
-                {t("faq.q5.answer")}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
 
       </div>
     </main>
