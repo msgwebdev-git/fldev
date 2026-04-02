@@ -26,6 +26,7 @@ import {
   Package,
   Calendar,
   Gift,
+  Smartphone,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -212,7 +213,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             </Badge>
           ) : row.original.source === "app" ? (
             <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 text-xs">
-              <Gift className="w-3 h-3 mr-1" />Приложение
+              <Smartphone className="w-3 h-3 mr-1" />Приложение
             </Badge>
           ) : null}
         </div>
