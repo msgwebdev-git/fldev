@@ -1373,5 +1373,22 @@
       "title": "Regulile Festivalului",
       "description": "Regulile oficiale ale Festivalului Lupilor 2026. Ce este permis și ce este interzis pe teritoriul festivalului."
     }
+  },
+  "ResetPassword": {
+    "verifying": "Verificăm linkul...",
+    "invalidTitle": "Link invalid sau expirat",
+    "invalidBody": "Acest link pentru resetarea parolei nu mai este valabil. Te rugăm să revii în aplicație și să soliciți unul nou.",
+    "formTitle": "Setează o parolă nouă",
+    "formSubtitle": "Alege o parolă sigură pe care o vei ține minte.",
+    "newPasswordLabel": "PAROLĂ NOUĂ",
+    "confirmPasswordLabel": "CONFIRMĂ PAROLA",
+    "submit": "Salvează parola",
+    "updating": "Se salvează...",
+    "passwordHint": "Minim 8 caractere. Folosește o combinație de litere, cifre și simboluri.",
+    "errorPasswordTooShort": "Parola trebuie să aibă cel puțin 8 caractere.",
+    "errorPasswordMismatch": "Parolele nu coincid.",
+    "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
+    "successTitle": "Parola a fost schimbată",
+    "successBody": "Poți închide această pagină și să te întorci în aplicație. Autentifică-te cu noua parolă."
   }
 }
