@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/env";
 import {
   FileText,
   CheckCircle,
@@ -48,8 +49,7 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
 
       // After generating invoice, trigger download via public endpoint
       if (action === "generate-invoice") {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-        window.open(`${apiUrl}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
+        window.open(`${API_URL}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
       }
     } catch (err: any) {
       console.error(`Error ${action}:`, err);
@@ -94,8 +94,7 @@ export function B2BOrderActions({ order }: B2BOrderActionsProps) {
       {order.invoice_url && (
         <Button
           onClick={() => {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-            window.open(`${apiUrl}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
+            window.open(`${API_URL}/api/b2b/orders/${order.order_number}/download-invoice`, "_blank");
           }}
           className="w-full"
           variant="outline"

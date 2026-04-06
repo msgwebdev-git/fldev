@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/env";
 import {
   ArrowLeft,
   Mail,
@@ -204,8 +205,7 @@ export function OrderPageClient({ order: initialOrder, customerHistory }: OrderP
   };
 
   const handleDownloadTickets = () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-    window.open(`${apiUrl}/api/checkout/tickets/${order.order_number}/download`, "_blank");
+    window.open(`${API_URL}/api/checkout/tickets/${order.order_number}/download`, "_blank");
   };
 
   const handleResendTickets = async () => {

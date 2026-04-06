@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/env";
 import {
   ColumnDef,
   flexRender,
@@ -251,8 +252,7 @@ export function InvitationsTable({ invitations }: InvitationsTableProps) {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-                  window.open(`${apiUrl}/api/checkout/tickets/${inv.order_number}/download`, "_blank");
+                  window.open(`${API_URL}/api/checkout/tickets/${inv.order_number}/download`, "_blank");
                 }}
               >
                 <Download className="mr-2 h-4 w-4" />

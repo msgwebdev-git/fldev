@@ -10,6 +10,7 @@ import { ShoppingCart, AlertCircle } from "lucide-react";
 import { B2BOrderWizard } from "@/components/B2BOrderWizard";
 import type { B2BOrderFormData } from "@/components/B2BOrderForm";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { API_URL } from "@/lib/env";
 
 interface TicketSelection {
   ticketId: string;
@@ -66,8 +67,7 @@ export function B2BOrderSection() {
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-      const response = await fetch(`${apiUrl}/api/b2b/create-order`, {
+      const response = await fetch(`${API_URL}/api/b2b/create-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

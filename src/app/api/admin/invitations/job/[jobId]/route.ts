@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/require-admin";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+import { API_URL, getAdminApiKey } from "@/lib/env";
 
 export async function GET(
   _request: NextRequest,
@@ -16,7 +14,7 @@ export async function GET(
   try {
     const { jobId } = await params;
     const res = await fetch(`${API_URL}/api/admin/invitations/job/${jobId}`, {
-      headers: { "x-api-key": ADMIN_API_KEY },
+      headers: { "x-api-key": getAdminApiKey() },
       cache: "no-store",
     });
 

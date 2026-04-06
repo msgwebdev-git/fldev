@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
+import { Turnstile } from "@/components/Turnstile";
+import { TURNSTILE_SITE_KEY } from "@/lib/env";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -14,20 +16,47 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const captchaEnabled = TURNSTILE_SITE_KEY.length > 0;
+
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setCaptchaToken(token);
+  }, []);
+
+  const handleCaptchaExpire = useCallback(() => {
+    setCaptchaToken(null);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
+    if (captchaEnabled && !captchaToken) {
+      setError("Пройдите проверку безопасности");
+      setIsLoading(false);
+      return;
+    }
+
     const supabase = createClient();
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: captchaToken ? { captchaToken } : undefined,
     });
 
     if (error || !data.user) {
+      // Captcha token is single-use — force user to re-solve on retry.
+      setCaptchaToken(null);
+      if (typeof window !== "undefined" && window.turnstile) {
+        try {
+          window.turnstile.reset();
+        } catch {
+          // ignore
+        }
+      }
       setError("Неверный email или пароль");
       setIsLoading(false);
       return;
@@ -40,6 +69,14 @@ export default function AdminLoginPage() {
       // Не админ — сразу разлогиниваем, чтобы не оставлять валидную сессию,
       // и показываем нейтральное сообщение (не раскрываем факт существования юзера).
       await supabase.auth.signOut();
+      setCaptchaToken(null);
+      if (typeof window !== "undefined" && window.turnstile) {
+        try {
+          window.turnstile.reset();
+        } catch {
+          // ignore
+        }
+      }
       setError("Неверный email или пароль");
       setIsLoading(false);
       return;
@@ -94,6 +131,16 @@ export default function AdminLoginPage() {
               />
             </div>
 
+            {captchaEnabled && (
+              <Turnstile
+                siteKey={TURNSTILE_SITE_KEY}
+                onVerify={handleCaptchaVerify}
+                onExpire={handleCaptchaExpire}
+                onError={handleCaptchaExpire}
+                action="admin-login"
+              />
+            )}
+
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                 <p className="text-red-600 text-sm text-center">{error}</p>
@@ -103,7 +150,7 @@ export default function AdminLoginPage() {
             <Button
               type="submit"
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || (captchaEnabled && !captchaToken)}
             >
               {isLoading ? (
                 <>

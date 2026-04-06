@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/require-admin";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+import { API_URL, getAdminApiKey } from "@/lib/env";
 
 export async function POST(
   request: NextRequest,
@@ -33,7 +31,7 @@ export async function POST(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": ADMIN_API_KEY,
+        "x-api-key": getAdminApiKey(),
       },
       body: JSON.stringify({
         reason,

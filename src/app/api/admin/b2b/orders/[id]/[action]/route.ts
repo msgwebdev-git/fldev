@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/require-admin";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+import { API_URL, getAdminApiKey } from "@/lib/env";
 
 const ALLOWED_ACTIONS: Record<string, string> = {
   "generate-invoice": "POST",
@@ -47,7 +45,7 @@ async function handleRequest(
       method: expectedMethod,
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": ADMIN_API_KEY,
+        "x-api-key": getAdminApiKey(),
       },
       ...(body ? { body } : {}),
     });

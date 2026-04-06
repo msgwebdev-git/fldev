@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/require-admin";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
+import { API_URL, getAdminApiKey } from "@/lib/env";
 
 export async function GET() {
   const { isAdmin } = await requireAdmin();
@@ -12,7 +10,7 @@ export async function GET() {
 
   try {
     const res = await fetch(`${API_URL}/api/scan/cache/status`, {
-      headers: { "x-api-key": ADMIN_API_KEY },
+      headers: { "x-api-key": getAdminApiKey() },
       cache: "no-store",
     });
 
@@ -36,7 +34,7 @@ export async function POST() {
   try {
     const res = await fetch(`${API_URL}/api/scan/cache/warmup`, {
       method: "POST",
-      headers: { "x-api-key": ADMIN_API_KEY },
+      headers: { "x-api-key": getAdminApiKey() },
     });
 
     if (!res.ok) {
