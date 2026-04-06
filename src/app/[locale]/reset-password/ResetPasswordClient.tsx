@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { CheckCircle2, Loader2, Lock, ShieldAlert } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -12,39 +13,62 @@ type Stage = "verifying" | "form" | "updating" | "success" | "invalid";
  *
  * Flow:
  *  1. User taps the reset link in the email.
- *  2. Browser opens this page. Supabase JS client auto-parses the URL
- *     (either `?code=...` for PKCE flow, or `#access_token=...&type=recovery`
- *     for the legacy hash flow) and establishes a recovery session.
- *  3. We listen for the session, verify it, and show the new-password form.
- *  4. User submits → we call supabase.auth.updateUser({ password }) →
- *     immediately sign out so the recovery session cannot linger.
- *  5. Show a "return to the app" screen. No redirect to site/login —
- *     the user came from the mobile app and should return there.
+ *  2. The link is built by our custom Supabase email template as:
+ *       {{ .SiteURL }}/reset-password?token_hash={{ .TokenHash }}&type=recovery
+ *     This avoids the default {{ .ConfirmationURL }} variable, which
+ *     points to the Site URL root and has no knowledge of our app path.
+ *  3. This page reads `token_hash` + `type` from the query, calls
+ *     supabase.auth.verifyOtp({ token_hash, type: 'recovery' }), which
+ *     validates the token with gotrue and establishes a recovery session.
+ *  4. We show the new-password form. User submits →
+ *     supabase.auth.updateUser({ password }) → force signOut() so the
+ *     recovery session cannot be reused.
+ *  5. Success screen: "return to the app". No automatic deep link —
+ *     the mobile app has no intent-filter; the user switches back manually.
  *
- * Security notes:
- *  * No deep link back to the app (app has no intent-filter / associated
- *    domain). User returns manually, which is standard for apps without
- *    deep link support.
- *  * After successful password change we force signOut() so the recovery
- *    session cannot be reused. The user MUST log in again in the mobile
- *    app with the new password.
+ * Backwards compatibility:
+ *  If a legacy recovery link (with `?code=...` PKCE or `#access_token=...`
+ *  hash) still lands here, the Supabase JS client auto-parses it on init
+ *  and fires PASSWORD_RECOVERY. We listen for that too, so both old and
+ *  new flows work.
  */
 export default function ResetPasswordClient() {
   const t = useTranslations("ResetPassword");
   const supabase = useMemo(() => createClient(), []);
+  const searchParams = useSearchParams();
 
   const [stage, setStage] = useState<Stage>("verifying");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  // On mount: wait for Supabase to parse the URL and establish a session.
+  // On mount: establish a recovery session from whatever the URL contains.
   useEffect(() => {
     let cancelled = false;
 
-    const checkRecoverySession = async () => {
-      // Give Supabase a tick to consume the URL code/hash.
-      await new Promise((r) => setTimeout(r, 100));
+    const establish = async () => {
+      // Preferred path: explicit token_hash + type=recovery (custom template).
+      const tokenHash = searchParams.get("token_hash");
+      const type = searchParams.get("type");
+
+      if (tokenHash && type === "recovery") {
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          type: "recovery",
+          token_hash: tokenHash,
+        });
+        if (cancelled) return;
+        if (verifyError) {
+          setStage("invalid");
+          return;
+        }
+        setStage("form");
+        return;
+      }
+
+      // Fallback path: legacy PKCE (?code=) or hash (#access_token=).
+      // Supabase JS auto-parses these on client init. Give it a tick, then
+      // check for a session.
+      await new Promise((r) => setTimeout(r, 150));
       if (cancelled) return;
 
       const {
@@ -52,16 +76,11 @@ export default function ResetPasswordClient() {
       } = await supabase.auth.getSession();
 
       if (cancelled) return;
-
-      if (session) {
-        setStage("form");
-      } else {
-        setStage("invalid");
-      }
+      setStage(session ? "form" : "invalid");
     };
 
-    // Also react to PASSWORD_RECOVERY event (primary signal in newer
-    // Supabase clients).
+    // Also react to PASSWORD_RECOVERY event (fires in the legacy flow
+    // when Supabase finishes parsing the URL).
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -71,13 +90,13 @@ export default function ResetPasswordClient() {
       }
     });
 
-    checkRecoverySession();
+    establish();
 
     return () => {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, [supabase, searchParams]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
