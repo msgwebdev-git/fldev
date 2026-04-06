@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
@@ -19,11 +19,9 @@ export async function POST(
       );
     }
 
-    const supabase = await createClient();
-
-    // Check if user is authenticated (admin)
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    // Check if user is authenticated admin
+    const { user, isAdmin } = await requireAdmin();
+    if (!isAdmin || !user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }

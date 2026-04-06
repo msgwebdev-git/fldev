@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export async function PATCH(
   request: NextRequest,
@@ -9,12 +10,12 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const supabase = await createClient();
-
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
+    const { isAdmin } = await requireAdmin();
+    if (!isAdmin) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const supabase = await createClient();
 
     // Build update object from provided fields
     const update: Record<string, unknown> = {

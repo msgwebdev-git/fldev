@@ -1,12 +1,15 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { revalidatePath } from "next/cache";
 import { sendTelegramMessage } from "@/lib/telegram";
 
 export async function submitPartnerApplication(formData: FormData) {
   try {
-    const supabase = await createClient();
+    // Public form → use service role. This action runs server-side only.
+    // Writing via the cookie session would fail under RLS because anonymous
+    // site visitors have the `anon` role.
+    const supabase = createAdminClient();
 
     // Extract form data
     const contactName = formData.get("contactName") as string;

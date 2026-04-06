@@ -22,12 +22,24 @@ export default function AdminLoginPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
+    if (error || !data.user) {
+      setError("Неверный email или пароль");
+      setIsLoading(false);
+      return;
+    }
+
+    // Проверяем, что у пользователя действительно роль админа.
+    // Источник правды — app_metadata.role, которое правится только service role.
+    const role = data.user.app_metadata?.role;
+    if (role !== "admin") {
+      // Не админ — сразу разлогиниваем, чтобы не оставлять валидную сессию,
+      // и показываем нейтральное сообщение (не раскрываем факт существования юзера).
+      await supabase.auth.signOut();
       setError("Неверный email или пароль");
       setIsLoading(false);
       return;

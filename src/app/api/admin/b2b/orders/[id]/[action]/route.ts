@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || "";
@@ -27,9 +27,8 @@ async function handleRequest(
     return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
   }
 
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
+  const { isAdmin } = await requireAdmin();
+  if (!isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

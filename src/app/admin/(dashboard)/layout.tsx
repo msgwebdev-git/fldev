@@ -1,20 +1,16 @@
-import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { requireAdmin } from "@/lib/auth/require-admin";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
+  const { user, isAdmin } = await requireAdmin();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!user || !isAdmin) {
     redirect("/admin/login");
   }
 
