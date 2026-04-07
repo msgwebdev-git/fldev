@@ -56,6 +56,9 @@ const ACTION_ROUTES = [
   { value: "/tickets", label: "Билеты" },
   { value: "/program", label: "Программа" },
   { value: "/more", label: "Ещё" },
+  // app_update — virtual route. Сервер сам подставит правильный URL
+  // (Play Store / App Store) для каждого устройства по его платформе.
+  { value: "app_update", label: "Обновить приложение (Play Store / App Store)" },
 ];
 
 export default function NotificationsPage() {
