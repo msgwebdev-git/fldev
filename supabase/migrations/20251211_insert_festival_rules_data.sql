@@ -229,22 +229,22 @@ INSERT INTO festival_rules (
     '["кемпинг", "палатка", "camping", "семейный", "тишина", "душ", "туалет"]',
     '[
       "• Campingul este permis numai în zonele autorizate",
-      "• Accesul și instalarea corturilor: 09 august 2024, ora 18:00",
+      "• Accesul și instalarea corturilor — începând cu ora 18:00, cu o zi înainte de deschiderea Festivalului",
       "• FAMILY CAMPING este zonă de liniște între 23:00 – 07:00",
       "• Curățenia este responsabilitatea fiecărui participant",
       "• Deșeurile se aruncă doar în spațiile special amenajate",
       "• Grupurile sanitare trebuie utilizate responsabil",
-      "• Demontarea corturilor — până pe 12 august la ora 12:00",
+      "• Demontarea corturilor — până la ora 12:00 a zilei următoare de la închiderea festivalului",
       "• Locul trebuie lăsat curat și fără obiecte"
     ]',
     '[
       "• Кемпинг разрешён только в специально отведённых зонах",
-      "• Въезд и установка палаток: 09 августа 2024, с 18:00",
+      "• Въезд и установка палаток — с 18:00 за день до открытия Фестиваля",
       "• FAMILY CAMPING — зона тишины с 23:00 до 07:00",
       "• Чистота — ответственность каждого участника",
       "• Мусор выбрасывается только в специально оборудованных местах",
       "• Санитарные группы должны использоваться ответственно",
-      "• Демонтаж палаток — до 12 августа, 12:00",
+      "• Демонтаж палаток — до 12:00 следующего дня после окончания фестиваля",
       "• Место необходимо оставить чистым и без вещей"
     ]',
     9,

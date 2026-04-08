@@ -4,7 +4,7 @@
     "description": "Aceasta este pagina principală"
   },
   "Hero": {
-    "badge": "Cel mai mare festival din Moldova",
+    "badge": "Cel mai mare festival-camping din Moldova",
     "august": "August",
     "buyTickets": "Cumpără bilete",
     "viewLineup": "Vezi Line-up",
@@ -38,7 +38,7 @@
   "Aftermovie": {
     "badge": "Video Oficial",
     "title": "Aftermovie 2025",
-    "subtitle": "Retrăiește cele mai frumoase momente de la ediția trecută",
+    "subtitle": "Retrăiește cele mai frumoase momente de la edițiile trecute",
     "thumbnailAlt": "Aftermovie Festivalul Lupilor 2025",
     "playVideo": "Rulează video",
     "officialAftermovie": "Aftermovie Oficial",
@@ -189,7 +189,7 @@
     "badge": "Despre festival",
     "pageTitle": "Festivalul Lupilor",
     "backToHome": "Înapoi la pagina principală",
-    "heroDescription": "Cel mai mare festival open-air din Moldova, care de cinci ani consecutiv se desfășoară în august în Rezervația Cultural-Naturală «Orheiul Vechi».",
+    "heroDescription": "Cel mai mare festival open-air din Republica Moldova, organizat în afara orașului, care are loc tradițional în august în Rezervația Cultural-Naturală «Orheiul Vechi».",
     "stats": {
       "years": "Ani de festival",
       "artists": "Artiști pe scenă",
@@ -197,7 +197,7 @@
       "stages": "Scene"
     },
     "historyTitle": "Istoria noastră",
-    "historyP1": "Din 2021, Festivalul Lupilor a devenit o tradiție de trei zile de imersiune în lumea muzicii live, tradițiilor și naturii uimitoare, unde folk-rock, ritmuri balcanice, etno, alternative și muzică electronică răsună printre stâncile milenare și meandrele râului Răut.",
+    "historyP1": "Din 2021, Festivalul Lupilor adună mii de oameni în valea pitorească a Orheiului Vechi, transformând malurile Răutului într-o scenă culturală imensă. Aici, diverse ritmuri muzicale — de la folk la rock balcanic și electronică — se împletesc cu tradițiile străvechi, dezvăluind caracterul modern și frumusețea naturală a Moldovei.",
     "historyP2": "",
     "musicTitle": "Muzica",
     "musicP1": "Rezidenții permanenți sunt Lupii lui Calancea și Tudor Ungureanu, Vali Boghean Band, Gândul Mâței, Snails, iar printre headlinerii edițiilor trecute se numără Alternosfera, Subcarpați, Carla's Dreams, The Motans, Irina Rimes, Sunstroke Project, Travka și mulți alții.",
@@ -212,15 +212,15 @@
       "familyZone": "Zonă pentru familii"
     },
     "locationTitle": "Locația",
-    "locationDescription": "Festivalul se desfășoară în Rezervația Cultural-Naturală «Orheiul Vechi», un loc unic unde muzica modernă întâlnește energia antică a pământului, iar mii de oameni devin în fiecare an o mare haită pentru trei zile cu adevărat de neuitat.",
+    "locationDescription": "Festivalul are loc în Rezervația Cultural-Naturală „Orheiul Vechi”, un spațiu cu adevărat special, unde muzica modernă se îmbină firesc cu natura și atmosfera locului. În fiecare an, mii de oameni se adună aici și creează împreună o energie unică, pentru trei zile care chiar rămân în memorie.",
     "dates": "7-9 August 2026",
     "distance": "50 km de la Chișinău",
     "faqTitle": "Întrebări frecvente",
     "faq": {
       "q1": "Cum ajung la festival?",
-      "a1": "Festivalul se află la 50 km de Chișinău, în satul Trebujeni. Există autobuze speciale din capitală și parcare gratuită pentru cei care vin cu mașina.",
+      "a1": "Festivalul are loc la 50 km de Chișinău, în apropierea satului Trebujeni. Puteți ajunge cu mașina, iar detaliile și locația exactă pot fi găsite în secțiunea Cum ajungi. Urmează indicatoarele spre festival.",
       "q2": "Pot să vin cu cortul?",
-      "a2": "Da! Avem o zonă de camping confortabilă pentru peste 5000 de persoane, cu dușuri, stații de încărcare și pază 24/7.",
+      "a2": "Da! Avem o zonă de camping confortabilă pentru peste 500 de persoane, cu dușuri, stații de încărcare și pază 24/7.",
       "q3": "Este potrivit pentru familii cu copii?",
       "a3": "Absolut! Avem o zonă specială pentru copii cu activități pentru familie, ateliere creative și animatori.",
       "q4": "Ce pot mânca la festival?",

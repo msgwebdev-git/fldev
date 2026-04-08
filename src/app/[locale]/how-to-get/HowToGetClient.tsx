@@ -8,7 +8,6 @@ import {
   MapPin,
   Navigation,
   Car,
-  Bus,
   Clock,
   Compass,
   ExternalLink,
@@ -36,12 +35,6 @@ const transportOptions = [
     icon: Car,
     duration: "~1h",
     distance: "50 km"
-  },
-  {
-    id: "bus",
-    icon: Bus,
-    duration: "~1.5h",
-    distance: "Autobus"
   }
 ];
 
@@ -152,7 +145,7 @@ export default function HowToGetPage() {
                   <div>
                     <p className="font-medium">{t("location.addressLabel")}</p>
                     <p className="text-sm text-muted-foreground">
-                      Orheiul Vechi, sat. Trebujeni<br />
+                      Orheiul Vechi,<br />
                       r-nul Orhei, Moldova
                     </p>
                   </div>

@@ -195,14 +195,14 @@ export function ContactsContent({ contacts, siteContacts }: ContactsContentProps
                             Instagram
                           </a>
                         )}
-                        {siteContacts.telegram && (
+                        {siteContacts.tiktok && (
                           <a
-                            href={siteContacts.telegram}
+                            href={siteContacts.tiktok}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-muted-foreground hover:text-primary transition-colors"
                           >
-                            Telegram
+                            TikTok
                           </a>
                         )}
                       </div>
