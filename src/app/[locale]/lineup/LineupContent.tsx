@@ -4,7 +4,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft, Music, Star, Users, Calendar } from "lucide-react";
+import { ArrowLeft, Music, Star, Calendar } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -48,9 +48,6 @@ export function LineupContent({ artists, years }: LineupContentProps) {
 
   const headliners = currentArtists.filter((a) => a.is_headliner);
   const otherArtists = currentArtists.filter((a) => !a.is_headliner);
-
-  // Получаем уникальные сцены
-  const stages = [...new Set(currentArtists.map((a) => a.stage).filter(Boolean))];
 
   return (
     <main className="min-h-screen bg-background pt-24 pb-20">
@@ -96,7 +93,7 @@ export function LineupContent({ artists, years }: LineupContentProps) {
         ) : (
         <>
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 gap-4 mb-12 max-w-md mx-auto">
           <div className="text-center p-4 rounded-xl bg-muted/50">
             <div className="text-3xl font-bold text-primary">{headliners.length}</div>
             <div className="text-sm text-muted-foreground">{t("stats.headliners")}</div>
@@ -104,14 +101,6 @@ export function LineupContent({ artists, years }: LineupContentProps) {
           <div className="text-center p-4 rounded-xl bg-muted/50">
             <div className="text-3xl font-bold text-primary">{otherArtists.length}</div>
             <div className="text-sm text-muted-foreground">{t("stats.artists")}</div>
-          </div>
-          <div className="text-center p-4 rounded-xl bg-muted/50">
-            <div className="text-3xl font-bold text-primary">{stages.length || 4}</div>
-            <div className="text-sm text-muted-foreground">{t("stats.stages")}</div>
-          </div>
-          <div className="text-center p-4 rounded-xl bg-muted/50">
-            <div className="text-3xl font-bold text-primary">3</div>
-            <div className="text-sm text-muted-foreground">{t("stats.days")}</div>
           </div>
         </div>
 
@@ -246,11 +235,6 @@ export function LineupContent({ artists, years }: LineupContentProps) {
                   );
                 })}
 
-                {/* Artist count */}
-                <div className="text-center mt-8 text-muted-foreground">
-                  <Users className="inline-block h-4 w-4 mr-2" />
-                  {yearArtists.length} {t("totalArtists")}
-                </div>
               </TabsContent>
             );
           })}
