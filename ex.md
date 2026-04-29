@@ -141,3 +141,4 @@ Colegi, Pentru sesiunea ministeriala din 14-15 mai 2026, propunem reanimarea sit
 - подготовить инструкцию по деплою на свой сервер через Coolify
 
 
+d
