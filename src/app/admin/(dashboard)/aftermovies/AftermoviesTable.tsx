@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,11 +98,11 @@ export function AftermoviesTable({ aftermovies }: AftermoviesTableProps) {
               <tr key={item.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3">
                   <div className="relative w-24 h-14 rounded overflow-hidden bg-gray-100">
-                    <Image
+                    <img
                       src={`https://img.youtube.com/vi/${item.video_id}/mqdefault.jpg`}
                       alt={`Aftermovie ${item.year}`}
-                      fill
-                      className="object-cover"
+                      className="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 </td>

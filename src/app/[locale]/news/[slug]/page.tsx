@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -14,6 +15,20 @@ interface Props {
     slug: string;
   }>;
 }
+
+export const revalidate = 600;
+
+// Deduped within a single render — generateMetadata + page reuse the same row.
+const getNewsBySlug = cache(async (slug: string) => {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("news")
+    .select("*")
+    .eq("slug", slug)
+    .eq("published", true)
+    .single();
+  return data;
+});
 
 function formatDate(dateString: string, locale: string = "ru"): string {
   const date = new Date(dateString);
@@ -39,14 +54,7 @@ function getLocalizedField(
 
 export async function generateMetadata({ params }: Props) {
   const { locale, slug } = await params;
-  const supabase = await createClient();
-
-  const { data: news } = await supabase
-    .from("news")
-    .select("title_ru, title_ro, excerpt_ru, excerpt_ro")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+  const news = await getNewsBySlug(slug);
 
   if (!news) {
     return { title: locale === "ro" ? "Știrea nu a fost găsită" : "Новость не найдена" };
@@ -64,14 +72,7 @@ export async function generateMetadata({ params }: Props) {
 export default async function NewsPage({ params }: Props) {
   const { locale, slug } = await params;
   const t = await getTranslations("News");
-  const supabase = await createClient();
-
-  const { data: news } = await supabase
-    .from("news")
-    .select("*")
-    .eq("slug", slug)
-    .eq("published", true)
-    .single();
+  const news = await getNewsBySlug(slug);
 
   if (!news) {
     notFound();

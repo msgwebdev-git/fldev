@@ -20,6 +20,8 @@ interface Props {
   }>;
 }
 
+export const revalidate = 300;
+
 function formatDate(dateString: string, locale: string = "ru"): string {
   const date = new Date(dateString);
   return date.toLocaleDateString(locale === "ro" ? "ro-RO" : "ru-RU", {

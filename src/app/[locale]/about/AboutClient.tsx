@@ -78,9 +78,10 @@ export default function AboutPage() {
         {/* Main Image */}
         <div className="relative aspect-[21/9] rounded-2xl overflow-hidden mb-16">
           <Image
-            src="/279cc82299d526a60d1d9f51a53ab1cd.jpg"
+            src="/about-hero.webp"
             alt="Festivalul Lupilor"
             fill
+            sizes="(max-width: 768px) 100vw, 100vw"
             className="object-cover"
             priority
           />
@@ -132,9 +133,10 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           <div className="relative aspect-square md:aspect-auto rounded-2xl overflow-hidden">
             <Image
-              src="/orheiul-vechi2.jpg"
+              src="/orheiul-vechi2.webp"
               alt="Orheiul Vechi"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
             />
           </div>

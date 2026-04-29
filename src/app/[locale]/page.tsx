@@ -10,6 +10,9 @@ import { generatePageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string }> };
 
+// ISR: cached HTML, regenerated at most every 5 min — covers ticket/availability changes.
+export const revalidate = 300;
+
 export async function generateMetadata({ params }: Props) {
   return generatePageMetadata({ params, page: "home", path: "" });
 }

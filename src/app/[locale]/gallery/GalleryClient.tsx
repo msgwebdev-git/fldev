@@ -270,6 +270,7 @@ export default function GalleryPage() {
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       loading="lazy"
+                      unoptimized
                     />
                     {/* Hover Overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">

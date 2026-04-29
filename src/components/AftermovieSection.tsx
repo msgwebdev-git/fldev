@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Play, Youtube } from "lucide-react";
-import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,8 +36,6 @@ export function AftermovieSection() {
   const [selectedVideo, setSelectedVideo] = React.useState<AftermovieData>(fallbackAftermovies[0]);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [thumbnailQuality, setThumbnailQuality] = React.useState<'maxresdefault' | 'hqdefault' | 'mqdefault'>('maxresdefault');
-  const [galleryThumbnailErrors, setGalleryThumbnailErrors] = React.useState<Set<string>>(new Set());
 
   React.useEffect(() => {
     async function fetchAftermovies() {
@@ -60,17 +57,8 @@ export function AftermovieSection() {
     fetchAftermovies();
   }, []);
 
-  const thumbnailUrl = `https://img.youtube.com/vi/${selectedVideo.videoId}/${thumbnailQuality}.jpg`;
-
-  const handleThumbnailError = () => {
-    if (thumbnailQuality === 'maxresdefault') {
-      setThumbnailQuality('hqdefault');
-      setIsLoading(true);
-    } else if (thumbnailQuality === 'hqdefault') {
-      setThumbnailQuality('mqdefault');
-      setIsLoading(true);
-    }
-  };
+  // hqdefault.jpg always exists for any YouTube video (480x360) — skip Vercel image optimizer.
+  const thumbnailUrl = `https://img.youtube.com/vi/${selectedVideo.videoId}/hqdefault.jpg`;
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -81,19 +69,11 @@ export function AftermovieSection() {
       setSelectedVideo(video);
       setIsPlaying(false);
       setIsLoading(true);
-      setThumbnailQuality('maxresdefault'); // Reset to highest quality
     }
   };
 
-  const getGalleryThumbnailUrl = (videoId: string) => {
-    return galleryThumbnailErrors.has(videoId)
-      ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-      : `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
-  };
-
-  const handleGalleryThumbnailError = (videoId: string) => {
-    setGalleryThumbnailErrors(prev => new Set(prev).add(videoId));
-  };
+  const getGalleryThumbnailUrl = (videoId: string) =>
+    `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
 
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-black text-white overflow-hidden">
@@ -125,17 +105,15 @@ export function AftermovieSection() {
                   {isLoading && (
                     <Skeleton className="absolute inset-0 bg-white/10" />
                   )}
-                  <Image
+                  <img
                     src={thumbnailUrl}
                     alt={`Aftermovie ${selectedVideo.year}`}
-                    fill
                     className={cn(
-                      "object-cover transition-opacity duration-300",
+                      "absolute inset-0 h-full w-full object-cover transition-opacity duration-300",
                       isLoading ? "opacity-0" : "opacity-100"
                     )}
                     onLoad={() => setIsLoading(false)}
-                    onError={handleThumbnailError}
-                    priority
+                    loading="eager"
                   />
                 </div>
 
@@ -205,12 +183,11 @@ export function AftermovieSection() {
                 )}
               >
                 <div className="relative w-24 h-16 sm:w-32 sm:h-20 md:w-40 md:h-24">
-                  <Image
+                  <img
                     src={getGalleryThumbnailUrl(video.videoId)}
                     alt={`Aftermovie ${video.year}`}
-                    fill
-                    className="object-cover"
-                    onError={() => handleGalleryThumbnailError(video.videoId)}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
                   />
                   {/* Overlay */}
                   <div className={cn(

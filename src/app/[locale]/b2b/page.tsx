@@ -3,6 +3,8 @@ import { generatePageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string }> };
 
+export const dynamic = "force-static";
+
 export async function generateMetadata({ params }: Props) {
   return generatePageMetadata({ params, page: "b2b" });
 }

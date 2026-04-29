@@ -18,18 +18,20 @@ export function HeroSection() {
     });
   };
 
+  const youtubeVideoId = "2BVoFeiaMbY";
+
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {/* Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover"
-      >
-        <source src="/festival-video.mp4" type="video/mp4" />
-      </video>
+    <section className="relative h-screen w-full overflow-hidden bg-black">
+      {/* Video Background — YouTube embed (no muted-autoplay limits, served from YouTube CDN) */}
+      <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none">
+        <iframe
+          src={`https://www.youtube-nocookie.com/embed/${youtubeVideoId}?autoplay=1&mute=1&loop=1&playlist=${youtubeVideoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&iv_load_policy=3&disablekb=1`}
+          title="Festivalul Lupilor"
+          allow="autoplay; encrypted-media"
+          className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2 border-0"
+          loading="eager"
+        />
+      </div>
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/50" />

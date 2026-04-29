@@ -5,6 +5,8 @@ import { generatePageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ locale: string }> };
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: Props) {
   return generatePageMetadata({ params, page: "contacts" });
 }

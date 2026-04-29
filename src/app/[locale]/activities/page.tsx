@@ -8,6 +8,8 @@ interface ActivitiesPageProps {
   }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: ActivitiesPageProps) {
   return generatePageMetadata({ params, page: "activities" });
 }

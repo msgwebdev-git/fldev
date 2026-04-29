@@ -8,6 +8,8 @@ interface RulesPageProps {
   }>;
 }
 
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: RulesPageProps) {
   return generatePageMetadata({ params, page: "rules" });
 }
