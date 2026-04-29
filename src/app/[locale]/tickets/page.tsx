@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { TicketData, TicketOption } from "@/components/TicketCard";
 import { TicketsContent } from "./TicketsContent";
 import { generatePageMetadata } from "@/lib/seo";
@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function TicketsPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Загружаем билеты с опциями
   const { data: ticketsData } = await supabase

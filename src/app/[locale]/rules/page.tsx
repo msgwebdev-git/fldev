@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { RulesContent, Rule } from "./RulesContent";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -60,7 +60,7 @@ const getQuickTopics = (locale: string) => {
 
 export default async function RulesPage({ params }: RulesPageProps) {
   const { locale } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: rulesDB } = await supabase
     .from("festival_rules")

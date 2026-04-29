@@ -1,5 +1,6 @@
+import { cache } from "react";
 import Script from "next/script";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { SanitizedHtml } from "@/components/SanitizedHtml";
 
 interface MarketingSettings {
@@ -12,8 +13,9 @@ interface MarketingSettings {
   custom_body_scripts?: string;
 }
 
-async function getMarketingSettings(): Promise<MarketingSettings> {
-  const supabase = await createClient();
+// Deduped within a single render: Head + Body invoke this once each per page.
+const getMarketingSettings = cache(async (): Promise<MarketingSettings> => {
+  const supabase = createPublicClient();
 
   const { data: settings } = await supabase
     .from("site_settings")
@@ -28,7 +30,7 @@ async function getMarketingSettings(): Promise<MarketingSettings> {
   });
 
   return settingsMap;
-}
+});
 
 export async function MarketingScriptsHead() {
   const settings = await getMarketingSettings();

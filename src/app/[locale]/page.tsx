@@ -4,7 +4,7 @@ import { AftermovieSection } from "@/components/AftermovieSection";
 import { GallerySection } from "@/components/GallerySection";
 import { AppSection } from "@/components/AppSection";
 import { NewsSection } from "@/components/NewsSection";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { TicketData, TicketOption } from "@/components/TicketCard";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function Home() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Проверяем видимость секции мобильного приложения
   const { data: appSetting } = await supabase

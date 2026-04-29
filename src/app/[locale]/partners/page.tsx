@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { PartnersContent } from "./PartnersContent";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function PartnersPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Получаем всех партнеров без фильтрации по годам
   const { data: partners } = await supabase

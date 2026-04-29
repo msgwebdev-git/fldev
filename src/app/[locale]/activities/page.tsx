@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { ActivitiesContent } from "./ActivitiesContent";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -44,7 +44,7 @@ interface Activity {
 
 export default async function ActivitiesPage({ params }: ActivitiesPageProps) {
   const { locale } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Получаем текущий год для фильтрации
   const currentYear = "2025";

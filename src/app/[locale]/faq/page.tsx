@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { FAQClient } from "./FAQClient";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function FAQPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Fetch FAQ data from Supabase
   const { data: faqData } = await supabase

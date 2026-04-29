@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -55,7 +55,7 @@ export async function generateMetadata() {
 export default async function NewsListPage({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations("News");
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: news } = await supabase
     .from("news")

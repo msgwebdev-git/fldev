@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { ContactsContent } from "./ContactsContent";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ContactsPage() {
   const t = await getTranslations("Contacts");
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // Загружаем контакты отделов
   const { data: contacts } = await supabase

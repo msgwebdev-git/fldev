@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { LineupContent } from "./LineupContent";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function LineupPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: artists } = await supabase
     .from("artists")
