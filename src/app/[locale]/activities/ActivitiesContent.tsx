@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppCTABlock } from "@/components/AppCTABlock";
+import { AppSection } from "@/components/AppSection";
 
 interface Activity {
   id: string;
@@ -201,7 +201,7 @@ export function ActivitiesContent({ activities, showMobileApp }: ActivitiesConte
         )}
 
         {/* App Download CTA */}
-        {showMobileApp && <AppCTABlock namespace="Activities" notificationText="Workshop starts in 10 min!" />}
+        {showMobileApp && <AppSection namespace="Activities.appCta" notificationText="Workshop starts in 10 min!" />}
       </div>
     </main>
   );

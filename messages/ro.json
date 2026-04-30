@@ -162,10 +162,26 @@
     "subtitle": "Descarcă aplicația oficială Festivalul Lupilor și obține acces la program, hartă și notificări exclusive",
     "downloadOn": "Descarcă pe",
     "getItOn": "Disponibil pe",
+    "downloadApp": "Descarcă aplicația",
     "features": {
       "notifications": "Notificări push despre spectacole",
       "schedule": "Program personalizat",
-      "map": "Hartă interactivă a festivalului"
+      "tickets": "Biletele tale, salvate în aplicație"
+    },
+    "floating": {
+      "notifications": {
+        "title": "Notificări push",
+        "subtitle": "Nu rata!"
+      },
+      "tickets": {
+        "title": "Biletele tale",
+        "subtitle": "Mereu la îndemână"
+      }
+    },
+    "drawer": {
+      "title": "Descarcă aplicația Festivalul Lupilor",
+      "subtitle": "Program, bilete și notificări — totul într-un singur loc.",
+      "alreadyInstalled": "Am deja aplicația"
     }
   },
   "News": {
@@ -394,10 +410,21 @@
       "subtitle": "Descarcă aplicația și primește notificări când începe concertul artiștilor tăi preferați",
       "downloadOn": "Descarcă din",
       "getItOn": "Disponibil pe",
+      "downloadApp": "Descarcă aplicația",
       "features": {
         "notifications": "Push-notificări pentru spectacole",
         "schedule": "Program personalizat",
-        "map": "Hartă interactivă a festivalului"
+        "tickets": "Biletele tale, salvate în aplicație"
+      },
+      "floating": {
+        "notifications": {
+          "title": "Notificări push",
+          "subtitle": "Nu rata!"
+        },
+        "tickets": {
+          "title": "Biletele tale",
+          "subtitle": "Mereu la îndemână"
+        }
       }
     }
   },
@@ -670,10 +697,21 @@
       "subtitle": "Descarcă aplicația și primește notificări despre workshop-uri, evenimente și multe altele",
       "downloadOn": "Descarcă din",
       "getItOn": "Disponibil pe",
+      "downloadApp": "Descarcă aplicația",
       "features": {
         "notifications": "Push-notificări pentru activități",
         "schedule": "Program personalizat",
-        "map": "Hartă interactivă a festivalului"
+        "tickets": "Biletele tale, salvate în aplicație"
+      },
+      "floating": {
+        "notifications": {
+          "title": "Notificări push",
+          "subtitle": "Nu rata!"
+        },
+        "tickets": {
+          "title": "Biletele tale",
+          "subtitle": "Mereu la îndemână"
+        }
       }
     }
   },

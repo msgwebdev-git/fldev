@@ -8,6 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
+import { AppDownloadDrawer } from "@/components/AppDownloadDrawer";
 import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
 import { Toaster } from "sonner";
 import "../globals.css";
@@ -107,6 +108,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main>{children}</main>
             <Footer />
             <TicketCartBar />
+            <AppDownloadDrawer />
             <Toaster position="top-center" richColors />
           </CartProvider>
         </NextIntlClientProvider>

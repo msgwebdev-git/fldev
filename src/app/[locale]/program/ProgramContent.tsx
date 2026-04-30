@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppCTABlock } from "@/components/AppCTABlock";
+import { AppSection } from "@/components/AppSection";
 
 // Types for program data
 interface ProgramEvent {
@@ -229,7 +229,7 @@ export function ProgramContent({ events, showMobileApp }: ProgramContentProps) {
         )}
 
         {/* App Download CTA */}
-        {showMobileApp && <AppCTABlock namespace="Program" notificationText="Main Stage starts in 30 min!" />}
+        {showMobileApp && <AppSection namespace="Program.appCta" notificationText="Main Stage starts in 30 min!" />}
       </div>
     </main>
   );
