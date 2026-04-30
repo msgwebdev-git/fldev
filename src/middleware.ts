@@ -13,6 +13,11 @@ export async function middleware(request: NextRequest) {
     return updateSession(request);
   }
 
+  // /app — страница редиректа на сторы, без локализации
+  if (pathname === "/app" || pathname.startsWith("/app/")) {
+    return NextResponse.next();
+  }
+
   // Для остальных роутов используем intl middleware
   return intlMiddleware(request);
 }
