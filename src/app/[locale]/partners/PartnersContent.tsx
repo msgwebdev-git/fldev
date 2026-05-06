@@ -53,7 +53,7 @@ interface PartnersContentProps {
 }
 
 const LOGO_SIZE = "h-24 md:h-32";
-const GRID_COLS = "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
+const CARD_WIDTH = "w-[calc(50%-0.5rem)] sm:w-56 md:w-64";
 
 export function PartnersContent({ partners, categories }: PartnersContentProps) {
   const t = useTranslations("Partners");
@@ -147,11 +147,11 @@ export function PartnersContent({ partners, categories }: PartnersContentProps) 
                   <Separator className="mt-4 max-w-xs mx-auto" />
                 </div>
 
-                <div className={`grid gap-4 ${GRID_COLS}`}>
+                <div className="flex flex-wrap justify-center gap-4">
                   {category.partners.map((partner) => (
                     <Card
                       key={partner.id}
-                      className="group transition-all hover:shadow-lg hover:border-primary/30 overflow-hidden"
+                      className={`group transition-all hover:shadow-lg hover:border-primary/30 overflow-hidden ${CARD_WIDTH}`}
                     >
                       <CardContent className="p-6 flex items-center justify-center min-h-[140px]">
                         {partner.website ? (
