@@ -167,7 +167,7 @@ export function PartnersContent({ partners, categories }: PartnersContentProps) 
                                   src={partner.logo_url}
                                   alt={partner.name}
                                   fill
-                                  className="object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                                  className="object-contain"
                                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                                 />
                               ) : (
@@ -190,7 +190,7 @@ export function PartnersContent({ partners, categories }: PartnersContentProps) 
                                 src={partner.logo_url}
                                 alt={partner.name}
                                 fill
-                                className="object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                                className="object-contain"
                                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                               />
                             ) : (
