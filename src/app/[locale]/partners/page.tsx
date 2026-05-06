@@ -13,12 +13,17 @@ export async function generateMetadata({ params }: Props) {
 export default async function PartnersPage() {
   const supabase = createPublicClient();
 
-  // Получаем всех партнеров без фильтрации по годам
-  const { data: partners } = await supabase
-    .from("partners")
-    .select("*")
-    .order("category", { ascending: true })
-    .order("sort_order", { ascending: true });
+  const [{ data: partners }, { data: categories }] = await Promise.all([
+    supabase
+      .from("partners")
+      .select("*")
+      .order("category", { ascending: true })
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("partner_categories")
+      .select("*")
+      .order("sort_order", { ascending: true }),
+  ]);
 
-  return <PartnersContent partners={partners || []} />;
+  return <PartnersContent partners={partners || []} categories={categories || []} />;
 }

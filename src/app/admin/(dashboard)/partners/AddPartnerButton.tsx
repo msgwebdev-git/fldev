@@ -22,12 +22,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
+import type { PartnerCategory } from "./categories/CategoriesTable";
 
-export function AddPartnerButton() {
+interface Props {
+  categories: PartnerCategory[];
+}
+
+export function AddPartnerButton({ categories }: Props) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("partners");
+  const [selectedCategory, setSelectedCategory] = useState(
+    categories[0]?.key ?? "",
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -87,7 +94,7 @@ export function AddPartnerButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={categories.length === 0} title={categories.length === 0 ? "Сначала создайте категорию" : ""}>
           <Plus className="w-4 h-4 mr-2" />
           Добавить партнёра
         </Button>
@@ -115,11 +122,11 @@ export function AddPartnerButton() {
                 <SelectValue placeholder="Категория" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="patronage">Патронаж</SelectItem>
-                <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
-                <SelectItem value="partners">Партнёры</SelectItem>
-                <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
-                <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c.id} value={c.key}>
+                    {c.label_ru}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { ArrowLeft, Handshake, ExternalLink } from "lucide-react";
@@ -31,54 +31,54 @@ interface Partner {
   sort_order: number;
 }
 
-interface PartnerCategory {
+interface PartnerCategoryRow {
+  id: number;
   key: string;
+  label_ro: string;
+  label_ru: string;
+  label_en: string | null;
+  sort_order: number;
+  badge_color: string;
+}
+
+interface RenderedCategory {
+  key: string;
+  label: string;
   partners: Partner[];
 }
 
 interface PartnersContentProps {
   partners: Partner[];
+  categories: PartnerCategoryRow[];
 }
 
-// Порядок категорий
-const categoryOrder = ["generalPartner", "partners", "generalMediaPartner", "mediaPartners"];
+const LOGO_SIZE = "h-24 md:h-32";
+const GRID_COLS = "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5";
 
-export function PartnersContent({ partners }: PartnersContentProps) {
+export function PartnersContent({ partners, categories }: PartnersContentProps) {
   const t = useTranslations("Partners");
+  const locale = useLocale();
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
-  // Группируем партнёров по категориям
+  const labelFor = (c: PartnerCategoryRow) => {
+    if (locale === "ru") return c.label_ru;
+    if (locale === "en") return c.label_en ?? c.label_ro;
+    return c.label_ro;
+  };
+
   const partnersByCategory = partners.reduce((acc, partner) => {
-    if (!acc[partner.category]) {
-      acc[partner.category] = [];
-    }
+    if (!acc[partner.category]) acc[partner.category] = [];
     acc[partner.category].push(partner);
     return acc;
   }, {} as Record<string, Partner[]>);
 
-  // Создаём массив категорий в правильном порядке
-  const categories: PartnerCategory[] = categoryOrder
-    .filter((key) => partnersByCategory[key]?.length > 0)
-    .map((key) => ({
-      key,
-      partners: partnersByCategory[key].sort((a, b) => a.sort_order - b.sort_order),
+  const renderedCategories: RenderedCategory[] = categories
+    .filter((c) => partnersByCategory[c.key]?.length > 0)
+    .map((c) => ({
+      key: c.key,
+      label: labelFor(c),
+      partners: partnersByCategory[c.key].sort((a, b) => a.sort_order - b.sort_order),
     }));
-
-  const getGridCols = (count: number, isMain: boolean) => {
-    if (isMain) {
-      if (count === 1) return "grid-cols-1 max-w-xs mx-auto";
-      if (count === 2) return "grid-cols-2 max-w-lg mx-auto";
-      return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 max-w-3xl mx-auto";
-    }
-    return "grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6";
-  };
-
-  const getLogoSize = (key: string) => {
-    if (key === "patronage" || key === "generalPartner" || key === "generalMediaPartner") {
-      return "h-24 md:h-32";
-    }
-    return "h-20 md:h-24";
-  };
 
   return (
     <main className="min-h-screen bg-background pt-24 pb-20">
@@ -128,7 +128,7 @@ export function PartnersContent({ partners }: PartnersContentProps) {
         </div>
 
         {/* Partners Section */}
-        {categories.length === 0 ? (
+        {renderedCategories.length === 0 ? (
           <div className="text-center py-20">
             <Handshake className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">{t("noPartnersYet")}</h3>
@@ -137,23 +137,17 @@ export function PartnersContent({ partners }: PartnersContentProps) {
             </p>
           </div>
         ) : (
-          /* Partner Categories */
           <div className="space-y-16">
-            {categories.map((category) => {
-            const isMainCategory = ["patronage", "generalPartner", "generalMediaPartner"].includes(category.key);
-
-            return (
+            {renderedCategories.map((category) => (
               <section key={category.key}>
-                {/* Category Title */}
                 <div className="text-center mb-8">
-                  <h2 className={`font-bold ${isMainCategory ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"}`}>
-                    {t(`categories.${category.key}`)}
+                  <h2 className="font-bold text-2xl md:text-3xl">
+                    {category.label}
                   </h2>
                   <Separator className="mt-4 max-w-xs mx-auto" />
                 </div>
 
-                {/* Partners Grid */}
-                <div className={`grid gap-4 ${getGridCols(category.partners.length, isMainCategory)}`}>
+                <div className={`grid gap-4 ${GRID_COLS}`}>
                   {category.partners.map((partner) => (
                     <Card
                       key={partner.id}
@@ -167,7 +161,7 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                             rel="noopener noreferrer"
                             className="relative block w-full"
                           >
-                            <div className={`relative w-full ${getLogoSize(category.key)}`}>
+                            <div className={`relative w-full ${LOGO_SIZE}`}>
                               {partner.logo_url ? (
                                 <Image
                                   src={partner.logo_url}
@@ -190,7 +184,7 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                             </div>
                           </a>
                         ) : (
-                          <div className={`relative w-full ${getLogoSize(category.key)}`}>
+                          <div className={`relative w-full ${LOGO_SIZE}`}>
                             {partner.logo_url ? (
                               <Image
                                 src={partner.logo_url}
@@ -211,13 +205,11 @@ export function PartnersContent({ partners }: PartnersContentProps) {
                   ))}
                 </div>
               </section>
-            );
-            })}
+            ))}
           </div>
         )}
 
-        {/* Thank you message */}
-        {categories.length > 0 && (
+        {renderedCategories.length > 0 && (
           <div className="mt-12 text-center">
             <p className="text-muted-foreground italic">
               {t("thankYou")}

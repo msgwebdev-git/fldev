@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Pencil, Trash2, Handshake, ExternalLink } from "lucide-react";
+import { type PartnerCategory, getBadgeClasses } from "./categories/CategoriesTable";
 
 interface Partner {
   id: number;
@@ -36,31 +37,21 @@ interface Partner {
 
 interface PartnersTableProps {
   partners: Partner[];
+  categories: PartnerCategory[];
 }
 
-const categoryLabels: Record<string, string> = {
-  patronage: "Патронаж",
-  generalPartner: "Генеральный партнёр",
-  partners: "Партнёры",
-  generalMediaPartner: "Генеральный медиа-партнёр",
-  mediaPartners: "Медиа-партнёры",
-};
-
-const categoryColors: Record<string, string> = {
-  patronage: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  generalPartner: "bg-blue-100 text-blue-800 border-blue-200",
-  partners: "bg-green-100 text-green-800 border-green-200",
-  generalMediaPartner: "bg-purple-100 text-purple-800 border-purple-200",
-  mediaPartners: "bg-pink-100 text-pink-800 border-pink-200",
-};
-
-export function PartnersTable({ partners }: PartnersTableProps) {
+export function PartnersTable({ partners, categories }: PartnersTableProps) {
   const router = useRouter();
   const [editingItem, setEditingItem] = useState<Partner | null>(null);
   const [deletingItem, setDeletingItem] = useState<Partner | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [editCategory, setEditCategory] = useState("partners");
+  const [editCategory, setEditCategory] = useState(categories[0]?.key ?? "");
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const categoryByKey = new Map(categories.map((c) => [c.key, c]));
+  const labelOf = (key: string) => categoryByKey.get(key)?.label_ru ?? key;
+  const badgeOf = (key: string) =>
+    getBadgeClasses(categoryByKey.get(key)?.badge_color ?? "gray");
 
   // Группируем по категориям
   const partnersByCategory: Record<string, Partner[]> = {};
@@ -190,8 +181,8 @@ export function PartnersTable({ partners }: PartnersTableProps) {
         </div>
       </td>
       <td className="px-4 py-3">
-        <Badge className={categoryColors[partner.category] || "bg-gray-100 text-gray-800"}>
-          {categoryLabels[partner.category] || partner.category}
+        <Badge className={badgeOf(partner.category)}>
+          {labelOf(partner.category)}
         </Badge>
       </td>
       <td className="px-4 py-3">
@@ -224,11 +215,17 @@ export function PartnersTable({ partners }: PartnersTableProps) {
     <>
       {Object.keys(partnersByCategory).length > 0 ? (
         <div className="space-y-6">
-          {Object.entries(partnersByCategory).map(([category, categoryPartners]) => (
+          {Object.entries(partnersByCategory)
+            .sort(([a], [b]) => {
+              const orderA = categoryByKey.get(a)?.sort_order ?? 9999;
+              const orderB = categoryByKey.get(b)?.sort_order ?? 9999;
+              return orderA - orderB;
+            })
+            .map(([category, categoryPartners]) => (
             <div key={category}>
               <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
-                <Badge className={categoryColors[category] || "bg-gray-100"}>
-                  {categoryLabels[category] || category}
+                <Badge className={badgeOf(category)}>
+                  {labelOf(category)}
                 </Badge>
                 <span>({categoryPartners.length})</span>
               </h3>
@@ -295,11 +292,11 @@ export function PartnersTable({ partners }: PartnersTableProps) {
                   <SelectValue placeholder="Категория" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="patronage">Патронаж</SelectItem>
-                  <SelectItem value="generalPartner">Генеральный партнёр</SelectItem>
-                  <SelectItem value="partners">Партнёры</SelectItem>
-                  <SelectItem value="generalMediaPartner">Генеральный медиа-партнёр</SelectItem>
-                  <SelectItem value="mediaPartners">Медиа-партнёры</SelectItem>
+                  {categories.map((c) => (
+                    <SelectItem key={c.id} value={c.key}>
+                      {c.label_ru}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
