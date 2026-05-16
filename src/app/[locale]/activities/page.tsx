@@ -1,5 +1,6 @@
 import { createPublicClient } from "@/lib/supabase/public";
 import { ActivitiesContent } from "./ActivitiesContent";
+import { getSiteSettingBool } from "@/lib/data/site-settings";
 import { generatePageMetadata } from "@/lib/seo";
 
 interface ActivitiesPageProps {
@@ -49,18 +50,14 @@ export default async function ActivitiesPage({ params }: ActivitiesPageProps) {
   // Получаем текущий год для фильтрации
   const currentYear = "2025";
 
-  const [{ data: activitiesDB }, { data: appSetting }] = await Promise.all([
+  const [{ data: activitiesDB }, showMobileApp] = await Promise.all([
     supabase
       .from("activities")
       .select("*")
       .eq("year", currentYear)
       .order("category", { ascending: true })
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "show_mobile_app")
-      .single(),
+    getSiteSettingBool("show_mobile_app"),
   ]);
 
   // Преобразуем данные для отображения с учётом локали
@@ -80,7 +77,7 @@ export default async function ActivitiesPage({ params }: ActivitiesPageProps) {
   return (
     <ActivitiesContent
       activities={activities}
-      showMobileApp={appSetting?.value === "true"}
+      showMobileApp={showMobileApp}
     />
   );
 }

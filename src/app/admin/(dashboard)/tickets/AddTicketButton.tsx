@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { revalidateTicketsCache } from "./actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -62,6 +63,8 @@ export function AddTicketButton() {
 
     if (error) {
       console.error("Error adding ticket:", error);
+    } else {
+      await revalidateTicketsCache();
     }
 
     setIsLoading(false);

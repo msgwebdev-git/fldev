@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { revalidateTicketsCache } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -115,6 +116,8 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
     if (error) {
       console.error("Error updating ticket:", error);
       alert(`Ошибка сохранения: ${error.message}`);
+    } else {
+      await revalidateTicketsCache();
     }
 
     setIsLoading(false);
@@ -129,6 +132,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
     const supabase = createClient();
 
     await supabase.from("tickets").delete().eq("id", deletingItem.id);
+    await revalidateTicketsCache();
 
     setIsLoading(false);
     setDeletingItem(null);
@@ -212,6 +216,8 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
         return;
       }
     }
+
+    await revalidateTicketsCache();
 
     setIsLoading(false);
     setOptionsItem(null);

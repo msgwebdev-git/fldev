@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { revalidateSiteSettingsCache } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -49,6 +50,7 @@ export function SectionsSettingsForm({
       );
 
       await Promise.all(updates);
+      await revalidateSiteSettingsCache();
 
       setSavedMessage("Настройки сохранены");
       router.refresh();
