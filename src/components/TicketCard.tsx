@@ -37,6 +37,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useCart } from "@/context/CartContext";
+import { trackAddToCart } from "@/lib/analytics";
 
 export interface TicketOption {
   id: string;
@@ -143,8 +144,15 @@ export function TicketCard({ ticket }: TicketCardProps) {
 
     if (hasOptions && selectedOption) {
       setItemQuantity(ticket, Math.min(maxPerOrder, quantity + 1), selectedOption);
+      trackAddToCart({
+        id,
+        name: ticketName,
+        price: price + (selectedOption.priceModifier ?? 0),
+        quantity: 1,
+      });
     } else {
       setItemQuantity(ticket, Math.min(maxPerOrder, quantity + 1));
+      trackAddToCart({ id, name: ticketName, price, quantity: 1 });
     }
   };
 
@@ -153,6 +161,12 @@ export function TicketCard({ ticket }: TicketCardProps) {
     if (option) {
       setItemQuantity(ticket, 1, option);
       setOptionsOpen(false);
+      trackAddToCart({
+        id,
+        name: ticketName,
+        price: price + (option.priceModifier ?? 0),
+        quantity: 1,
+      });
     }
   };
 

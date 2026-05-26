@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Ticket, Shield, CreditCard, Mail } from "lucide-react";
 
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { TicketCard, TicketData } from "@/components/TicketCard";
+import { trackViewContent } from "@/lib/analytics";
 
 const paymentFeatures = [
   { icon: Shield, labelKey: "payment.secure" },
@@ -23,6 +24,21 @@ interface TicketsContentProps {
 export function TicketsContent({ tickets }: TicketsContentProps) {
   const t = useTranslations("TicketsPage");
   const tCommon = useTranslations("Tickets");
+  const locale = useLocale();
+
+  // Fire view_item_list / ViewContent once when the tickets page is viewed
+  const viewTracked = React.useRef(false);
+  React.useEffect(() => {
+    if (viewTracked.current || tickets.length === 0) return;
+    viewTracked.current = true;
+    trackViewContent(
+      tickets.map((ticket) => ({
+        id: ticket.id,
+        name: locale === "ru" ? ticket.nameRu : ticket.nameRo,
+        price: ticket.price,
+      }))
+    );
+  }, [tickets, locale]);
 
   return (
     <main className="min-h-screen bg-background pt-24 pb-20">

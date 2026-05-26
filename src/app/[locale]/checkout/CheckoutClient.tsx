@@ -52,6 +52,7 @@ import {
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useCart } from "@/context/CartContext";
 import { api } from "@/lib/api";
+import { trackInitiateCheckout } from "@/lib/analytics";
 import { useLocale } from "next-intl";
 
 // Form validation
@@ -133,6 +134,21 @@ export default function CheckoutPage() {
       router.push("/tickets");
     }
   }, [items.length, router, isHydrated]);
+
+  // Fire begin_checkout / InitiateCheckout once when reaching the checkout
+  const checkoutTracked = React.useRef(false);
+  React.useEffect(() => {
+    if (!isHydrated || items.length === 0 || checkoutTracked.current) return;
+    checkoutTracked.current = true;
+    trackInitiateCheckout(
+      items.map((item) => ({
+        id: item.ticket.id,
+        name: locale === "ru" ? item.ticket.nameRu : item.ticket.nameRo,
+        price: item.ticket.price + (item.selectedOption?.priceModifier ?? 0),
+        quantity: item.quantity,
+      }))
+    );
+  }, [isHydrated, items, locale]);
 
   // Handle form changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

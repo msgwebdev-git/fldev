@@ -22,6 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/api";
+import { trackPurchase } from "@/lib/analytics";
 
 interface TicketInfo {
   ticketCode: string;
@@ -82,6 +83,32 @@ export default function CheckoutSuccessPage() {
 
     return () => {
       if (interval) clearInterval(interval);
+    };
+  }, [orderNumber]);
+
+  // Fire Purchase conversion once per order (deduped across reloads)
+  React.useEffect(() => {
+    if (!orderNumber) return;
+
+    const dedupeKey = `fb_purchase_${orderNumber}`;
+    if (sessionStorage.getItem(dedupeKey)) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await api.getOrderStatus(orderNumber);
+        if (cancelled || !res.success || !res.data) return;
+        if (sessionStorage.getItem(dedupeKey)) return;
+
+        sessionStorage.setItem(dedupeKey, "1");
+        trackPurchase({ orderNumber, value: res.data.totalAmount });
+      } catch {
+        // silent — tracking must never break the page
+      }
+    })();
+
+    return () => {
+      cancelled = true;
     };
   }, [orderNumber]);
 
