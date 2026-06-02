@@ -11,6 +11,8 @@ export const EVENT = {
   // Moldova is EEST (+03:00) in August.
   startDate: "2026-08-07T12:00:00+03:00",
   endDate: "2026-08-09T23:59:00+03:00",
+  // When ticket sales opened (used for offers.validFrom).
+  salesStart: "2025-09-01T00:00:00+03:00",
   venue: {
     name: "Rezervația Cultural-Naturală Orheiul Vechi",
     streetAddress: "Orheiul Vechi",
@@ -94,6 +96,7 @@ export function buildMusicEventSchema({
     priceCurrency: t.currency || "MDL",
     availability: "https://schema.org/InStock",
     url: ticketsUrl,
+    validFrom: EVENT.salesStart,
     validThrough: EVENT.endDate,
   }));
 
