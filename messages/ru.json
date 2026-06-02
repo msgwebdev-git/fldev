@@ -1,4 +1,23 @@
 {
+  "CookieConsent": {
+    "title": "Мы используем cookie",
+    "description": "Мы используем cookie для аналитики и маркетинга, чтобы улучшать ваш опыт. Вы можете принять все, отклонить или настроить выбор.",
+    "acceptAll": "Принять всё",
+    "rejectAll": "Отклонить всё",
+    "customize": "Настроить",
+    "save": "Сохранить выбор",
+    "privacyLink": "Политика конфиденциальности",
+    "settingsTitle": "Настройки cookie",
+    "settingsDescription": "Выберите, какие категории cookie разрешить. Изменить выбор можно в любой момент.",
+    "alwaysActive": "Всегда включены",
+    "necessaryLabel": "Строго необходимые",
+    "necessaryDesc": "Нужны для работы сайта (корзина, сессия, безопасность). Их нельзя отключить.",
+    "analyticsLabel": "Аналитика",
+    "analyticsDesc": "Google Analytics, Yandex Metrica и Microsoft Clarity — помогают понять, как используется сайт (включая запись сессий).",
+    "marketingLabel": "Маркетинг",
+    "marketingDesc": "Facebook Pixel и TikTok Pixel — для оценки кампаний и показа релевантной рекламы.",
+    "manageLink": "Настройки cookie"
+  },
   "HomePage": {
     "title": "Добро пожаловать",
     "description": "Это главная страница"

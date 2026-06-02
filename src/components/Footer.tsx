@@ -16,6 +16,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { CookieSettingsLink } from "@/components/consent/CookieSettingsLink";
 import { cn } from "@/lib/utils";
 
 // Иконка TikTok (нет в lucide)
@@ -263,6 +264,7 @@ export function Footer() {
             >
               {t("terms")}
             </Link>
+            <CookieSettingsLink className="hover:text-white transition-colors" />
           </div>
           <a
             href="https://goqode.agency"

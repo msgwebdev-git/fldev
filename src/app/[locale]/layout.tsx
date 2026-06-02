@@ -9,7 +9,9 @@ import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
 import { AppDownloadDrawer } from "@/components/AppDownloadDrawer";
-import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
+import { MarketingScriptsHead, MarketingScriptsBody, MarketingTrackers } from "@/components/MarketingScripts";
+import { ConsentProvider } from "@/context/ConsentContext";
+import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { buildOrganizationSchema } from "@/lib/schema";
 import { Toaster } from "sonner";
@@ -106,14 +108,18 @@ export default async function LocaleLayout({ children, params }: Props) {
       >
         <MarketingScriptsBody />
         <NextIntlClientProvider>
-          <CartProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <TicketCartBar />
-            <AppDownloadDrawer />
-            <Toaster position="top-center" richColors />
-          </CartProvider>
+          <ConsentProvider>
+            <CartProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <TicketCartBar />
+              <AppDownloadDrawer />
+              <Toaster position="top-center" richColors />
+            </CartProvider>
+            <MarketingTrackers />
+            <CookieConsentBanner />
+          </ConsentProvider>
         </NextIntlClientProvider>
       </body>
     </html>

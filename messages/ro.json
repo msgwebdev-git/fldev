@@ -1,4 +1,23 @@
 {
+  "CookieConsent": {
+    "title": "Acest site folosește cookie-uri",
+    "description": "Folosim cookie-uri pentru analiză și marketing, ca să îmbunătățim experiența ta. Le poți accepta, refuza sau îți poți alege preferințele.",
+    "acceptAll": "Acceptă tot",
+    "rejectAll": "Refuză tot",
+    "customize": "Setări",
+    "save": "Salvează preferințele",
+    "privacyLink": "Politica de confidențialitate",
+    "settingsTitle": "Setări cookie-uri",
+    "settingsDescription": "Alege ce categorii de cookie-uri permiți. Îți poți schimba alegerea oricând.",
+    "alwaysActive": "Mereu active",
+    "necessaryLabel": "Strict necesare",
+    "necessaryDesc": "Esențiale pentru funcționarea site-ului (coș, sesiune, securitate). Nu pot fi dezactivate.",
+    "analyticsLabel": "Analiză",
+    "analyticsDesc": "Google Analytics, Yandex Metrica și Microsoft Clarity — ne ajută să înțelegem cum este folosit site-ul (inclusiv înregistrarea sesiunilor).",
+    "marketingLabel": "Marketing",
+    "marketingDesc": "Facebook Pixel și TikTok Pixel — pentru a măsura campaniile și a afișa reclame relevante.",
+    "manageLink": "Setări cookie-uri"
+  },
   "HomePage": {
     "title": "Bine ați venit",
     "description": "Aceasta este pagina principală"
