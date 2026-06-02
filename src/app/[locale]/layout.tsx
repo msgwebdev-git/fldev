@@ -10,6 +10,8 @@ import { CartProvider } from "@/context/CartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
 import { AppDownloadDrawer } from "@/components/AppDownloadDrawer";
 import { MarketingScriptsHead, MarketingScriptsBody } from "@/components/MarketingScripts";
+import { JsonLd } from "@/components/JsonLd";
+import { buildOrganizationSchema } from "@/lib/schema";
 import { Toaster } from "sonner";
 import "../globals.css";
 
@@ -97,6 +99,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html lang={locale}>
       <head>
         <MarketingScriptsHead />
+        <JsonLd data={buildOrganizationSchema()} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
