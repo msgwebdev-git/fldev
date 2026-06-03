@@ -49,7 +49,6 @@ export async function POST(req: NextRequest) {
       locale: str(b.locale, 16),
       device: deviceFromUA(ua),
       country,
-      user_agent: ua.slice(0, 512),
       metadata:
         b.metadata && typeof b.metadata === "object" ? b.metadata : {},
     };
