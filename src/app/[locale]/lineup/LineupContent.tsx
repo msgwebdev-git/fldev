@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/analytics";
 
 interface Artist {
   id: number;
@@ -45,6 +46,17 @@ export function LineupContent({ artists, years }: LineupContentProps) {
     () => artists.filter((a) => a.year === selectedYear),
     [artists, selectedYear]
   );
+
+  const trackArtistClick = (artist: Artist) =>
+    trackEvent("lineup_artist_click", {
+      metadata: {
+        artist_id: artist.id,
+        artist_name: artist.name,
+        year: artist.year,
+        day: artist.day,
+        is_headliner: artist.is_headliner,
+      },
+    });
 
   const headliners = currentArtists.filter((a) => a.is_headliner);
   const otherArtists = currentArtists.filter((a) => !a.is_headliner);
@@ -140,8 +152,9 @@ export function LineupContent({ artists, years }: LineupContentProps) {
                       {yearHeadliners.map((artist) => (
                         <Card
                           key={artist.id}
+                          onClick={() => trackArtistClick(artist)}
                           className={cn(
-                            "group overflow-hidden border-2 transition-all duration-300 hover:shadow-xl p-0 gap-0",
+                            "group overflow-hidden border-2 transition-all duration-300 hover:shadow-xl p-0 gap-0 cursor-pointer",
                             "hover:border-primary/50"
                           )}
                         >
@@ -200,7 +213,8 @@ export function LineupContent({ artists, years }: LineupContentProps) {
                         {dayArtists.map((artist) => (
                           <Card
                             key={artist.id}
-                            className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-105 p-0 gap-0"
+                            onClick={() => trackArtistClick(artist)}
+                            className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:scale-105 p-0 gap-0 cursor-pointer"
                           >
                             <div className="relative aspect-square overflow-hidden">
                               {artist.image_url ? (

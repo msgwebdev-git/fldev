@@ -25,6 +25,7 @@ const navigation: NavElement[] = [
     category: "Продажи",
     items: [
       { name: "Аналитика", href: "/admin/analytics", icon: TrendingUp },
+      { name: "Трафик", href: "/admin/traffic", icon: BarChart3 },
       { name: "Заказы", href: "/admin/orders", icon: ShoppingCart },
       { name: "B2B Заказы", href: "/admin/b2b-orders", icon: Briefcase },
       { name: "Билеты", href: "/admin/tickets", icon: Ticket },

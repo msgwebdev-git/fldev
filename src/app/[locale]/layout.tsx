@@ -13,6 +13,7 @@ import { MarketingScriptsHead, MarketingScriptsBody, MarketingTrackers } from "@
 import { ConsentProvider } from "@/context/ConsentContext";
 import { CookieConsentBanner } from "@/components/consent/CookieConsentBanner";
 import { JsonLd } from "@/components/JsonLd";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { buildOrganizationSchema } from "@/lib/schema";
 import { Toaster } from "sonner";
 import "../globals.css";
@@ -118,6 +119,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               <Toaster position="top-center" richColors />
             </CartProvider>
             <MarketingTrackers />
+            <PageViewTracker />
             <CookieConsentBanner />
           </ConsentProvider>
         </NextIntlClientProvider>
