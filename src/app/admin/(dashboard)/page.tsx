@@ -71,7 +71,7 @@ async function getContentStats() {
   const currentYear = new Date().getFullYear();
 
   const [artists, events, activities, news, partners] = await Promise.all([
-    supabase.from("artists").select("id", { count: "exact" }).eq("year", currentYear),
+    supabase.from("artists_base").select("id", { count: "exact" }).eq("year", currentYear),
     supabase.from("program_events").select("id", { count: "exact" }).eq("year", currentYear),
     supabase.from("activities").select("id", { count: "exact" }).eq("year", currentYear),
     supabase.from("news").select("id, is_published", { count: "exact" }),

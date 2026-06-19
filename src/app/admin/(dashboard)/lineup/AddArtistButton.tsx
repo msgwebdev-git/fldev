@@ -74,7 +74,7 @@ export function AddArtistButton({}: AddArtistButtonProps) {
 
     const days = selectedDays.length > 0 ? selectedDays : [1];
 
-    const { error } = await supabase.from("artists").insert({
+    const { error } = await supabase.from("artists_base").insert({
       name: formData.get("name") as string,
       image_url: imageUrl || null,
       genre: formData.get("genre") as string || null,

@@ -27,7 +27,7 @@ export default async function Home({ params }: Props) {
     getActiveTickets(),
     getSiteSettingBool("show_mobile_app"),
     supabase
-      .from("artists")
+      .from("artists_base")
       .select("name, image_url")
       .eq("year", EVENT.year)
       .order("is_headliner", { ascending: false }),

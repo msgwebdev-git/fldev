@@ -6,7 +6,7 @@ export default async function LineupPage() {
   const supabase = await createClient();
 
   const { data: artists } = await supabase
-    .from("artists")
+    .from("artists_base")
     .select("*")
     .order("year", { ascending: false })
     .order("is_headliner", { ascending: false })

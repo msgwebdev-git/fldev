@@ -90,7 +90,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
     }
 
     await supabase
-      .from("artists")
+      .from("artists_base")
       .update({
         name: formData.get("name") as string,
         image_url: imageUrl || null,
@@ -117,7 +117,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
     setIsLoading(true);
     const supabase = createClient();
 
-    await supabase.from("artists").delete().eq("id", deletingItem.id);
+    await supabase.from("artists_base").delete().eq("id", deletingItem.id);
 
     setIsLoading(false);
     setDeletingItem(null);
