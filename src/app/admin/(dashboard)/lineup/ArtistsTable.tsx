@@ -16,13 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil, Trash2, Star, Music } from "lucide-react";
 import { getYears } from "@/lib/utils";
@@ -35,10 +28,14 @@ interface Artist {
   country: string | null;
   is_headliner: boolean;
   day: number;
+  days: number[] | null;
   stage: string | null;
   year: string;
   sort_order: number;
 }
+
+const getArtistDays = (a: Artist): number[] =>
+  a.days && a.days.length > 0 ? [...a.days].sort((x, y) => x - y) : [a.day];
 
 interface ArtistsTableProps {
   artists: Artist[];
@@ -52,8 +49,14 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedYear, setSelectedYear] = useState(years[0] || getYears()[0]);
   const [editIsHeadliner, setEditIsHeadliner] = useState(false);
-  const [editDay, setEditDay] = useState("1");
+  const [editDays, setEditDays] = useState<number[]>([1]);
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const toggleEditDay = (day: number, checked: boolean) => {
+    setEditDays((prev) =>
+      checked ? [...prev, day].sort((a, b) => a - b) : prev.filter((d) => d !== day)
+    );
+  };
 
   const filteredArtists = artists.filter((a) => a.year === selectedYear);
   const headliners = filteredArtists.filter((a) => a.is_headliner);
@@ -94,7 +97,8 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
         genre: formData.get("genre") as string || null,
         country: formData.get("country") as string || null,
         is_headliner: editIsHeadliner,
-        day: parseInt(editDay),
+        days: editDays.length > 0 ? editDays : [1],
+        day: Math.min(...(editDays.length > 0 ? editDays : [1])),
         stage: formData.get("stage") as string || null,
         year: formData.get("year") as string,
         sort_order: parseInt(formData.get("sort_order") as string) || 0,
@@ -123,7 +127,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
   const openEditDialog = (artist: Artist) => {
     setEditingItem(artist);
     setEditIsHeadliner(artist.is_headliner);
-    setEditDay(artist.day.toString());
+    setEditDays(getArtistDays(artist));
   };
 
   if (artists.length === 0) {
@@ -168,7 +172,7 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
         )}
       </td>
       <td className="px-4 py-3">
-        <span className="text-gray-600">День {artist.day}</span>
+        <span className="text-gray-600">День {getArtistDays(artist).join(", ")}</span>
         {artist.stage && (
           <p className="text-gray-400 text-sm">{artist.stage}</p>
         )}
@@ -323,17 +327,21 @@ export function ArtistsTable({ artists, years }: ArtistsTableProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="edit-day" className="text-gray-700">День</Label>
-                <Select value={editDay} onValueChange={setEditDay}>
-                  <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                    <SelectValue placeholder="День" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">День 1</SelectItem>
-                    <SelectItem value="2">День 2</SelectItem>
-                    <SelectItem value="3">День 3</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label className="text-gray-700">Дни</Label>
+                <div className="flex items-center gap-4 h-9">
+                  {[1, 2, 3].map((day) => (
+                    <div key={day} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`edit-day-${day}`}
+                        checked={editDays.includes(day)}
+                        onCheckedChange={(checked) => toggleEditDay(day, checked === true)}
+                      />
+                      <Label htmlFor={`edit-day-${day}`} className="text-gray-700 cursor-pointer">
+                        {day}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 

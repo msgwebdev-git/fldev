@@ -37,8 +37,14 @@ export function AddArtistButton({}: AddArtistButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isHeadliner, setIsHeadliner] = useState(false);
   const [selectedYear, setSelectedYear] = useState(years[0]);
-  const [selectedDay, setSelectedDay] = useState("1");
+  const [selectedDays, setSelectedDays] = useState<number[]>([1]);
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const toggleDay = (day: number, checked: boolean) => {
+    setSelectedDays((prev) =>
+      checked ? [...prev, day].sort((a, b) => a - b) : prev.filter((d) => d !== day)
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,13 +72,16 @@ export function AddArtistButton({}: AddArtistButtonProps) {
       }
     }
 
+    const days = selectedDays.length > 0 ? selectedDays : [1];
+
     const { error } = await supabase.from("artists").insert({
       name: formData.get("name") as string,
       image_url: imageUrl || null,
       genre: formData.get("genre") as string || null,
       country: formData.get("country") as string || null,
       is_headliner: isHeadliner,
-      day: parseInt(selectedDay),
+      days,
+      day: Math.min(...days),
       stage: formData.get("stage") as string || null,
       year: selectedYear,
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
@@ -86,6 +95,7 @@ export function AddArtistButton({}: AddArtistButtonProps) {
     setOpen(false);
     setImageFile(null);
     setIsHeadliner(false);
+    setSelectedDays([1]);
     router.refresh();
   };
 
@@ -131,17 +141,21 @@ export function AddArtistButton({}: AddArtistButtonProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="day" className="text-gray-700">День</Label>
-              <Select value={selectedDay} onValueChange={setSelectedDay}>
-                <SelectTrigger className="bg-white border-gray-300 text-gray-900">
-                  <SelectValue placeholder="День" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">День 1</SelectItem>
-                  <SelectItem value="2">День 2</SelectItem>
-                  <SelectItem value="3">День 3</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label className="text-gray-700">Дни</Label>
+              <div className="flex items-center gap-4 h-9">
+                {[1, 2, 3].map((day) => (
+                  <div key={day} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`day-${day}`}
+                      checked={selectedDays.includes(day)}
+                      onCheckedChange={(checked) => toggleDay(day, checked === true)}
+                    />
+                    <Label htmlFor={`day-${day}`} className="text-gray-700 cursor-pointer">
+                      {day}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

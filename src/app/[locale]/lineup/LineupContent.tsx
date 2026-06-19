@@ -23,10 +23,15 @@ interface Artist {
   country: string | null;
   is_headliner: boolean;
   day: number;
+  days: number[] | null;
   stage: string | null;
   year: string;
   sort_order: number;
 }
+
+// An artist may perform on several days. Fall back to the legacy single `day`.
+const getArtistDays = (a: Artist): number[] =>
+  a.days && a.days.length > 0 ? [...a.days].sort((x, y) => x - y) : [a.day];
 
 interface LineupContentProps {
   artists: Artist[];
@@ -177,7 +182,7 @@ export function LineupContent({ artists, years }: LineupContentProps) {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                             <div className="absolute bottom-0 left-0 right-0 p-6">
                               <Badge className="mb-2 bg-primary/90">
-                                {t("day")} {artist.day}
+                                {t("day")} {getArtistDays(artist).join(", ")}
                               </Badge>
                               <h3 className="text-2xl font-bold text-white mb-1">
                                 {artist.name}
@@ -199,7 +204,7 @@ export function LineupContent({ artists, years }: LineupContentProps) {
                 {/* All Artists by Day */}
                 {[1, 2, 3].map((day) => {
                   const dayArtists = yearArtists.filter(
-                    (a) => a.day === day && !a.is_headliner
+                    (a) => getArtistDays(a).includes(day) && !a.is_headliner
                   );
                   if (dayArtists.length === 0) return null;
 
