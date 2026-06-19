@@ -105,11 +105,13 @@ export function LineupContent({ artists, years }: LineupContentProps) {
         ) : (
         <>
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-12 max-w-md mx-auto">
-          <div className="text-center p-4 rounded-xl bg-muted/50">
-            <div className="text-3xl font-bold text-primary">{headliners.length}</div>
-            <div className="text-sm text-muted-foreground">{t("stats.headliners")}</div>
-          </div>
+        <div className={cn("grid gap-4 mb-12 max-w-md mx-auto", headliners.length > 0 ? "grid-cols-2" : "grid-cols-1")}>
+          {headliners.length > 0 && (
+            <div className="text-center p-4 rounded-xl bg-muted/50">
+              <div className="text-3xl font-bold text-primary">{headliners.length}</div>
+              <div className="text-sm text-muted-foreground">{t("stats.headliners")}</div>
+            </div>
+          )}
           <div className="text-center p-4 rounded-xl bg-muted/50">
             <div className="text-3xl font-bold text-primary">{otherArtists.length}</div>
             <div className="text-sm text-muted-foreground">{t("stats.artists")}</div>
