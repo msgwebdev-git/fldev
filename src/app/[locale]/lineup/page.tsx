@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 import { LineupContent } from "./LineupContent";
 import { generatePageMetadata } from "@/lib/seo";
@@ -24,5 +25,12 @@ export default async function LineupPage() {
   const artistsData = artists ?? [];
   const years = [...new Set(artistsData.map((a) => a.year))].sort((a, b) => b.localeCompare(a));
 
-  return <LineupContent artists={artistsData} years={years} />;
+  // LineupContent reads useSearchParams() (?year=…), which forces a client
+  // bail-out during prerender — it must sit behind a Suspense boundary or the
+  // static export fails. See nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+  return (
+    <Suspense fallback={null}>
+      <LineupContent artists={artistsData} years={years} />
+    </Suspense>
+  );
 }

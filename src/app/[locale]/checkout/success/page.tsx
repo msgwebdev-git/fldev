@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { generatePageMetadata } from "@/lib/seo";
 import CheckoutSuccessPage from "./SuccessClient";
 
@@ -7,4 +8,11 @@ export async function generateMetadata({ params }: Props) {
   return generatePageMetadata({ params, page: "tickets", path: "/checkout/success", noindex: true });
 }
 
-export default CheckoutSuccessPage;
+// SuccessClient reads useSearchParams(); wrap in Suspense for prerender.
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <CheckoutSuccessPage />
+    </Suspense>
+  );
+}

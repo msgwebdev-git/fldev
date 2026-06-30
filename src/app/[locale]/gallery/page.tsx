@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { generatePageMetadata } from "@/lib/seo";
 import GalleryPage from "./GalleryClient";
 
@@ -10,4 +11,12 @@ export async function generateMetadata({ params }: Props) {
   return generatePageMetadata({ params, page: "gallery" });
 }
 
-export default GalleryPage;
+// GalleryClient reads useSearchParams(), forcing a client bail-out during
+// prerender — wrap it in Suspense so the static shell can be generated.
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <GalleryPage />
+    </Suspense>
+  );
+}
