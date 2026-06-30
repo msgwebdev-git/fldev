@@ -599,6 +599,41 @@
       "title": "Ne vedem la festival!",
       "subtitle": "Cumpără biletele acum și pregătește-te pentru 3 zile de neuitat",
       "buyTickets": "Cumpără bilete"
+    },
+    "publicTransport": {
+      "badge": "Orar",
+      "title": "Transport public",
+      "intro": "Dacă alegi să călătorești la Orheiul Vechi cu transportul public, poți găsi rutiera la <gara>Gara Centrală din Chișinău</gara> sau la <autogara>Autogara orășelului Orhei</autogara>.",
+      "note": "Prețurile pot varia periodic din cauza ajustării costului combustibilului.",
+      "priceLabel": "Preț bilet",
+      "routeChisinau": {
+        "title": "Ruta Chișinău",
+        "price": "55 lei / persoană",
+        "trips": [
+          {
+            "from": "Chișinău – Butuceni – Trebujeni",
+            "times": "8:35, 10:20, 13:45, 17:15, 18:15"
+          },
+          {
+            "from": "Butuceni – Chișinău",
+            "times": "6:00, 8:00, 10:00, 15:00, 16:30"
+          }
+        ]
+      },
+      "routeOrhei": {
+        "title": "Ruta Orhei",
+        "price": "35 lei / persoană",
+        "trips": [
+          {
+            "from": "Orhei – Butuceni – Trebujeni",
+            "times": "7:00, 10:35"
+          },
+          {
+            "from": "Trebujeni – Orhei",
+            "times": "9:45, 12:45"
+          }
+        ]
+      }
     }
   },
   "Activities": {

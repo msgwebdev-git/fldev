@@ -12,7 +12,9 @@ import {
   Compass,
   ExternalLink,
   ChevronRight,
-  Locate
+  Locate,
+  Bus,
+  Ticket
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +29,12 @@ const FESTIVAL_COORDS = {
   name: "Festivalul Lupilor",
   address: "Orheiul Vechi, Trebujeni, Moldova"
 };
+
+// Public transport departure points (Google Maps)
+const GARA_CENTRALA_URL =
+  "https://www.google.com/maps/dir//%D0%A6%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9+%D0%B0%D0%B2%D1%82%D0%BE%D0%B2%D0%BE%D0%BA%D0%B7%D0%B0%D0%BB,+Strada+Mitropolit+Varlaam+58,+Chi%C8%99in%C4%83u,+%D0%9C%D0%BE%D0%BB%D0%B4%D0%BE%D0%B2%D0%B0/@47.0193858,28.8431044,725m/data=!3m1!1e3!4m9!4m8!1m0!1m5!1m1!1s0x40c97c3bbf44d667:0xa25ecbcbf54fb506!2m2!1d28.8452931!2d47.0193858!3e0";
+const AUTOGARA_ORHEI_URL =
+  "https://www.google.com/maps/place/Autogara+Orhei/@47.3780238,28.8161704,17z/data=!4m7!3m6!1s0x40cbef30b0008b23:0x733bcb1db0003c5a!8m2!3d47.3779322!4d28.8189702";
 
 // Transport options
 const transportOptions = [
@@ -212,6 +220,93 @@ export default function HowToGetPage() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Public Transport Section */}
+        <div className="mt-16 max-w-5xl mx-auto">
+          <Separator className="mb-12" />
+
+          <div className="text-center mb-8">
+            <Badge variant="outline" className="mb-4">
+              <Bus className="h-3 w-3 mr-1" />
+              {t("publicTransport.badge")}
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              {t("publicTransport.title")}
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              {t.rich("publicTransport.intro", {
+                gara: (chunks) => (
+                  <a
+                    href={GARA_CENTRALA_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    {chunks}
+                  </a>
+                ),
+                autogara: (chunks) => (
+                  <a
+                    href={AUTOGARA_ORHEI_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary underline-offset-4 hover:underline"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {(["routeChisinau", "routeOrhei"] as const).map((route) => {
+              const trips = t.raw(`publicTransport.${route}.trips`) as {
+                from: string;
+                times: string;
+              }[];
+              return (
+                <Card key={route} className="overflow-hidden">
+                  <CardHeader className="bg-muted/40 border-b">
+                    <div className="flex items-center justify-between gap-3">
+                      <CardTitle className="flex items-center gap-2.5 text-lg">
+                        <span className="p-2 rounded-lg bg-primary/10">
+                          <Bus className="h-5 w-5 text-primary" />
+                        </span>
+                        {t(`publicTransport.${route}.title`)}
+                      </CardTitle>
+                      <Badge className="shrink-0 gap-1">
+                        <Ticket className="h-3 w-3" />
+                        {t(`publicTransport.${route}.price`)}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-5 space-y-4">
+                    {trips.map((trip, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-muted">
+                          <Clock className="h-4 w-4 text-primary" />
+                        </span>
+                        <div>
+                          <p className="font-medium text-sm leading-snug">
+                            {trip.from}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {trip.times}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          <p className="text-xs text-muted-foreground text-center mt-6 max-w-2xl mx-auto">
+            {t("publicTransport.note")}
+          </p>
         </div>
 
         {/* Additional Info Section */}

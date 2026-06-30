@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Navbar } from "@/components/Navbar";
@@ -97,6 +97,11 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+
+  // Required for static rendering: feeds the locale into next-intl's request
+  // config so getRequestConfig (and the NextIntlClientProvider below) resolve
+  // the correct messages at build time instead of falling back to defaultLocale.
+  setRequestLocale(locale);
 
   return (
     <html lang={locale}>
