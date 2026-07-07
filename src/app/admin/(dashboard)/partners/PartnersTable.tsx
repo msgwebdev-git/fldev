@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePartners } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -114,6 +115,8 @@ export function PartnersTable({ partners, categories }: PartnersTableProps) {
       return;
     }
 
+    await revalidatePartners();
+
     setIsLoading(false);
     setEditingItem(null);
     setImageFile(null);
@@ -127,6 +130,7 @@ export function PartnersTable({ partners, categories }: PartnersTableProps) {
     const supabase = createClient();
 
     await supabase.from("partners").delete().eq("id", deletingItem.id);
+    await revalidatePartners();
 
     setIsLoading(false);
     setDeletingItem(null);

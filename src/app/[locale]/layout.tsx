@@ -4,10 +4,13 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { getMerchShopEnabled } from "@/lib/data/merch";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { MerchCartProvider } from "@/context/MerchCartContext";
 import { TicketCartBar } from "@/components/TicketCartBar";
+import { MerchCartBar } from "@/components/MerchCartBar";
 import { AppDownloadDrawer } from "@/components/AppDownloadDrawer";
 import { MarketingScriptsHead, MarketingScriptsBody, MarketingTrackers } from "@/components/MarketingScripts";
 import { ConsentProvider } from "@/context/ConsentContext";
@@ -103,6 +106,8 @@ export default async function LocaleLayout({ children, params }: Props) {
   // the correct messages at build time instead of falling back to defaultLocale.
   setRequestLocale(locale);
 
+  const shopEnabled = await getMerchShopEnabled();
+
   return (
     <html lang={locale}>
       <head>
@@ -116,12 +121,15 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider>
           <ConsentProvider>
             <CartProvider>
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
-              <TicketCartBar />
-              <AppDownloadDrawer />
-              <Toaster position="top-center" richColors />
+              <MerchCartProvider>
+                <Navbar shopEnabled={shopEnabled} />
+                <main>{children}</main>
+                <Footer />
+                <TicketCartBar />
+                <MerchCartBar />
+                <AppDownloadDrawer />
+                <Toaster position="top-center" richColors />
+              </MerchCartProvider>
             </CartProvider>
             <MarketingTrackers />
             <PageViewTracker />

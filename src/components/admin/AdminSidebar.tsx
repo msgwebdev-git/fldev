@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft, Inbox } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft, Inbox, ShoppingBag, Package, Tag, Film } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -35,6 +35,16 @@ const navigation: NavElement[] = [
     ]
   },
   {
+    category: "Магазин",
+    items: [
+      { name: "Товары", href: "/admin/merch", icon: ShoppingBag },
+      { name: "Категории", href: "/admin/merch/categories", icon: Tag },
+      { name: "Заказы мерча", href: "/admin/merch/orders", icon: Package },
+      { name: "Акции", href: "/admin/merch/promotions", icon: Gift },
+      { name: "Настройки", href: "/admin/merch/settings", icon: ToggleLeft },
+    ]
+  },
+  {
     category: "Фестиваль",
     items: [
       { name: "Lineup", href: "/admin/lineup", icon: Music },
@@ -45,6 +55,7 @@ const navigation: NavElement[] = [
   {
     category: "Контент",
     items: [
+      { name: "Сторис", href: "/admin/stories", icon: Film },
       { name: "Новости", href: "/admin/news", icon: Newspaper },
       { name: "Aftermovie", href: "/admin/aftermovies", icon: Video },
       { name: "Галерея", href: "/admin/gallery", icon: Images },

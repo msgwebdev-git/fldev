@@ -52,7 +52,8 @@
     "organizers": "Contacte organizatori",
     "buyTickets": "Cumpără bilete",
     "toggleMenu": "Deschide meniul",
-    "menu": "Meniu"
+    "menu": "Meniu",
+    "shop": "Magazin"
   },
   "Aftermovie": {
     "badge": "Video Oficial",
@@ -1464,6 +1465,10 @@
     "rules": {
       "title": "Regulile Festivalului",
       "description": "Regulile oficiale ale Festivalului Lupilor 2026. Ce este permis și ce este interzis pe teritoriul festivalului."
+    },
+    "shop": {
+      "title": "Magazin — Merch oficial",
+      "description": "Merch oficial Festivalul Lupilor: tricouri, hanorace și accesorii. Comandă online cu livrare sau ridicare la festival."
     }
   },
   "ResetPassword": {
@@ -1482,5 +1487,127 @@
     "errorGeneric": "A apărut o eroare. Te rugăm să încerci din nou.",
     "successTitle": "Parola a fost schimbată",
     "successBody": "Poți închide această pagină și să te întorci în aplicație. Autentifică-te cu noua parolă."
+  },
+  "Shop": {
+    "badge": "Magazin",
+    "pageTitle": "Merch oficial",
+    "pageSubtitle": "Îmbrăcăminte și accesorii Festivalul Lupilor",
+    "backToHome": "Înapoi acasă",
+    "backToShop": "Înapoi la magazin",
+    "empty": "În curând vor apărea produse",
+    "outOfStock": "Stoc epuizat",
+    "selectSize": "Alege mărimea",
+    "sizeChart": "Ghid mărimi",
+    "lowStock": "Au mai rămas doar {count} buc.",
+    "inCart": "În coș",
+    "addToCart": "Adaugă în coș",
+    "promo": {
+      "title": "Bilet gratuit cadou",
+      "spend": "Comandă merch de {amount} MDL și primești acces gratuit 2 zile la festival",
+      "remaining": "Au mai rămas {count} din {max}",
+      "until": "până pe {date}",
+      "qualified": "Comanda ta se califică — primești biletul cadou 🎁",
+      "addMore": "Mai adaugă {amount} MDL pentru biletul gratuit"
+    },
+    "allCategories": "Toate",
+    "ticketsCta": "Vezi biletele la festival",
+    "related": "Produse similare",
+    "trustPayment": "Plată securizată",
+    "trustDelivery": "Livrare sau ridicare",
+    "color": "Culoare",
+    "inCartCount": "În coș: {count} buc.",
+    "crossBadge": "Festival",
+    "crossTitle": "Nu uita de bilet",
+    "crossText": "Merch + festival — setul perfect. Ia-ți accesul la Festivalul Lupilor."
+  },
+  "ShopCart": {
+    "checkout": "Finalizează",
+    "yourCart": "Coșul tău",
+    "total": "Total",
+    "size": "Mărime",
+    "close": "Închide"
+  },
+  "MerchCheckout": {
+    "backToShop": "Înapoi la magazin",
+    "title": "Finalizează comanda",
+    "subtitle": "Completează datele pentru a-ți primi produsele",
+    "size": "Mărime",
+    "customerInfo": {
+      "title": "Datele tale",
+      "subtitle": "Vom trimite confirmarea pe email",
+      "firstName": "Prenume",
+      "lastName": "Nume",
+      "email": "Email"
+    },
+    "fulfillment": {
+      "title": "Cum primești produsele",
+      "pickup": "Ridicare la festival",
+      "pickupDesc": "Ridici comanda pe teritoriul festivalului",
+      "delivery": "Livrare la adresă",
+      "deliveryDesc": "Îți trimitem comanda prin curier"
+    },
+    "address": {
+      "title": "Adresa de livrare",
+      "address": "Stradă, număr, apartament",
+      "city": "Oraș",
+      "region": "Regiune (opțional)",
+      "postalCode": "Cod poștal (opțional)",
+      "notesPlaceholder": "Note pentru livrare (opțional)"
+    },
+    "orderSummary": {
+      "title": "Comanda ta",
+      "promoCode": "Cod promoțional",
+      "promoPlaceholder": "Introdu codul",
+      "apply": "Aplică",
+      "promoError": "Cod promoțional invalid",
+      "subtotal": "Subtotal",
+      "discount": "Reducere",
+      "shipping": "Livrare",
+      "free": "Gratuit",
+      "total": "Total"
+    },
+    "terms": {
+      "accept": "Sunt de acord cu",
+      "termsLink": "Termenii și condițiile",
+      "and": "și",
+      "privacyLink": "Politica de confidențialitate"
+    },
+    "security": {
+      "secure": "Plată securizată",
+      "encrypted": "Date criptate"
+    },
+    "errors": {
+      "required": "Câmp obligatoriu",
+      "invalidEmail": "Email invalid",
+      "invalidPhone": "Telefon invalid",
+      "acceptTerms": "Acceptă termenii",
+      "orderFailed": "Comanda nu a putut fi creată. Încearcă din nou."
+    },
+    "processing": "Se procesează...",
+    "placeOrder": "Plătește comanda"
+  },
+  "MerchCheckoutSuccess": {
+    "title": "Comandă confirmată!",
+    "subtitle": "Îți mulțumim pentru achiziție",
+    "discount": "Reducere",
+    "shipping": "Livrare",
+    "free": "Gratuit",
+    "total": "Total",
+    "deliveryTitle": "Livrare la adresă",
+    "deliveryDesc": "Îți vom expedia comanda și te vom contacta cu detaliile de livrare.",
+    "pickupTitle": "Ridicare la festival",
+    "pickupDesc": "Prezintă numărul comenzii la standul de merch pe teritoriul festivalului.",
+    "noOrder": "Comanda a fost înregistrată.",
+    "emailSent": "Ți-am trimis confirmarea pe email",
+    "backToShop": "Înapoi la magazin",
+    "backToHome": "Acasă"
+  },
+  "MerchCheckoutFailed": {
+    "title": "Plata nu a reușit",
+    "subtitle": "Comanda ta nu a fost finalizată",
+    "hint": "Nu ți s-a debitat nicio sumă. Poți încerca din nou sau folosi alt card.",
+    "tryAgain": "Încearcă din nou",
+    "backToShop": "Înapoi la magazin",
+    "backToHome": "Acasă"
   }
 }

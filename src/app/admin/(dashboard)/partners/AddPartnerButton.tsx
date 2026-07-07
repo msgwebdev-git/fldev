@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { revalidatePartners } from "./actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -84,6 +85,8 @@ export function AddPartnerButton({ categories }: Props) {
       setIsLoading(false);
       return;
     }
+
+    await revalidatePartners();
 
     setIsLoading(false);
     setOpen(false);

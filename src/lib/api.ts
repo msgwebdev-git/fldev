@@ -64,6 +64,62 @@ interface OrderTicketsResponse {
   error?: string;
 }
 
+interface CreateMerchOrderRequest {
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  items: Array<{
+    productId: string;
+    variantId: string;
+    quantity: number;
+  }>;
+  fulfillmentMethod: 'pickup' | 'delivery';
+  shippingAddress?: {
+    address: string;
+    city: string;
+    region?: string;
+    postalCode?: string;
+    notes?: string;
+  };
+  promoCode?: string;
+  language: 'ro' | 'ru';
+}
+
+interface CreateMerchOrderResponse {
+  success: boolean;
+  data?: {
+    orderId: string;
+    orderNumber: string;
+    redirectUrl: string;
+  };
+  error?: string;
+}
+
+interface MerchOrderStatusResponse {
+  success: boolean;
+  data?: {
+    orderNumber: string;
+    status: string;
+    paymentStatus: string;
+    fulfillmentMethod: 'pickup' | 'delivery';
+    fulfillmentStatus: string;
+    subtotalAmount: number;
+    shippingAmount: number;
+    discountAmount: number;
+    totalAmount: number;
+    items: Array<{
+      productName: string;
+      size: string;
+      quantity: number;
+      totalPrice: number;
+    }>;
+  };
+  error?: string;
+}
+
 export const api = {
   // Create order and get payment redirect URL
   async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
@@ -106,6 +162,22 @@ export const api = {
   // Get download URL for all tickets as ZIP
   getTicketsDownloadUrl(orderNumber: string): string {
     return `${API_URL}/api/checkout/tickets/${orderNumber}/download`;
+  },
+
+  // Create merch order and get payment redirect URL
+  async createMerchOrder(data: CreateMerchOrderRequest): Promise<CreateMerchOrderResponse> {
+    const response = await fetch(`${API_URL}/api/merch/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+
+  // Get merch order status
+  async getMerchOrderStatus(orderNumber: string): Promise<MerchOrderStatusResponse> {
+    const response = await fetch(`${API_URL}/api/merch/status/${orderNumber}`);
+    return response.json();
   },
 
   // Health check

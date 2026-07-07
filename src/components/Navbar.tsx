@@ -75,7 +75,7 @@ function MenuToggle({
   );
 }
 
-export function Navbar() {
+export function Navbar({ shopEnabled = false }: { shopEnabled?: boolean }) {
   const t = useTranslations("Navbar");
   const locale = useLocale();
   const pathname = usePathname();
@@ -87,6 +87,7 @@ export function Navbar() {
     { href: "/about", label: t("about") },
     { href: "/program", label: t("program") },
     { href: "/tickets", label: t("buyTickets") },
+    ...(shopEnabled ? [{ href: "/shop", label: t("shop") }] : []),
   ];
 
   const secondaryItems = [
@@ -104,6 +105,7 @@ export function Navbar() {
     { href: "/lineup", label: t("lineup") },
     { href: "/about", label: t("about") },
     { href: "/program", label: t("program") },
+    ...(shopEnabled ? [{ href: "/shop", label: t("shop") }] : []),
     { href: "/partners", label: t("partners") },
     { href: "/contacts", label: t("contacts") },
   ];

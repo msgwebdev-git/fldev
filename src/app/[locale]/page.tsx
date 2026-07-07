@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/HeroSection";
+import { StoriesSection } from "@/components/stories/StoriesSection";
 import { TicketsSection } from "@/components/TicketsSection";
 import { AftermovieSection } from "@/components/AftermovieSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -43,6 +44,7 @@ export default async function Home({ params }: Props) {
     <>
       <JsonLd data={eventSchema} />
       <HeroSection />
+      <StoriesSection />
       <TicketsSection tickets={tickets} />
       <AftermovieSection />
       <GallerySection />
