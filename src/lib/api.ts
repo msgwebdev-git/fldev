@@ -15,6 +15,8 @@ interface CreateOrderRequest {
   }>;
   promoCode?: string;
   language: 'ro' | 'ru';
+  /** First-touch UTM captured client-side — stored on the order for source attribution. */
+  utm?: Record<string, string>;
 }
 
 interface CreateOrderResponse {

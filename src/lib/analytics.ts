@@ -72,6 +72,15 @@ function firstTouchUtm(): Record<string, string> {
   }
 }
 
+/**
+ * First-touch UTM of the current session — attached to the order at checkout
+ * so PAID orders carry their acquisition source (ground truth for the
+ * /admin/traffic dashboard, immune to ad-blockers dropping purchase events).
+ */
+export function getFirstTouchUtm(): Record<string, string> {
+  return firstTouchUtm();
+}
+
 function flTrack(eventType: string, payload: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
   try {

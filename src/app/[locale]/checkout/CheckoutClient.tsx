@@ -52,7 +52,7 @@ import {
 import { PhoneInput } from "@/components/ui/phone-input";
 import { useCart } from "@/context/CartContext";
 import { api } from "@/lib/api";
-import { trackInitiateCheckout } from "@/lib/analytics";
+import { trackInitiateCheckout, getFirstTouchUtm } from "@/lib/analytics";
 import { useLocale } from "next-intl";
 
 // Form validation
@@ -216,6 +216,7 @@ export default function CheckoutPage() {
         items: orderItems,
         promoCode: promoApplied?.code,
         language: locale,
+        utm: getFirstTouchUtm(),
       });
 
       if (result.success && result.data) {
