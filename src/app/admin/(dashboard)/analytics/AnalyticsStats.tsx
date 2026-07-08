@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, DollarSign, Ticket, TrendingUp, Globe, Smartphone } from "lucide-react";
+import { ShoppingCart, DollarSign, Ticket, TrendingUp, Globe, Smartphone, PenLine, type LucideIcon } from "lucide-react";
 
 interface SourceData {
   orders: number;
@@ -18,6 +18,7 @@ interface AnalyticsStatsProps {
   sourceStats: {
     web: SourceData;
     app: SourceData;
+    manual: SourceData;
   };
 }
 
@@ -49,9 +50,14 @@ export function AnalyticsStats({ totals, sourceStats }: AnalyticsStatsProps) {
     },
   ];
 
-  const hasAppOrders = sourceStats.app.orders > 0;
-  const appPct = totals.totalOrders > 0 ? Math.round((sourceStats.app.orders / totals.totalOrders) * 100) : 0;
-  const webPct = 100 - appPct;
+  const pct = (n: number) =>
+    totals.totalOrders > 0 ? Math.round((n / totals.totalOrders) * 100) : 0;
+
+  const sources: Array<{ key: string; title: string; icon: LucideIcon; iconCls: string; borderCls: string; data: SourceData }> = [
+    { key: "web", title: "Сайт", icon: Globe, iconCls: "text-blue-600", borderCls: "border-gray-200", data: sourceStats.web },
+    { key: "app", title: "Приложение", icon: Smartphone, iconCls: "text-indigo-600", borderCls: "border-indigo-200", data: sourceStats.app },
+    { key: "manual", title: "Вручную", icon: PenLine, iconCls: "text-amber-600", borderCls: "border-gray-200", data: sourceStats.manual },
+  ].filter((s) => s.data.orders > 0);
 
   return (
     <div className="space-y-4">
@@ -75,52 +81,32 @@ export function AnalyticsStats({ totals, sourceStats }: AnalyticsStatsProps) {
         ))}
       </div>
 
-      {/* Source breakdown: Site vs App */}
-      {hasAppOrders && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <Globe className="w-5 h-5 text-blue-600" />
-              <span className="font-semibold text-gray-900">Сайт</span>
-              <span className="ml-auto text-sm text-gray-400">{webPct}%</span>
-            </div>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{sourceStats.web.orders}</p>
-                <p className="text-xs text-gray-500">заказов</p>
+      {/* Source breakdown — non-overlapping: Сайт + Приложение + Вручную = totals */}
+      {sources.length > 1 && (
+        <div className={`grid grid-cols-1 gap-4 ${sources.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3"}`}>
+          {sources.map((s) => (
+            <div key={s.key} className={`bg-white rounded-xl border ${s.borderCls} p-5`}>
+              <div className="flex items-center gap-3 mb-4">
+                <s.icon className={`w-5 h-5 ${s.iconCls}`} />
+                <span className="font-semibold text-gray-900">{s.title}</span>
+                <span className="ml-auto text-sm text-gray-400">{pct(s.data.orders)}%</span>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{sourceStats.web.tickets}</p>
-                <p className="text-xs text-gray-500">билетов</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-green-600">{sourceStats.web.revenue.toLocaleString("ru-RU")}</p>
-                <p className="text-xs text-gray-500">MDL</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-indigo-200 p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <Smartphone className="w-5 h-5 text-indigo-600" />
-              <span className="font-semibold text-gray-900">Приложение</span>
-              <span className="ml-auto text-sm text-indigo-500">{appPct}%</span>
-            </div>
-            <div className="grid grid-cols-3 gap-4 text-center">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{sourceStats.app.orders}</p>
-                <p className="text-xs text-gray-500">заказов</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">{sourceStats.app.tickets}</p>
-                <p className="text-xs text-gray-500">билетов</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-green-600">{sourceStats.app.revenue.toLocaleString("ru-RU")}</p>
-                <p className="text-xs text-gray-500">MDL</p>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{s.data.orders}</p>
+                  <p className="text-xs text-gray-500">заказов</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-gray-900">{s.data.tickets}</p>
+                  <p className="text-xs text-gray-500">билетов</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-green-600">{s.data.revenue.toLocaleString("ru-RU")}</p>
+                  <p className="text-xs text-gray-500">MDL</p>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       )}
     </div>

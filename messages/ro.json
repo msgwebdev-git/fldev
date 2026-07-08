@@ -53,7 +53,8 @@
     "buyTickets": "Cumpără bilete",
     "toggleMenu": "Deschide meniul",
     "menu": "Meniu",
-    "shop": "Magazin"
+    "shop": "Magazin",
+    "bus": "Autobuz"
   },
   "Aftermovie": {
     "badge": "Video Oficial",
@@ -1469,6 +1470,10 @@
     "shop": {
       "title": "Magazin — Merch oficial",
       "description": "Merch oficial Festivalul Lupilor: tricouri, hanorace și accesorii. Comandă online cu livrare sau ridicare la festival."
+    },
+    "bus": {
+      "title": "Autobuz spre festival",
+      "description": "Transfer dus-întors Chișinău ↔ Festivalul Lupilor, 8 și 9 august. Rezervă-ți locul în autobuz."
     }
   },
   "ResetPassword": {
@@ -1608,6 +1613,62 @@
     "hint": "Nu ți s-a debitat nicio sumă. Poți încerca din nou sau folosi alt card.",
     "tryAgain": "Încearcă din nou",
     "backToShop": "Înapoi la magazin",
+    "backToHome": "Acasă"
+  },
+  "Bus": {
+    "backToHome": "Înapoi acasă",
+    "badge": "Transfer",
+    "title": "Autobuz spre festival",
+    "subtitle": "Bilet dus-întors Chișinău ↔ Festival",
+    "selectDates": "Alege datele",
+    "roundTripNote": "Prețul include dus și întors (tur + retur)",
+    "cardDepart": "Tur de la",
+    "cardReturn": "Retur până la",
+    "scheduleTitle": "Cum circulă autobuzele",
+    "scheduleNote": "Autobuzele pleacă pe măsură ce se umplu: de îndată ce un autobuz e plin, pleacă și imediat se încarcă următorul. Prima cursă — la 12:00, ultimul retur — la 00:30.",
+    "noDates": "Momentan nu sunt curse disponibile",
+    "soldOut": "Locuri epuizate",
+    "seatsLeft": "{count} locuri libere",
+    "passengers": "Pasageri",
+    "passengersHint": "câte un bilet dus-întors pentru fiecare",
+    "customerInfo": "Datele tale",
+    "firstName": "Prenume",
+    "lastName": "Nume",
+    "total": "Total",
+    "processing": "Se procesează...",
+    "pay": "Plătește",
+    "secure": "Plată securizată",
+    "encrypted": "Date criptate",
+    "terms": {
+      "accept": "Sunt de acord cu",
+      "termsLink": "Termenii",
+      "and": "și",
+      "privacyLink": "Politica de confidențialitate"
+    },
+    "errors": {
+      "selectDate": "Alege cel puțin o dată",
+      "required": "Câmp obligatoriu",
+      "invalidEmail": "Email invalid",
+      "invalidPhone": "Telefon invalid",
+      "acceptTerms": "Acceptă termenii",
+      "orderFailed": "Comanda nu a putut fi creată. Încearcă din nou."
+    },
+    "orderSummary": "Comanda ta",
+    "emptySummary": "Alege o dată"
+  },
+  "BusSuccess": {
+    "title": "Bilete confirmate!",
+    "subtitle": "Îți mulțumim pentru achiziție",
+    "total": "Total",
+    "noOrder": "Comanda a fost înregistrată.",
+    "emailSent": "Biletele cu QR (PDF) au fost trimise pe email",
+    "backToHome": "Acasă"
+  },
+  "BusFailed": {
+    "title": "Plata nu a reușit",
+    "subtitle": "Comanda ta nu a fost finalizată",
+    "hint": "Nu ți s-a debitat nicio sumă. Poți încerca din nou.",
+    "tryAgain": "Încearcă din nou",
     "backToHome": "Acasă"
   }
 }

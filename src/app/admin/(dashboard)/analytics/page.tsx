@@ -34,6 +34,7 @@ async function getSalesData(): Promise<{
   sourceStats: {
     web: { orders: number; revenue: number; tickets: number };
     app: { orders: number; revenue: number; tickets: number };
+    manual: { orders: number; revenue: number; tickets: number };
   };
 }> {
   const supabase = await createClient();
@@ -74,11 +75,17 @@ async function getSalesData(): Promise<{
         .in("order_id", paidOrderIds)
     : { data: [] };
 
-  // Process daily sales
+  // Process daily sales.
+  // Bucket by Europe/Chisinau calendar day — created_at is UTC, and
+  // toISOString() would put a 01:30 local-night sale on the previous day.
+  // ("sv-SE" locale formats as YYYY-MM-DD.)
+  const chisinauDay = (iso: string) =>
+    new Date(iso).toLocaleDateString("sv-SE", { timeZone: "Europe/Chisinau" });
+
   const dailyMap = new Map<string, DailySales>();
 
   orders?.forEach((order) => {
-    const date = new Date(order.created_at).toISOString().split("T")[0];
+    const date = chisinauDay(order.created_at);
     const revenue = Number(order.total_amount) - Number(order.discount_amount || 0);
 
     if (!dailyMap.has(date)) {
@@ -93,8 +100,7 @@ async function getSalesData(): Promise<{
   // Count tickets per day
   const orderIdToDate = new Map<string, string>();
   orders?.forEach((order) => {
-    const date = new Date(order.created_at).toISOString().split("T")[0];
-    orderIdToDate.set(order.id, date);
+    orderIdToDate.set(order.id, chisinauDay(order.created_at));
   });
 
   orderItems?.forEach((item) => {
@@ -130,23 +136,23 @@ async function getSalesData(): Promise<{
   const totalTickets = orderItems?.reduce((sum, i) => sum + i.quantity, 0) || 0;
   const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0;
 
-  // Stats by source (site vs app)
-  const webOrders = orders?.filter((o) => o.source !== "app") || [];
-  const appOrders = orders?.filter((o) => o.source === "app") || [];
-  const webOrderIds = new Set(webOrders.map((o) => o.id));
-  const appOrderIds = new Set(appOrders.map((o) => o.id));
+  // Stats by source — explicit, non-overlapping categories matching the
+  // orders-page type filter: Сайт = online, Приложение = app,
+  // Вручную = manual/offline. Site + App + Manual = totals exactly.
+  const bySource = (pred: (src: string | null) => boolean) => {
+    const subset = orders?.filter((o) => pred(o.source)) || [];
+    const idSet = new Set(subset.map((o) => o.id));
+    return {
+      orders: subset.length,
+      revenue: subset.reduce((s, o) => s + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
+      tickets: orderItems?.filter((i) => idSet.has(i.order_id)).reduce((s, i) => s + i.quantity, 0) || 0,
+    };
+  };
 
   const sourceStats = {
-    web: {
-      orders: webOrders.length,
-      revenue: webOrders.reduce((s, o) => s + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
-      tickets: orderItems?.filter((i) => webOrderIds.has(i.order_id)).reduce((s, i) => s + i.quantity, 0) || 0,
-    },
-    app: {
-      orders: appOrders.length,
-      revenue: appOrders.reduce((s, o) => s + (Number(o.total_amount) - Number(o.discount_amount || 0)), 0),
-      tickets: orderItems?.filter((i) => appOrderIds.has(i.order_id)).reduce((s, i) => s + i.quantity, 0) || 0,
-    },
+    web: bySource((src) => src === "online" || !src),
+    app: bySource((src) => src === "app"),
+    manual: bySource((src) => src === "manual" || src === "offline"),
   };
 
   // Sort and format data

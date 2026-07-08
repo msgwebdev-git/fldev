@@ -120,6 +120,46 @@ interface MerchOrderStatusResponse {
   error?: string;
 }
 
+interface CreateBusOrderRequest {
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  busDateIds: string[];
+  passengers: number;
+  promoCode?: string;
+  language: 'ro' | 'ru';
+}
+
+interface CreateBusOrderResponse {
+  success: boolean;
+  data?: {
+    orderId: string;
+    orderNumber: string;
+    redirectUrl: string;
+  };
+  error?: string;
+}
+
+interface BusOrderStatusResponse {
+  success: boolean;
+  data?: {
+    orderNumber: string;
+    status: string;
+    paymentStatus: string;
+    passengers: number;
+    totalAmount: number;
+    tickets: Array<{
+      travelDate: string;
+      direction: 'tur' | 'retur';
+      ticketCode: string;
+    }>;
+  };
+  error?: string;
+}
+
 export const api = {
   // Create order and get payment redirect URL
   async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
@@ -177,6 +217,22 @@ export const api = {
   // Get merch order status
   async getMerchOrderStatus(orderNumber: string): Promise<MerchOrderStatusResponse> {
     const response = await fetch(`${API_URL}/api/merch/status/${orderNumber}`);
+    return response.json();
+  },
+
+  // Create bus transfer order and get payment redirect URL
+  async createBusOrder(data: CreateBusOrderRequest): Promise<CreateBusOrderResponse> {
+    const response = await fetch(`${API_URL}/api/bus/create-order`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  },
+
+  // Get bus order status
+  async getBusOrderStatus(orderNumber: string): Promise<BusOrderStatusResponse> {
+    const response = await fetch(`${API_URL}/api/bus/status/${orderNumber}`);
     return response.json();
   },
 

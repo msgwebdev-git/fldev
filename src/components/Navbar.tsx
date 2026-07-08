@@ -75,7 +75,7 @@ function MenuToggle({
   );
 }
 
-export function Navbar({ shopEnabled = false }: { shopEnabled?: boolean }) {
+export function Navbar({ shopEnabled = false, busEnabled = true }: { shopEnabled?: boolean; busEnabled?: boolean }) {
   const t = useTranslations("Navbar");
   const locale = useLocale();
   const pathname = usePathname();
@@ -94,6 +94,7 @@ export function Navbar({ shopEnabled = false }: { shopEnabled?: boolean }) {
     { href: "/partners", label: t("partners") },
     { href: "/contacts", label: t("contacts") },
     { href: "/how-to-get", label: t("howToGet") },
+    ...(busEnabled ? [{ href: "/bus", label: t("bus") }] : []),
     { href: "/activities", label: t("activities") },
     { href: "/b2b", label: t("b2b") },
     { href: "/rules", label: t("rules") },
@@ -112,6 +113,7 @@ export function Navbar({ shopEnabled = false }: { shopEnabled?: boolean }) {
 
   const moreItems = [
     { href: "/how-to-get", label: t("howToGet") },
+    ...(busEnabled ? [{ href: "/bus", label: t("bus") }] : []),
     { href: "/activities", label: t("activities") },
     { href: "/b2b", label: t("b2b") },
     { href: "/rules", label: t("rules") },

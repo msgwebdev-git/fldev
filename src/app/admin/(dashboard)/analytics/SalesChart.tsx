@@ -56,6 +56,17 @@ const periodLabels: Record<Period, string> = {
   "all": "Все время",
 };
 
+// Parse "YYYY-MM-DD" as LOCAL midnight — new Date("YYYY-MM-DD") is UTC
+// midnight and mixing it with local getDay()/getDate() shifts buckets.
+function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
+function localKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
   return new Intl.DateTimeFormat("ru-RU", {
@@ -103,41 +114,36 @@ export function SalesChart({ data }: SalesChartProps) {
   const [chartType, setChartType] = useState<ChartType>("area");
   const [period, setPeriod] = useState<Period>("30d");
 
-  // Filter and aggregate data based on period
+  // Filter and aggregate data based on period.
+  // Grouping follows the SELECTED RANGE (7/30 days = daily, 3 months = weekly,
+  // 1y/all = monthly) — never the number of sale-days, which used to collapse
+  // "30 дней" into 5 weekly points. Daily views are zero-filled so days
+  // without sales show as real dips instead of being skipped.
   const { chartData, groupingLabel } = useMemo(() => {
-    const now = new Date();
-    let cutoffDate: Date | null = null;
-
-    switch (period) {
-      case "7d":
-        cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
-      case "30d":
-        cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        break;
-      case "90d":
-        cutoffDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-        break;
-      case "1y":
-        cutoffDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        cutoffDate = null;
+    if (period === "7d" || period === "30d") {
+      const daysBack = period === "7d" ? 7 : 30;
+      const byDate = new Map(data.map((d) => [d.date, d]));
+      const days: DailySales[] = [];
+      const now = new Date();
+      for (let i = daysBack - 1; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const key = localKey(d);
+        days.push(byDate.get(key) ?? { date: key, orders: 0, revenue: 0, tickets: 0 });
+      }
+      return { chartData: days, groupingLabel: "по дням" };
     }
 
-    // Filter by period
-    const filtered = cutoffDate
-      ? data.filter((d) => new Date(d.date) >= cutoffDate!)
-      : data;
-
-    // Determine grouping based on data length
-    if (filtered.length <= 14) {
-      return { chartData: filtered, groupingLabel: "по дням" };
-    } else if (filtered.length <= 90) {
+    if (period === "90d") {
+      const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+      const filtered = data.filter((d) => parseLocalDate(d.date) >= cutoff);
       return { chartData: aggregateByWeek(filtered), groupingLabel: "по неделям" };
-    } else {
-      return { chartData: aggregateByMonth(filtered), groupingLabel: "по месяцам" };
     }
+
+    const filtered =
+      period === "1y"
+        ? data.filter((d) => parseLocalDate(d.date) >= new Date(Date.now() - 365 * 24 * 60 * 60 * 1000))
+        : data;
+    return { chartData: aggregateByMonth(filtered), groupingLabel: "по месяцам" };
   }, [data, period]);
 
   if (data.length === 0) {
@@ -240,7 +246,7 @@ export function SalesChart({ data }: SalesChartProps) {
               />
               <Tooltip content={<CustomTooltip />} />
               <Area
-                type="monotone"
+                type="linear"
                 dataKey={viewMode}
                 stroke={viewModeColors[viewMode]}
                 strokeWidth={2}
@@ -293,13 +299,13 @@ function aggregateByWeek(data: DailySales[]): DailySales[] {
   const weekMap = new Map<string, DailySales>();
 
   data.forEach((day) => {
-    const date = new Date(day.date);
-    // Get Monday of the week
+    const date = parseLocalDate(day.date);
+    // Get Monday of the week (all-local math — no UTC/local mixing)
     const dayOfWeek = date.getDay();
     const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
     const monday = new Date(date);
     monday.setDate(diff);
-    const weekKey = monday.toISOString().split("T")[0];
+    const weekKey = localKey(monday);
 
     if (!weekMap.has(weekKey)) {
       weekMap.set(weekKey, { date: weekKey, orders: 0, revenue: 0, tickets: 0 });
@@ -321,7 +327,7 @@ function aggregateByMonth(data: DailySales[]): DailySales[] {
   const monthMap = new Map<string, DailySales>();
 
   data.forEach((day) => {
-    const date = new Date(day.date);
+    const date = parseLocalDate(day.date);
     // First day of the month
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-01`;
 

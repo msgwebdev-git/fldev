@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMerchShopEnabled } from "@/lib/data/merch";
+import { getBusEnabled } from "@/lib/data/bus";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
@@ -106,7 +107,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   // the correct messages at build time instead of falling back to defaultLocale.
   setRequestLocale(locale);
 
-  const shopEnabled = await getMerchShopEnabled();
+  const [shopEnabled, busEnabled] = await Promise.all([getMerchShopEnabled(), getBusEnabled()]);
 
   return (
     <html lang={locale}>
@@ -122,7 +123,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <ConsentProvider>
             <CartProvider>
               <MerchCartProvider>
-                <Navbar shopEnabled={shopEnabled} />
+                <Navbar shopEnabled={shopEnabled} busEnabled={busEnabled} />
                 <main>{children}</main>
                 <Footer />
                 <TicketCartBar />

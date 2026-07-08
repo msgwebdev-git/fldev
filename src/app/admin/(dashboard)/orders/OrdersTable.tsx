@@ -129,8 +129,15 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         return { from: monthAgo, to: new Date(today.getTime() + 24 * 60 * 60 * 1000) };
       }
       case "custom": {
-        const from = customDateFrom ? new Date(customDateFrom) : null;
-        const to = customDateTo ? new Date(new Date(customDateTo).getTime() + 24 * 60 * 60 * 1000) : null;
+        // Parse as LOCAL midnight — new Date("YYYY-MM-DD") would be UTC midnight,
+        // which is inconsistent with the today/week/month presets above and
+        // shifts boundaries by the timezone offset.
+        const parseLocal = (iso: string) => {
+          const [y, m, d] = iso.split("-").map(Number);
+          return new Date(y, (m || 1) - 1, d || 1);
+        };
+        const from = customDateFrom ? parseLocal(customDateFrom) : null;
+        const to = customDateTo ? new Date(parseLocal(customDateTo).getTime() + 24 * 60 * 60 * 1000) : null;
         return { from, to };
       }
       default:
@@ -141,7 +148,9 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   const filteredOrders = React.useMemo(() => {
     let result = orders;
 
-    // Filter by type
+    // Filter by type — explicit source mapping, consistent with analytics:
+    // Сайт = online, Приложение = app, Вручную = manual/offline,
+    // Продажи = everything except free invitations/giveaways.
     if (typeFilter !== "all") {
       if (typeFilter === "invitation") {
         result = result.filter((order) => order.source === "invitation");
@@ -149,8 +158,12 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         result = result.filter((order) => order.source === "giveaway");
       } else if (typeFilter === "manual") {
         result = result.filter((order) => order.source === "manual" || order.source === "offline");
+      } else if (typeFilter === "app") {
+        result = result.filter((order) => order.source === "app");
       } else if (typeFilter === "order") {
         result = result.filter((order) => order.source === "online" || !order.source);
+      } else if (typeFilter === "sales") {
+        result = result.filter((order) => order.source !== "invitation" && order.source !== "giveaway");
       }
     }
 
@@ -181,6 +194,32 @@ export function OrdersTable({ orders }: OrdersTableProps) {
 
     return result;
   }, [orders, statusFilter, typeFilter, dateFilter, getDateRange, globalFilter]);
+
+  // Live aggregates over the FILTERED set — react to every filter incl. date range.
+  // "Продано билетов" = paid SALES only (online/offline/manual/app), matching the
+  // analytics page. Free tickets (invitations/giveaways with status paid) are
+  // shown separately — they are given away, not sold.
+  const filteredSummary = React.useMemo(() => {
+    let paidOrders = 0;
+    let paidTickets = 0;
+    let paidRevenue = 0;
+    let freeTickets = 0;
+    let allTickets = 0;
+    for (const order of filteredOrders) {
+      const qty = (order.items || []).reduce((s, i) => s + i.quantity, 0);
+      allTickets += qty;
+      if (order.status !== "paid") continue;
+      const isFree = order.source === "invitation" || order.source === "giveaway";
+      if (isFree) {
+        freeTickets += qty;
+      } else {
+        paidOrders += 1;
+        paidTickets += qty;
+        paidRevenue += Number(order.total_amount) - Number(order.discount_amount || 0);
+      }
+    }
+    return { orders: filteredOrders.length, paidOrders, paidTickets, paidRevenue, freeTickets, allTickets };
+  }, [filteredOrders]);
 
   const columns: ColumnDef<OrderData>[] = [
     {
@@ -421,8 +460,12 @@ export function OrdersTable({ orders }: OrdersTableProps) {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Все</SelectItem>
-                <SelectItem value="order">Заказы</SelectItem>
+                <SelectItem value="sales">Продажи (все)</SelectItem>
+                <SelectItem value="order">Сайт</SelectItem>
+                <SelectItem value="app">Приложение</SelectItem>
+                <SelectItem value="manual">Вручную</SelectItem>
                 <SelectItem value="invitation">Приглашения</SelectItem>
+                <SelectItem value="giveaway">Розыгрыши</SelectItem>
               </SelectContent>
             </Select>
 
@@ -503,7 +546,14 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             )}
             {typeFilter !== "all" && (
               <Badge variant="secondary" className="gap-1">
-                Тип: {typeFilter === "invitation" ? "Приглашения" : "Заказы"}
+                Тип: {{
+                  sales: "Продажи (все)",
+                  order: "Сайт",
+                  app: "Приложение",
+                  manual: "Вручную",
+                  invitation: "Приглашения",
+                  giveaway: "Розыгрыши",
+                }[typeFilter] ?? typeFilter}
                 <button onClick={() => setTypeFilter("all")}>
                   <X className="h-3 w-3" />
                 </button>
@@ -547,6 +597,28 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Summary over the filtered set (reacts to date range, status, search) */}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-gray-100 bg-gray-50/60 px-4 py-3 text-sm">
+        <div>
+          <span className="text-gray-500">Продано билетов: </span>
+          <span className="font-bold text-gray-900">{filteredSummary.paidTickets} шт.</span>
+          {filteredSummary.freeTickets > 0 && (
+            <span className="ml-1 text-xs text-gray-400">(+{filteredSummary.freeTickets} беспл.)</span>
+          )}
+        </div>
+        <div>
+          <span className="text-gray-500">Оплаченных заказов: </span>
+          <span className="font-semibold text-gray-900">{filteredSummary.paidOrders}</span>
+          {filteredSummary.orders !== filteredSummary.paidOrders && (
+            <span className="ml-1 text-xs text-gray-400">из {filteredSummary.orders}</span>
+          )}
+        </div>
+        <div>
+          <span className="text-gray-500">Выручка: </span>
+          <span className="font-semibold text-gray-900">{filteredSummary.paidRevenue.toLocaleString("ru-RU")} MDL</span>
+        </div>
       </div>
 
       {/* Table */}

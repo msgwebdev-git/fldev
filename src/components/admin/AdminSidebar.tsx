@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft, Inbox, ShoppingBag, Package, Tag, Film } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Video, Newspaper, Music, Calendar, Handshake, Sparkles, Ticket, BarChart3, ShoppingCart, Gift, TrendingUp, Percent, ChevronDown, Phone, Briefcase, Images, HelpCircle, ShieldCheck, ScanLine, Bell, ToggleLeft, Inbox, ShoppingBag, Package, Tag, Film, Bus, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -31,6 +31,7 @@ const navigation: NavElement[] = [
       { name: "Билеты", href: "/admin/tickets", icon: Ticket },
       { name: "Приглашения", href: "/admin/invitations", icon: Gift },
       { name: "Промо-коды", href: "/admin/promo-codes", icon: Percent },
+      { name: "Автобус", href: "/admin/bus", icon: Bus },
       { name: "Сканирование", href: "/admin/scanning", icon: ScanLine },
     ]
   },
@@ -82,6 +83,7 @@ const navigation: NavElement[] = [
     items: [
       { name: "Маркетинг", href: "/admin/settings/marketing", icon: BarChart3 },
       { name: "Секции", href: "/admin/settings/sections", icon: ToggleLeft },
+      { name: "Команда", href: "/admin/team", icon: Users },
     ]
   },
 ];
