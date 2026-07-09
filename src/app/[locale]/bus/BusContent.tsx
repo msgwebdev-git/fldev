@@ -205,7 +205,7 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                           transition={{ delay: 0.04 * i }}
                           whileTap={{ scale: 0.98 }}
                           className={`group relative overflow-hidden rounded-2xl border-2 p-4 text-left transition-all ${
-                            isSel ? "border-primary bg-primary/[0.06]" : "border-border hover:border-primary/40"
+                            isSel ? "border-primary" : "border-border hover:border-primary/40"
                           } ${soldOut ? "cursor-not-allowed opacity-45" : ""}`}
                         >
                           <div className="flex items-start justify-between">
