@@ -8,6 +8,7 @@ interface CacheStatus {
   totalTickets: number;
   regular: { total: number; checkedIn: number };
   b2b: { total: number; checkedIn: number };
+  bus?: { total: number; checkedIn: number }; // optional: old server builds don't send it
   pendingWrites: number;
 }
 
@@ -88,7 +89,7 @@ export function TicketCacheStatus() {
 
   if (!status) return null;
 
-  const totalCheckedIn = status.regular.checkedIn + status.b2b.checkedIn;
+  const totalCheckedIn = status.regular.checkedIn + status.b2b.checkedIn + (status.bus?.checkedIn ?? 0);
   const checkinPercent = status.totalTickets > 0
     ? Math.round((totalCheckedIn / status.totalTickets) * 100)
     : 0;
@@ -156,8 +157,11 @@ export function TicketCacheStatus() {
 
       {/* Details */}
       <div className="mt-3 flex items-center justify-between text-xs text-gray-400">
-        <span>Обычные: {status.regular.checkedIn}/{status.regular.total}</span>
+        <span>Фестиваль: {status.regular.checkedIn}/{status.regular.total}</span>
         <span>B2B: {status.b2b.checkedIn}/{status.b2b.total}</span>
+        {status.bus && status.bus.total > 0 && (
+          <span>Автобус: {status.bus.checkedIn}/{status.bus.total}</span>
+        )}
         {status.pendingWrites > 0 && (
           <span className="flex items-center gap-1 text-yellow-500">
             <Wifi className="w-3 h-3" />
