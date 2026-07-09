@@ -30,8 +30,10 @@ export default async function BusOrderDetailPage({ params }: Props) {
     id: string; travel_date: string; direction: "tur" | "retur";
     passenger_index: number; ticket_code: string; checked_in_at: string | null; checked_in_by: string | null;
   }>;
+  // Travel order: tur (there) before retur (back) — not alphabetical (retur < tur).
+  const dirRank: Record<string, number> = { tur: 0, retur: 1 };
   tickets.sort((a, b) =>
-    a.travel_date.localeCompare(b.travel_date) || a.passenger_index - b.passenger_index || a.direction.localeCompare(b.direction)
+    a.travel_date.localeCompare(b.travel_date) || a.passenger_index - b.passenger_index || (dirRank[a.direction] ?? 9) - (dirRank[b.direction] ?? 9)
   );
 
   return (

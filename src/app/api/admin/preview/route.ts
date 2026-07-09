@@ -10,8 +10,8 @@ import { requireAdmin } from "@/lib/auth/require-admin";
  * caching for regular visitors is untouched — only the cookie holder gets
  * per-request dynamic rendering where the visibility guard lets them through.
  *
- *   GET /api/admin/preview?path=/ru/bus   → enable + redirect
- *   GET /api/admin/preview?off=1&path=/ru → disable + redirect
+ *   GET /api/admin/preview?path=/ro/bus   → enable + redirect
+ *   GET /api/admin/preview?off=1&path=/ro → disable + redirect
  */
 export async function GET(req: NextRequest) {
   const { isAdmin } = await requireAdmin();

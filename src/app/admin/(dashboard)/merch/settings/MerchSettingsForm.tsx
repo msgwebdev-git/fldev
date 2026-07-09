@@ -111,7 +111,7 @@ export function MerchSettingsForm({ initial }: { initial: MerchSettingsInput }) 
           </label>
           {!form.shopEnabled && (
             <Button variant="outline" size="sm" asChild>
-              <a href="/api/admin/preview?path=/ru/shop" target="_blank" rel="noopener">
+              <a href="/api/admin/preview?path=/ro/shop" target="_blank" rel="noopener">
                 <Eye className="mr-2 h-4 w-4" />
                 Предпросмотр скрытого магазина
               </a>

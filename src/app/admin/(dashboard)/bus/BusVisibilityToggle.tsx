@@ -46,7 +46,7 @@ export function BusVisibilityToggle({ initialEnabled }: { initialEnabled: boolea
         </label>
         {!enabled && (
           <Button variant="outline" size="sm" asChild>
-            <a href="/api/admin/preview?path=/ru/bus" target="_blank" rel="noopener">
+            <a href="/api/admin/preview?path=/ro/bus" target="_blank" rel="noopener">
               <Eye className="mr-2 h-4 w-4" />
               Предпросмотр скрытой страницы
             </a>
