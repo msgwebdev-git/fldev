@@ -149,8 +149,10 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
       </section>
 
       {/* ── Boarding pass ──────────────────────────────── */}
-      <div className="container mx-auto max-w-5xl px-4">
-        <form onSubmit={handleSubmit} className="relative -mt-20 mb-20">
+      {/* pb-20 here (not mb-20 on the form): a bottom MARGIN on the last child
+          collapses through <main> and lets the white body show as a strip. */}
+      <div className="container mx-auto max-w-5xl px-4 pb-20">
+        <form onSubmit={handleSubmit} className="relative -mt-20">
           <div className="relative overflow-hidden rounded-[1.75rem] bg-card shadow-[0_40px_100px_-40px_rgba(0,0,0,0.5)] lg:grid lg:grid-cols-[1fr_23rem]">
             {/* ── Left: trip + passenger ─────────────── */}
             <div className="p-6 md:p-8 lg:p-10">
