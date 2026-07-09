@@ -32,6 +32,7 @@ const navigation: NavElement[] = [
       { name: "Приглашения", href: "/admin/invitations", icon: Gift },
       { name: "Промо-коды", href: "/admin/promo-codes", icon: Percent },
       { name: "Автобус", href: "/admin/bus", icon: Bus },
+      { name: "Заказы автобуса", href: "/admin/bus/orders", icon: Package },
       { name: "Сканирование", href: "/admin/scanning", icon: ScanLine },
     ]
   },
@@ -93,6 +94,25 @@ const allCategories = navigation
   .filter((item): item is NavCategory => "category" in item)
   .map((cat) => cat.category);
 
+// Collect every nav href once, so active-matching can pick the MOST SPECIFIC
+// one. Without this, `/admin/bus/orders` matches both `/admin/bus` and
+// `/admin/bus/orders` (prefix match) and highlights two items.
+const allHrefs = navigation.flatMap((item) =>
+  "category" in item ? item.items.map((i) => i.href) : [item.href]
+);
+
+// The single href that best matches the current path: exact, else the longest
+// href that is a path-prefix of it. Returns null if nothing matches.
+function activeHrefFor(pathname: string): string | null {
+  let best: string | null = null;
+  for (const href of allHrefs) {
+    if (pathname === href || pathname.startsWith(href + "/")) {
+      if (!best || href.length > best.length) best = href;
+    }
+  }
+  return best;
+}
+
 // Find which category contains a given path
 function findCategoryForPath(pathname: string): string | null {
   for (const item of navigation) {
@@ -108,8 +128,34 @@ function findCategoryForPath(pathname: string): string | null {
   return null;
 }
 
+// One nav row — modern "tinted" active state (soft brand fill + accent bar)
+// instead of a heavy solid fill. Icons muted when inactive.
+function NavLink({ href, icon: Icon, label, active }: { href: string; icon: LucideIcon; label: string; active: boolean }) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+        active
+          ? "bg-primary/10 font-semibold text-primary"
+          : "font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+      )}
+    >
+      {active && <span className="absolute inset-y-1.5 left-0 w-[3px] rounded-full bg-primary" />}
+      <Icon
+        className={cn(
+          "h-[18px] w-[18px] shrink-0 transition-colors",
+          active ? "text-primary" : "text-gray-400 group-hover:text-gray-500"
+        )}
+      />
+      <span className="truncate">{label}</span>
+    </Link>
+  );
+}
+
 export function AdminSidebar() {
   const pathname = usePathname();
+  const activeHref = activeHrefFor(pathname);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(allCategories));
 
   // Load saved state from localStorage on mount
@@ -167,30 +213,26 @@ export function AdminSidebar() {
       </div>
 
       {/* Navigation with scroll */}
-      <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
         {navigation.map((item) => {
           if ("category" in item) {
             const category = item as NavCategory;
             const isExpanded = expandedCategories.has(category.category);
-            const hasActiveItem = category.items.some(
-              (subItem) => pathname === subItem.href || pathname.startsWith(subItem.href + "/")
-            );
+            const hasActiveItem = category.items.some((subItem) => subItem.href === activeHref);
 
             return (
-              <div key={category.category} className="pt-2">
+              <div key={category.category} className="pt-3 first:pt-0">
                 <button
                   onClick={() => toggleCategory(category.category)}
                   className={cn(
-                    "w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium uppercase tracking-wider transition-colors",
-                    hasActiveItem
-                      ? "text-gray-700"
-                      : "text-gray-400 hover:text-gray-600"
+                    "group w-full flex items-center justify-between px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider transition-colors",
+                    hasActiveItem ? "text-gray-500" : "text-gray-400 hover:text-gray-600"
                   )}
                 >
                   <span>{category.category}</span>
                   <ChevronDown
                     className={cn(
-                      "w-4 h-4 transition-transform duration-200",
+                      "w-3.5 h-3.5 text-gray-300 transition-transform duration-200 group-hover:text-gray-400",
                       isExpanded ? "rotate-0" : "-rotate-90"
                     )}
                   />
@@ -198,29 +240,15 @@ export function AdminSidebar() {
                 <div
                   className={cn(
                     "overflow-hidden transition-all duration-200 ease-in-out",
-                    isExpanded ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                    isExpanded ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
                   )}
                 >
-                  <div className="space-y-1 mt-1">
-                    {category.items.map((subItem) => {
-                      const isActive = pathname === subItem.href || pathname.startsWith(subItem.href + "/");
-                      const Icon = subItem.icon;
-                      return (
-                        <Link
-                          key={subItem.name}
-                          href={subItem.href}
-                          className={cn(
-                            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                          )}
-                        >
-                          <Icon className="w-5 h-5" />
-                          {subItem.name}
-                        </Link>
-                      );
-                    })}
+                  {/* py-1 gives the rounded active pill breathing room so
+                      overflow-hidden doesn't clip its corners. */}
+                  <div className="space-y-0.5 py-1">
+                    {category.items.map((subItem) => (
+                      <NavLink key={subItem.name} href={subItem.href} icon={subItem.icon} label={subItem.name} active={subItem.href === activeHref} />
+                    ))}
                   </div>
                 </div>
               </div>
@@ -228,22 +256,8 @@ export function AdminSidebar() {
           }
 
           const navItem = item as NavItem;
-          const isActive = pathname === navItem.href;
-          const Icon = navItem.icon;
           return (
-            <Link
-              key={navItem.name}
-              href={navItem.href}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-              )}
-            >
-              <Icon className="w-5 h-5" />
-              {navItem.name}
-            </Link>
+            <NavLink key={navItem.name} href={navItem.href} icon={navItem.icon} label={navItem.name} active={navItem.href === activeHref} />
           );
         })}
       </nav>

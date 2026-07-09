@@ -9,6 +9,7 @@ import {
   ArrowRight,
   Bus,
   Users,
+  Baby,
   Minus,
   Plus,
   Loader2,
@@ -58,7 +59,8 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
   const isRu = locale === "ru";
 
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
-  const [passengers, setPassengers] = React.useState(1);
+  const [adults, setAdults] = React.useState(1);
+  const [children, setChildren] = React.useState(0);
   const [form, setForm] = React.useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [acceptTerms, setAcceptTerms] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -67,13 +69,21 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
 
   const selectedDates = dates.filter((d) => selected.has(d.id));
   const currency = dates[0]?.currency ?? "MDL";
-  const maxPassengers = selectedDates.length ? Math.max(1, Math.min(20, ...selectedDates.map((d) => d.seatsLeft))) : 20;
+  // Adults take a seat → capped by the tightest date's availability.
+  const maxAdults = selectedDates.length ? Math.max(1, Math.min(20, ...selectedDates.map((d) => d.seatsLeft))) : 20;
+  // Lap children take no seat, but need a lap → at most one per adult.
+  const maxChildren = adults;
 
   React.useEffect(() => {
-    if (passengers > maxPassengers) setPassengers(maxPassengers);
-  }, [maxPassengers, passengers]);
+    if (adults > maxAdults) setAdults(maxAdults);
+  }, [maxAdults, adults]);
 
-  const total = selectedDates.reduce((sum, d) => sum + d.price * passengers, 0);
+  React.useEffect(() => {
+    if (children > adults) setChildren(adults);
+  }, [adults, children]);
+
+  // Only adults are billed; children under 7 ride free.
+  const total = selectedDates.reduce((sum, d) => sum + d.price * adults, 0);
 
   const toggleDate = (id: string) =>
     setSelected((prev) => {
@@ -109,7 +119,7 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const result = await api.createBusOrder({ customer: form, busDateIds: [...selected], passengers, language: locale });
+      const result = await api.createBusOrder({ customer: form, busDateIds: [...selected], passengers: adults, children, language: locale });
       if (result.success && result.data) window.location.href = result.data.redirectUrl;
       else { setSubmitError(result.error || t("errors.orderFailed")); setSubmitting(false); }
     } catch {
@@ -243,19 +253,38 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                 </div>
               </div>
 
-              {/* Passengers */}
-              <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4">
-                <div className="flex items-center gap-2.5">
-                  <Users className="h-4 w-4 text-primary" />
-                  <div>
-                    <p className="text-sm font-bold">{t("passengers")}</p>
-                    <p className="text-xs text-muted-foreground">{t("passengersHint")}</p>
+              {/* Adults + children */}
+              <div className="mt-6 space-y-3">
+                {/* Adults */}
+                <div className="flex items-center justify-between rounded-2xl bg-muted/50 p-4">
+                  <div className="flex items-center gap-2.5">
+                    <Users className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">{t("adults")}</p>
+                      <p className="text-xs text-muted-foreground">{t("adultsHint")}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center rounded-xl border border-border bg-card">
+                    <button type="button" disabled={adults <= 1} onClick={() => setAdults((p) => Math.max(1, p - 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Minus className="h-4 w-4" /></button>
+                    <span className="w-10 text-center text-lg font-bold tabular-nums">{adults}</span>
+                    <button type="button" disabled={adults >= maxAdults} onClick={() => setAdults((p) => Math.min(maxAdults, p + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
                   </div>
                 </div>
-                <div className="flex items-center rounded-xl border border-border bg-card">
-                  <button type="button" disabled={passengers <= 1} onClick={() => setPassengers((p) => Math.max(1, p - 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Minus className="h-4 w-4" /></button>
-                  <span className="w-10 text-center text-lg font-bold tabular-nums">{passengers}</span>
-                  <button type="button" disabled={passengers >= maxPassengers} onClick={() => setPassengers((p) => Math.min(maxPassengers, p + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
+
+                {/* Children under 7 (free, lap) */}
+                <div className="flex items-center justify-between rounded-2xl bg-muted/50 p-4">
+                  <div className="flex items-center gap-2.5">
+                    <Baby className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">{t("children")}</p>
+                      <p className="text-xs text-muted-foreground">{t("childrenHint")}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center rounded-xl border border-border bg-card">
+                    <button type="button" disabled={children <= 0} onClick={() => setChildren((c) => Math.max(0, c - 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Minus className="h-4 w-4" /></button>
+                    <span className="w-10 text-center text-lg font-bold tabular-nums">{children}</span>
+                    <button type="button" disabled={children >= maxChildren} onClick={() => setChildren((c) => Math.min(maxChildren, c + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
+                  </div>
                 </div>
               </div>
 
@@ -304,12 +333,18 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                           <RefreshCw className="h-3.5 w-3.5 text-primary" />
                           <div>
                             <p className="font-semibold">{dayNum(d.travelDate)} {monthName(d.travelDate, isRu)}</p>
-                            <p className="text-xs text-muted-foreground">{passengers} × {d.price} {currency}</p>
+                            <p className="text-xs text-muted-foreground">{adults} × {d.price} {currency}</p>
                           </div>
                         </div>
-                        <span className="font-semibold tabular-nums">{d.price * passengers} {currency}</span>
+                        <span className="font-semibold tabular-nums">{d.price * adults} {currency}</span>
                       </div>
                     ))
+                  )}
+                  {selectedDates.length > 0 && children > 0 && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Baby className="h-3.5 w-3.5 text-primary" />
+                      {t("childrenSummary", { count: children })}
+                    </div>
                   )}
                 </div>
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { ShopContent } from "./ShopContent";
 import {
   getActiveProducts,
@@ -8,6 +9,7 @@ import {
   getMerchShopEnabled,
 } from "@/lib/data/merch";
 import { generatePageMetadata } from "@/lib/seo";
+import { PreviewBanner } from "@/components/admin/PreviewBanner";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -18,7 +20,10 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function ShopPage() {
-  if (!(await getMerchShopEnabled())) notFound();
+  // Draft Mode = admin preview of the hidden shop (see /api/admin/preview)
+  const { isEnabled: preview } = await draftMode();
+  const enabled = await getMerchShopEnabled();
+  if (!enabled && !preview) notFound();
 
   const [products, promotions, categories, banner] = await Promise.all([
     getActiveProducts(),
@@ -27,6 +32,9 @@ export default async function ShopPage() {
     getMerchBanner(),
   ]);
   return (
-    <ShopContent products={products} promotions={promotions} categories={categories} banner={banner} />
+    <>
+      {preview && !enabled && <PreviewBanner />}
+      <ShopContent products={products} promotions={promotions} categories={categories} banner={banner} />
+    </>
   );
 }

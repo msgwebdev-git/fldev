@@ -3,8 +3,10 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Eye } from "lucide-react";
 
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { setBusEnabled } from "./actions";
 
@@ -32,7 +34,7 @@ export function BusVisibilityToggle({ initialEnabled }: { initialEnabled: boolea
       <CardHeader>
         <CardTitle className="text-base">Видимость</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
         <label className="flex items-center justify-between gap-4">
           <div>
             <p className="font-medium text-gray-900">Показывать страницу автобуса на сайте</p>
@@ -42,6 +44,14 @@ export function BusVisibilityToggle({ initialEnabled }: { initialEnabled: boolea
           </div>
           <Switch checked={enabled} disabled={saving} onCheckedChange={handleToggle} />
         </label>
+        {!enabled && (
+          <Button variant="outline" size="sm" asChild>
+            <a href="/api/admin/preview?path=/ru/bus" target="_blank" rel="noopener">
+              <Eye className="mr-2 h-4 w-4" />
+              Предпросмотр скрытой страницы
+            </a>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

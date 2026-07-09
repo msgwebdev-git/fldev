@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { BusContent } from "./BusContent";
 import { getActiveBusDates, getBusEnabled } from "@/lib/data/bus";
 import { generatePageMetadata } from "@/lib/seo";
+import { PreviewBanner } from "@/components/admin/PreviewBanner";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -12,7 +14,17 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function BusPage() {
-  if (!(await getBusEnabled())) notFound();
+  // Draft Mode = admin preview: the bypass cookie renders this request
+  // dynamically for the admin only; public ISR still serves 404 when hidden.
+  const { isEnabled: preview } = await draftMode();
+  const enabled = await getBusEnabled();
+  if (!enabled && !preview) notFound();
+
   const dates = await getActiveBusDates();
-  return <BusContent dates={dates} />;
+  return (
+    <>
+      {preview && !enabled && <PreviewBanner />}
+      <BusContent dates={dates} />
+    </>
+  );
 }

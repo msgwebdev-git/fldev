@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { getActiveProducts, getProductBySlug, getMerchCategories, getMerchShopEnabled } from "@/lib/data/merch";
 import { ProductDetail } from "./ProductDetail";
 
@@ -46,7 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProductPage({ params }: Props) {
-  if (!(await getMerchShopEnabled())) notFound();
+  const { isEnabled: preview } = await draftMode();
+  if (!(await getMerchShopEnabled()) && !preview) notFound();
 
   const { locale, slug } = await params;
   const [product, allProducts, categories] = await Promise.all([

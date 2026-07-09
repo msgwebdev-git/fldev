@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Loader2, Upload, X, Trash2 } from "lucide-react";
+import { Loader2, Upload, X, Trash2, Eye } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ export function MerchSettingsForm({ initial }: { initial: MerchSettingsInput }) 
         <CardHeader>
           <CardTitle className="text-base">Видимость</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <label className="flex items-center justify-between gap-4">
             <div>
               <p className="font-medium text-gray-900">Показывать магазин на сайте</p>
@@ -109,6 +109,14 @@ export function MerchSettingsForm({ initial }: { initial: MerchSettingsInput }) 
             </div>
             <Switch checked={form.shopEnabled} onCheckedChange={(v) => set("shopEnabled", v)} />
           </label>
+          {!form.shopEnabled && (
+            <Button variant="outline" size="sm" asChild>
+              <a href="/api/admin/preview?path=/ru/shop" target="_blank" rel="noopener">
+                <Eye className="mr-2 h-4 w-4" />
+                Предпросмотр скрытого магазина
+              </a>
+            </Button>
+          )}
         </CardContent>
       </Card>
 

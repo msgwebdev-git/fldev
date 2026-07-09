@@ -9,6 +9,7 @@ interface OrderRow {
   order_number: string;
   status: string;
   passengers: number;
+  children: number;
   total_amount: number;
   customer_name: string;
   customer_email: string;
@@ -28,7 +29,7 @@ export default async function BusOrdersPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("bus_orders")
-    .select("id, order_number, status, passengers, total_amount, customer_name, customer_email, created_at, bus_tickets(checked_in_at)")
+    .select("id, order_number, status, passengers, children, total_amount, customer_name, customer_email, created_at, bus_tickets(checked_in_at)")
     .order("created_at", { ascending: false })
     .limit(200);
 
@@ -79,7 +80,10 @@ export default async function BusOrdersPage() {
                       <p className="text-xs text-gray-400">{new Date(o.created_at).toLocaleDateString("ru-RU")}</p>
                     </td>
                     <td className="px-4 py-3"><p className="text-gray-900">{o.customer_name}</p><p className="text-xs text-gray-400">{o.customer_email}</p></td>
-                    <td className="px-4 py-3 text-gray-700">{o.passengers}</td>
+                    <td className="px-4 py-3 text-gray-700">
+                      {o.passengers}
+                      {o.children > 0 && <span className="text-gray-400"> +{o.children} дет.</span>}
+                    </td>
                     <td className="px-4 py-3 text-gray-600">{o.status === "paid" ? `${boarded} / ${tickets.length}` : "—"}</td>
                     <td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span></td>
                     <td className="px-4 py-3 text-right font-medium text-gray-900">{o.total_amount} MDL</td>

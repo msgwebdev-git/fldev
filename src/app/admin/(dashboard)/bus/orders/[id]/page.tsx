@@ -52,7 +52,10 @@ export default async function BusOrderDetailPage({ params }: Props) {
         <p className="text-sm text-gray-700">{order.customer_name}</p>
         <p className="text-sm text-gray-500">{order.customer_email}</p>
         <p className="text-sm text-gray-500">{order.customer_phone}</p>
-        <p className="text-sm text-gray-500">Пассажиров: {order.passengers}</p>
+        <p className="text-sm text-gray-500">
+          Взрослые: {order.passengers}
+          {order.children > 0 && <> · Дети до 7 (на руках): {order.children}</>}
+        </p>
       </div>
 
       <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
