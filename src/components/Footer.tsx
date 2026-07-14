@@ -133,9 +133,9 @@ export function Footer() {
         >
           <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
           <span>
-            GOQODE AGENCY S.R.L.
+            ORIGINI - CULTURA SI PATRIMONIU A.O.
             <br />
-            str. Petricani 17
+            MD-2028, mun. Chișinău, str. V. Cupcea 81
           </span>
         </a>
       </li>
