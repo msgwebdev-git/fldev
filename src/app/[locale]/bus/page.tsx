@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { BusContent } from "./BusContent";
-import { getActiveBusDates, getBusEnabled } from "@/lib/data/bus";
+import { getActiveBusDates, getBusEnabled, getBusDepartureAddress } from "@/lib/data/bus";
 import { generatePageMetadata } from "@/lib/seo";
 import { PreviewBanner } from "@/components/admin/PreviewBanner";
 
@@ -20,11 +20,14 @@ export default async function BusPage() {
   const enabled = await getBusEnabled();
   if (!enabled && !preview) notFound();
 
-  const dates = await getActiveBusDates();
+  const [dates, departureAddress] = await Promise.all([
+    getActiveBusDates(),
+    getBusDepartureAddress(),
+  ]);
   return (
     <>
       {preview && !enabled && <PreviewBanner />}
-      <BusContent dates={dates} />
+      <BusContent dates={dates} departureAddress={departureAddress} />
     </>
   );
 }

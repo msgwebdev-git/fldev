@@ -1616,6 +1616,12 @@
     "backToShop": "Înapoi la magazin",
     "backToHome": "Acasă"
   },
+  "BusCta": {
+    "badge": "Cum ajungi",
+    "title": "Ajungi la festival cu autobuzul",
+    "subtitle": "Transfer confortabil din Chișinău — dus și întors. Rezervă-ți locul din timp.",
+    "cta": "Cumpără bilet la autobuz"
+  },
   "Bus": {
     "backToHome": "Înapoi acasă",
     "badge": "Transfer",
@@ -1632,11 +1638,13 @@
     "seatsLeft": "{count} locuri libere",
     "passengers": "Pasageri",
     "passengersHint": "câte un bilet dus-întors pentru fiecare",
-    "adults": "Adulți",
+    "adults": "Adulți (7+)",
     "adultsHint": "câte un bilet dus-întors pentru fiecare",
-    "children": "Copii până la 7 ani",
-    "childrenHint": "gratuit, în brațe fără loc separat",
-    "childrenSummary": "Copii până la 7 ani: {count} · gratuit",
+    "children": "Copii 2–7 ani",
+    "childrenHint": "jumătate de preț, loc și bilet separat",
+    "infants": "Copii până la 2 ani",
+    "infantsHint": "gratuit, în brațe fără loc separat",
+    "infantsSummary": "Copii până la 2 ani: {count} · gratuit",
     "customerInfo": "Datele tale",
     "firstName": "Prenume",
     "lastName": "Nume",

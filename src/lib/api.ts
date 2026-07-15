@@ -130,8 +130,9 @@ interface CreateBusOrderRequest {
     phone: string;
   };
   busDateIds: string[];
-  passengers: number; // adults (paying, seated)
-  children?: number; // under 7, free, on a lap — no ticket, no seat
+  passengers: number; // adults 7+ (paying, seated)
+  childrenSeated?: number; // 2–7, half price, own seat + ticket
+  children?: number; // under 2, free, on a lap — no ticket, no seat
   promoCode?: string;
   language: 'ro' | 'ru';
 }

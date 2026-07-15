@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { motion } from "motion/react";
 import {
@@ -53,14 +54,15 @@ function validateEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-export function BusContent({ dates }: { dates: BusDate[] }) {
+export function BusContent({ dates, departureAddress }: { dates: BusDate[]; departureAddress?: string }) {
   const t = useTranslations("Bus");
   const locale = useLocale() as "ro" | "ru";
   const isRu = locale === "ru";
 
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
   const [adults, setAdults] = React.useState(1);
-  const [children, setChildren] = React.useState(0);
+  const [childrenSeated, setChildrenSeated] = React.useState(0); // 2–7, half price, own seat
+  const [children, setChildren] = React.useState(0); // under 2, lap, free
   const [form, setForm] = React.useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [acceptTerms, setAcceptTerms] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -69,21 +71,26 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
 
   const selectedDates = dates.filter((d) => selected.has(d.id));
   const currency = dates[0]?.currency ?? "MDL";
-  // Adults take a seat → capped by the tightest date's availability.
-  const maxAdults = selectedDates.length ? Math.max(1, Math.min(20, ...selectedDates.map((d) => d.seatsLeft))) : 20;
-  // Lap children take no seat, but need a lap → at most one per adult.
-  const maxChildren = adults;
+  const childFare = (price: number) => Math.round(price / 2);
+  // Seats consumed = adults + seated 2–7 children → capped by the tightest date.
+  const seatCap = selectedDates.length ? Math.max(1, Math.min(20, ...selectedDates.map((d) => d.seatsLeft))) : 20;
+  const maxAdults = Math.max(1, seatCap - childrenSeated);
+  const maxChildrenSeated = Math.max(0, seatCap - adults);
+  // Lap infants take no seat, but need a lap → at most one per adult.
+  const maxInfants = adults;
 
   React.useEffect(() => {
-    if (adults > maxAdults) setAdults(maxAdults);
-  }, [maxAdults, adults]);
-
-  React.useEffect(() => {
+    // Keep adults + seated children within the seat cap; adults ≥ 1.
+    if (adults > seatCap) setAdults(Math.max(1, seatCap));
+    if (adults + childrenSeated > seatCap) setChildrenSeated(Math.max(0, seatCap - adults));
     if (children > adults) setChildren(adults);
-  }, [adults, children]);
+  }, [seatCap, adults, childrenSeated, children]);
 
-  // Only adults are billed; children under 7 ride free.
-  const total = selectedDates.reduce((sum, d) => sum + d.price * adults, 0);
+  // Adults full fare + seated 2–7 children at half fare; lap infants free.
+  const total = selectedDates.reduce(
+    (sum, d) => sum + d.price * adults + childFare(d.price) * childrenSeated,
+    0,
+  );
 
   const toggleDate = (id: string) =>
     setSelected((prev) => {
@@ -119,7 +126,7 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const result = await api.createBusOrder({ customer: form, busDateIds: [...selected], passengers: adults, children, language: locale });
+      const result = await api.createBusOrder({ customer: form, busDateIds: [...selected], passengers: adults, childrenSeated, children, language: locale });
       if (result.success && result.data) window.location.href = result.data.redirectUrl;
       else { setSubmitError(result.error || t("errors.orderFailed")); setSubmitting(false); }
     } catch {
@@ -132,6 +139,17 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
     <main className="min-h-screen bg-neutral-100 dark:bg-neutral-950">
       {/* ── Cinematic hero ─────────────────────────────── */}
       <section className="relative overflow-hidden bg-neutral-900 pt-24 pb-32 text-white">
+        {/* Background photo + dark overlay so the white text stays readable */}
+        <Image
+          src="https://ybumbbtackrfdhijvfkz.supabase.co/storage/v1/object/public/gallery/bus-image.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+          className="pointer-events-none select-none"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-neutral-950/85 via-neutral-950/65 to-neutral-950/40" />
         <div className="pointer-events-none absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(circle at 20% 30%, var(--primary), transparent 45%), radial-gradient(circle at 85% 60%, var(--primary), transparent 40%)" }} />
         <div className="pointer-events-none absolute -bottom-24 left-1/2 h-64 w-[120%] -translate-x-1/2 rounded-[100%] bg-primary/20 blur-3xl" />
         <div className="container relative mx-auto max-w-5xl px-4">
@@ -179,6 +197,21 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                   <p className="text-xl font-black">Festival</p>
                 </div>
               </div>
+
+              {departureAddress && (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(departureAddress)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 flex items-start gap-2 rounded-xl bg-muted/50 px-3.5 py-2.5 text-sm transition-colors hover:bg-muted"
+                >
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-muted-foreground">
+                    <span className="font-semibold text-foreground">{isRu ? "Отправление из Кишинёва: " : "Plecare din Chișinău: "}</span>
+                    <span className="text-primary underline underline-offset-2">{departureAddress}</span>
+                  </span>
+                </a>
+              )}
 
               <div className="my-7 h-px bg-border" />
 
@@ -255,9 +288,9 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                 </div>
               </div>
 
-              {/* Adults + children */}
+              {/* Passengers: adults 7+, seated 2–7 (half price), lap under-2 (free) */}
               <div className="mt-6 space-y-3">
-                {/* Adults */}
+                {/* Adults 7+ */}
                 <div className="flex items-center justify-between rounded-2xl bg-muted/50 p-4">
                   <div className="flex items-center gap-2.5">
                     <Users className="h-4 w-4 text-primary" />
@@ -273,7 +306,7 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                   </div>
                 </div>
 
-                {/* Children under 7 (free, lap) */}
+                {/* Children 2–7 (half price, own seat + ticket) */}
                 <div className="flex items-center justify-between rounded-2xl bg-muted/50 p-4">
                   <div className="flex items-center gap-2.5">
                     <Baby className="h-4 w-4 text-primary" />
@@ -283,9 +316,25 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                     </div>
                   </div>
                   <div className="flex items-center rounded-xl border border-border bg-card">
+                    <button type="button" disabled={childrenSeated <= 0} onClick={() => setChildrenSeated((c) => Math.max(0, c - 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Minus className="h-4 w-4" /></button>
+                    <span className="w-10 text-center text-lg font-bold tabular-nums">{childrenSeated}</span>
+                    <button type="button" disabled={childrenSeated >= maxChildrenSeated} onClick={() => setChildrenSeated((c) => Math.min(maxChildrenSeated, c + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
+                  </div>
+                </div>
+
+                {/* Infants under 2 (free, on a lap) */}
+                <div className="flex items-center justify-between rounded-2xl bg-muted/50 p-4">
+                  <div className="flex items-center gap-2.5">
+                    <Baby className="h-4 w-4 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">{t("infants")}</p>
+                      <p className="text-xs text-muted-foreground">{t("infantsHint")}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center rounded-xl border border-border bg-card">
                     <button type="button" disabled={children <= 0} onClick={() => setChildren((c) => Math.max(0, c - 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Minus className="h-4 w-4" /></button>
                     <span className="w-10 text-center text-lg font-bold tabular-nums">{children}</span>
-                    <button type="button" disabled={children >= maxChildren} onClick={() => setChildren((c) => Math.min(maxChildren, c + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
+                    <button type="button" disabled={children >= maxInfants} onClick={() => setChildren((c) => Math.min(maxInfants, c + 1))} className="flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"><Plus className="h-4 w-4" /></button>
                   </div>
                 </div>
               </div>
@@ -330,22 +379,33 @@ export function BusContent({ dates }: { dates: BusDate[] }) {
                     <p className="py-6 text-center text-sm text-muted-foreground">{t("emptySummary")}</p>
                   ) : (
                     selectedDates.map((d) => (
-                      <div key={d.id} className="flex items-start justify-between gap-3 text-sm">
-                        <div className="flex items-center gap-2">
-                          <RefreshCw className="h-3.5 w-3.5 text-primary" />
-                          <div>
+                      <div key={d.id} className="text-sm">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2">
+                            <RefreshCw className="h-3.5 w-3.5 text-primary" />
                             <p className="font-semibold">{dayNum(d.travelDate)} {monthName(d.travelDate, isRu)}</p>
-                            <p className="text-xs text-muted-foreground">{adults} × {d.price} {currency}</p>
                           </div>
+                          <span className="font-semibold tabular-nums">{d.price * adults + childFare(d.price) * childrenSeated} {currency}</span>
                         </div>
-                        <span className="font-semibold tabular-nums">{d.price * adults} {currency}</span>
+                        <div className="mt-1 space-y-0.5 pl-[22px] text-xs text-muted-foreground">
+                          <div className="flex items-center justify-between gap-2">
+                            <span>{t("adults")} · {adults}</span>
+                            <span className="tabular-nums">{d.price * adults} {currency}</span>
+                          </div>
+                          {childrenSeated > 0 && (
+                            <div className="flex items-center justify-between gap-2">
+                              <span>{t("children")} · {childrenSeated}</span>
+                              <span className="tabular-nums">{childFare(d.price) * childrenSeated} {currency}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))
                   )}
                   {selectedDates.length > 0 && children > 0 && (
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <Baby className="h-3.5 w-3.5 text-primary" />
-                      {t("childrenSummary", { count: children })}
+                      {t("infantsSummary", { count: children })}
                     </div>
                   )}
                 </div>

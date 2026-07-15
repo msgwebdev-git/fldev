@@ -55,8 +55,9 @@ export default async function BusOrderDetailPage({ params }: Props) {
         <p className="text-sm text-gray-500">{order.customer_email}</p>
         <p className="text-sm text-gray-500">{order.customer_phone}</p>
         <p className="text-sm text-gray-500">
-          Взрослые: {order.passengers}
-          {order.children > 0 && <> · Дети до 7 (на руках): {order.children}</>}
+          Взрослые (7+): {order.passengers}
+          {order.children_seated > 0 && <> · Дети 2–7: {order.children_seated}</>}
+          {order.children > 0 && <> · До 2 (на руках): {order.children}</>}
         </p>
       </div>
 

@@ -77,6 +77,24 @@ export async function setBusEnabled(enabled: boolean): Promise<ActionResult> {
   return { ok: true, id: "bus_enabled" };
 }
 
+export async function setBusDepartureAddress(address: string): Promise<ActionResult> {
+  const { isAdmin } = await requireAdmin();
+  if (!isAdmin) return { ok: false, error: "Unauthorized" };
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("site_settings").upsert(
+    {
+      key: "bus_departure_address",
+      value: address.trim(),
+      description: "Адрес/место отправления автобуса из Кишинёва",
+      category: "bus",
+    },
+    { onConflict: "key" }
+  );
+  if (error) return { ok: false, error: error.message };
+  revalidateBus();
+  return { ok: true, id: "bus_departure_address" };
+}
+
 export async function deleteBusDate(id: string): Promise<ActionResult> {
   const { isAdmin } = await requireAdmin();
   if (!isAdmin) return { ok: false, error: "Unauthorized" };

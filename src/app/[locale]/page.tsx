@@ -1,12 +1,14 @@
 import { HeroSection } from "@/components/HeroSection";
 import { StoriesSection } from "@/components/stories/StoriesSection";
 import { TicketsSection } from "@/components/TicketsSection";
+import { BusCtaSection } from "@/components/BusCtaSection";
 import { AftermovieSection } from "@/components/AftermovieSection";
 import { GallerySection } from "@/components/GallerySection";
 import { AppSection } from "@/components/AppSection";
 import { NewsSection } from "@/components/NewsSection";
 import { getActiveTickets } from "@/lib/data/tickets";
 import { getSiteSettingBool } from "@/lib/data/site-settings";
+import { getBusEnabled } from "@/lib/data/bus";
 import { generatePageMetadata } from "@/lib/seo";
 import { createPublicClient } from "@/lib/supabase/public";
 import { JsonLd } from "@/components/JsonLd";
@@ -24,9 +26,10 @@ export async function generateMetadata({ params }: Props) {
 export default async function Home({ params }: Props) {
   const { locale } = await params;
   const supabase = createPublicClient();
-  const [tickets, showMobileApp, { data: artists }] = await Promise.all([
+  const [tickets, showMobileApp, busEnabled, { data: artists }] = await Promise.all([
     getActiveTickets(),
     getSiteSettingBool("show_mobile_app"),
+    getBusEnabled(),
     supabase
       .from("artists_base")
       .select("name, image_url")
@@ -46,6 +49,7 @@ export default async function Home({ params }: Props) {
       <HeroSection />
       <StoriesSection />
       <TicketsSection tickets={tickets} />
+      {busEnabled && <BusCtaSection />}
       <AftermovieSection />
       <GallerySection />
       {showMobileApp && <AppSection />}

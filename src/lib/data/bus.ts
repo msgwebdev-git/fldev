@@ -83,3 +83,23 @@ export const getBusEnabled = unstable_cache(fetchBusEnabled, ["bus-enabled-v1"],
   revalidate: 300,
   tags: [BUS_CACHE_TAG],
 });
+
+// -----------------------------------------------------------------------------
+// Departure location (admin-editable) — shown on the bus page so passengers know
+// where the shuttle leaves Chișinău from. Single location for all trips.
+// -----------------------------------------------------------------------------
+
+async function fetchBusDepartureAddress(): Promise<string> {
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "bus_departure_address")
+    .maybeSingle();
+  return data?.value ?? "";
+}
+
+export const getBusDepartureAddress = unstable_cache(fetchBusDepartureAddress, ["bus-departure-address-v1"], {
+  revalidate: 300,
+  tags: [BUS_CACHE_TAG],
+});

@@ -9,6 +9,7 @@ interface OrderRow {
   order_number: string;
   status: string;
   passengers: number;
+  children_seated: number;
   children: number;
   total_amount: number;
   customer_name: string;
@@ -30,6 +31,7 @@ interface PaidTicket {
   direction: "tur" | "retur";
   checked_in_at: string | null;
   unit_price: number | null;
+  passenger_type: "adult" | "child";
   bus_orders: { id: string; children: number } | null;
 }
 
@@ -50,8 +52,9 @@ function fmtDate(iso: string) {
 }
 
 interface DateStats {
-  adults: number;        // seats sold (paying) = one tur ticket per passenger
-  children: number;      // lap infants, no seat — summed per distinct paid order
+  adults: number;        // full-fare 7+ seats (tur ticket, passenger_type 'adult')
+  seatedChildren: number;// half-fare 2–7 seats (tur ticket, passenger_type 'child')
+  children: number;      // lap infants under 2, no seat — summed per distinct paid order
   revenue: number;
   boardedTur: number;
   totalTur: number;
@@ -67,7 +70,7 @@ export default async function BusOrdersPage() {
   const [ordersRes, datesRes, ticketsRes] = await Promise.all([
     supabase
       .from("bus_orders")
-      .select("id, order_number, status, passengers, children, total_amount, customer_name, customer_email, created_at, bus_tickets(checked_in_at)")
+      .select("id, order_number, status, passengers, children_seated, children, total_amount, customer_name, customer_email, created_at, bus_tickets(checked_in_at)")
       .order("created_at", { ascending: false })
       .limit(200),
     supabase
@@ -77,7 +80,7 @@ export default async function BusOrdersPage() {
     // All tickets of PAID orders — the source of truth for per-date seat sales.
     supabase
       .from("bus_tickets")
-      .select("travel_date, direction, checked_in_at, unit_price, bus_orders!inner(id, children, status)")
+      .select("travel_date, direction, checked_in_at, unit_price, passenger_type, bus_orders!inner(id, children, status)")
       .eq("bus_orders.status", "paid"),
   ]);
 
@@ -97,7 +100,7 @@ export default async function BusOrdersPage() {
     let s = byDate.get(date);
     if (!s) {
       const d = dates.find((x) => x.travel_date === date);
-      s = { adults: 0, children: 0, revenue: 0, boardedTur: 0, totalTur: 0, boardedRetur: 0, totalRetur: 0, currency: d?.currency ?? "MDL", capacity: d?.capacity ?? 0 };
+      s = { adults: 0, seatedChildren: 0, children: 0, revenue: 0, boardedTur: 0, totalTur: 0, boardedRetur: 0, totalRetur: 0, currency: d?.currency ?? "MDL", capacity: d?.capacity ?? 0 };
       byDate.set(date, s);
       childrenByDateOrder.set(date, new Map());
     }
@@ -108,7 +111,9 @@ export default async function BusOrdersPage() {
     const s = ensure(tk.travel_date);
     if (tk.direction === "tur") {
       s.totalTur += 1;
-      s.adults += 1; // one tur ticket == one seated passenger for this date
+      // one tur ticket == one seated passenger for this date (adult or 2–7 child)
+      if (tk.passenger_type === "child") s.seatedChildren += 1;
+      else s.adults += 1;
       s.revenue += Number(tk.unit_price ?? 0);
       if (tk.checked_in_at) s.boardedTur += 1;
     } else {
@@ -142,10 +147,11 @@ export default async function BusOrdersPage() {
       {/* ── Per-date sales dashboard ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {dateStats.map((s) => {
-          const people = s.adults + s.children;
-          const pct = s.capacity > 0 ? Math.min(100, Math.round((s.adults / s.capacity) * 100)) : 0;
+          const seats = s.adults + s.seatedChildren; // seated passengers = seats sold
+          const people = seats + s.children;
+          const pct = s.capacity > 0 ? Math.min(100, Math.round((seats / s.capacity) * 100)) : 0;
           const { day, weekday } = fmtDate(s.date);
-          const low = s.capacity > 0 && s.capacity - s.adults <= Math.max(5, s.capacity * 0.1);
+          const low = s.capacity > 0 && s.capacity - seats <= Math.max(5, s.capacity * 0.1);
           return (
             <div key={s.date} className="rounded-2xl border border-gray-200 bg-white p-5">
               <div className="flex items-baseline justify-between">
@@ -161,7 +167,7 @@ export default async function BusOrdersPage() {
                 <div className="flex items-end justify-between">
                   <span className="flex items-center gap-1.5 text-sm text-gray-500"><Users className="h-4 w-4" /> Продано мест</span>
                   <span className="text-sm">
-                    <span className="text-2xl font-bold text-gray-900">{s.adults}</span>
+                    <span className="text-2xl font-bold text-gray-900">{seats}</span>
                     <span className="text-gray-400"> / {s.capacity || "∞"}</span>
                   </span>
                 </div>
@@ -173,18 +179,22 @@ export default async function BusOrdersPage() {
               </div>
 
               {/* People breakdown */}
-              <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+              <div className="mt-4 grid grid-cols-4 gap-2 text-center">
                 <div className="rounded-lg bg-gray-50 py-2">
                   <p className="text-lg font-bold text-gray-900">{s.adults}</p>
                   <p className="text-[11px] text-gray-500">Взрослые</p>
                 </div>
                 <div className="rounded-lg bg-gray-50 py-2">
+                  <p className="flex items-center justify-center gap-1 text-lg font-bold text-gray-900"><Baby className="h-3.5 w-3.5 text-gray-400" />{s.seatedChildren}</p>
+                  <p className="text-[11px] text-gray-500">Дети 2–7</p>
+                </div>
+                <div className="rounded-lg bg-gray-50 py-2">
                   <p className="flex items-center justify-center gap-1 text-lg font-bold text-gray-900"><Baby className="h-3.5 w-3.5 text-gray-400" />{s.children}</p>
-                  <p className="text-[11px] text-gray-500">Дети (на руках)</p>
+                  <p className="text-[11px] text-gray-500">До 2 (на руках)</p>
                 </div>
                 <div className="rounded-lg bg-primary/5 py-2">
                   <p className="text-lg font-bold text-primary">{people}</p>
-                  <p className="text-[11px] text-gray-500">Всего людей</p>
+                  <p className="text-[11px] text-gray-500">Всего</p>
                 </div>
               </div>
 
@@ -238,7 +248,8 @@ export default async function BusOrdersPage() {
                     <td className="px-4 py-3"><p className="text-gray-900">{o.customer_name}</p><p className="text-xs text-gray-400">{o.customer_email}</p></td>
                     <td className="px-4 py-3 text-gray-700">
                       {o.passengers}
-                      {o.children > 0 && <span className="text-gray-400"> +{o.children} дет.</span>}
+                      {o.children_seated > 0 && <span className="text-gray-400"> +{o.children_seated} (2–7)</span>}
+                      {o.children > 0 && <span className="text-gray-400"> +{o.children} мл.</span>}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{o.status === "paid" ? `${boarded} / ${tks.length}` : "—"}</td>
                     <td className="px-4 py-3"><span className={`rounded-full px-2 py-0.5 text-xs font-medium ${st.cls}`}>{st.label}</span></td>

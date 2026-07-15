@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { Info, Minus, Plus, Check, Calendar, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -78,6 +79,8 @@ export function TicketCard({ ticket }: TicketCardProps) {
   const locale = useLocale();
   const [infoOpen, setInfoOpen] = React.useState(false);
   const [optionsOpen, setOptionsOpen] = React.useState(false);
+  // Raw text while typing the quantity; committed/clamped on blur.
+  const [qtyDraft, setQtyDraft] = React.useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const { setItemQuantity, getItemQuantity, getSelectedOption } = useCart();
 
@@ -95,7 +98,8 @@ export function TicketCard({ ticket }: TicketCardProps) {
     currency = "MDL",
     dates,
     location,
-    maxPerOrder = 10,
+    // Safety cap per ticket type per order (guards against fraud / absurd values).
+    maxPerOrder = 50,
     hasOptions = false,
     options = [],
   } = ticket;
@@ -154,6 +158,21 @@ export function TicketCard({ ticket }: TicketCardProps) {
       setItemQuantity(ticket, Math.min(maxPerOrder, quantity + 1));
       trackAddToCart({ id, name: ticketName, price, quantity: 1 });
     }
+  };
+
+  // Set an explicit quantity (keyboard input), clamped to [0, maxPerOrder].
+  const setQty = (n: number) => {
+    const clamped = Math.max(0, Math.min(maxPerOrder, n));
+    if (hasOptions && !selectedOption) {
+      // An option must be chosen before a quantity can be set.
+      if (clamped > 0) {
+        setTempSelectedOptionId(defaultOption?.id);
+        setOptionsOpen(true);
+      }
+      return;
+    }
+    if (hasOptions && selectedOption) setItemQuantity(ticket, clamped, selectedOption);
+    else setItemQuantity(ticket, clamped);
   };
 
   const handleAddWithOption = () => {
@@ -411,7 +430,25 @@ export function TicketCard({ ticket }: TicketCardProps) {
             >
               <Minus className="h-4 w-4" />
             </Button>
-            <span className="w-12 text-center font-semibold text-lg">{quantity}</span>
+            <Input
+              type="text"
+              inputMode="numeric"
+              aria-label="Количество"
+              placeholder="0"
+              value={qtyDraft ?? (quantity > 0 ? String(quantity) : "")}
+              onChange={(e) => {
+                const digits = e.target.value.replace(/\D/g, "");
+                setQtyDraft(digits);
+                const n = parseInt(digits) || 0;
+                // Live-update (skip option tickets that still need an option chosen).
+                if (!(hasOptions && !selectedOption && n > 0)) setQty(n);
+              }}
+              onBlur={() => {
+                setQty(parseInt(qtyDraft ?? "") || 0);
+                setQtyDraft(null);
+              }}
+              className="h-9 w-12 text-center font-semibold text-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
             <Button
               variant="default"
               size="icon"

@@ -4,16 +4,19 @@ import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { BusDatesManager, type AdminBusDate } from "./BusDatesManager";
 import { BusVisibilityToggle } from "./BusVisibilityToggle";
+import { BusDepartureAddress } from "./BusDepartureAddress";
 
 export const dynamic = "force-dynamic";
 
 export default async function BusAdminPage() {
   const supabase = await createClient();
-  const [{ data }, { data: setting }] = await Promise.all([
+  const [{ data }, { data: setting }, { data: addressSetting }] = await Promise.all([
     supabase.from("bus_dates").select("*").order("sort_order", { ascending: true }),
     supabase.from("site_settings").select("value").eq("key", "bus_enabled").maybeSingle(),
+    supabase.from("site_settings").select("value").eq("key", "bus_departure_address").maybeSingle(),
   ]);
   const busEnabled = setting?.value !== "false";
+  const departureAddress = addressSetting?.value ?? "";
 
   return (
     <div className="space-y-6">
@@ -31,6 +34,8 @@ export default async function BusAdminPage() {
       </div>
 
       <BusVisibilityToggle initialEnabled={busEnabled} />
+
+      <BusDepartureAddress initialAddress={departureAddress} />
 
       <BusDatesManager dates={(data ?? []) as AdminBusDate[]} />
     </div>
