@@ -78,14 +78,18 @@ interface B2BPackageCalculatorProps {
   onSelectionChange?: (selections: TicketSelection[]) => void;
 }
 
+// Boundaries sit on reachable multiples of 5 (the stepper never produces 26 or 51);
+// ranges are contiguous so any quantity still maps to a tier. Mirror of the server's
+// b2b-discount tiers.
 const DISCOUNT_TIERS: DiscountTier[] = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 5, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 7, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 10, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 15, label: "200+" },
+  { minQuantity: 10, maxQuantity: 29, discountPercent: 10, label: "10-25" },
+  { minQuantity: 30, maxQuantity: 54, discountPercent: 15, label: "30-50" },
+  { minQuantity: 55, maxQuantity: null, discountPercent: 20, label: "55+" },
 ];
 
-const MIN_QUANTITY = 50;
+const MIN_QUANTITY = 10;
+// B2B quantity stepper: first tap jumps straight to the minimum, then moves in steps of 5.
+const STEP = 5;
 
 export function B2BPackageCalculator({
   tickets,
@@ -100,6 +104,9 @@ export function B2BPackageCalculator({
   const [optionsModalOpen, setOptionsModalOpen] = React.useState<Record<string, boolean>>({});
   const [tempSelectedOptions, setTempSelectedOptions] = React.useState<Record<string, string>>({});
   const [infoModalOpen, setInfoModalOpen] = React.useState<Record<string, boolean>>({});
+  // Raw text being typed into a quantity field. While a field is focused we show the
+  // draft verbatim (free typing); on blur we snap it to a valid value. Keyed by ticket id.
+  const [qtyDrafts, setQtyDrafts] = React.useState<Record<string, string>>({});
 
   // Calculate totals
   const totalQuantity = Object.values(selections).reduce((sum, qty) => sum + qty, 0);
@@ -166,12 +173,22 @@ export function B2BPackageCalculator({
     }
   }, [selections, selectedOptions, tickets, onSelectionChange]);
 
-  const handleQuantityChange = (ticket: Ticket, delta: number) => {
+  const handleQuantityChange = (ticket: Ticket, direction: number) => {
     const current = selections[ticket.id] || 0;
-    const newValue = Math.max(0, current + delta);
+
+    // First tap jumps to the minimum (10); after that ±5.
+    // Going down from the minimum removes the ticket — never lands on 1..9.
+    const newValue =
+      direction > 0
+        ? current === 0
+          ? MIN_QUANTITY
+          : current + STEP
+        : current <= MIN_QUANTITY
+          ? 0
+          : current - STEP;
 
     // If ticket has options and we're increasing from 0, open options modal
-    if (ticket.has_options && delta > 0 && current === 0) {
+    if (ticket.has_options && direction > 0 && current === 0) {
       const defaultOption = ticket.ticket_options?.find((o) => o.is_default) || ticket.ticket_options?.[0];
       setTempSelectedOptions((prev) => ({ ...prev, [ticket.id]: defaultOption?.id || "" }));
       setOptionsModalOpen((prev) => ({ ...prev, [ticket.id]: true }));
@@ -182,25 +199,42 @@ export function B2BPackageCalculator({
   };
 
   const handleQuantityInput = (ticket: Ticket, value: string) => {
-    const numValue = parseInt(value) || 0;
-    const validValue = Math.max(0, numValue);
+    // Store the raw text so the field shows exactly what the user types. Snapping to
+    // a multiple of 5 and the 10-minimum happens on blur, not on every keystroke.
+    const digits = value.replace(/\D/g, "");
+    setQtyDrafts((prev) => ({ ...prev, [ticket.id]: digits }));
 
-    // If ticket has options and setting quantity > 0 for the first time, open options modal
-    if (ticket.has_options && validValue > 0 && (selections[ticket.id] || 0) === 0) {
+    const numValue = parseInt(digits) || 0;
+
+    // First positive value on an options ticket → open the options modal.
+    if (ticket.has_options && numValue > 0 && (selections[ticket.id] || 0) === 0) {
       const defaultOption = ticket.ticket_options?.find((o) => o.is_default) || ticket.ticket_options?.[0];
       setTempSelectedOptions((prev) => ({ ...prev, [ticket.id]: defaultOption?.id || "" }));
       setOptionsModalOpen((prev) => ({ ...prev, [ticket.id]: true }));
+      // Modal will set the quantity on confirm — drop the draft so blur is a no-op.
+      setQtyDrafts((prev) => { const next = { ...prev }; delete next[ticket.id]; return next; });
       return;
     }
 
-    setSelections((prev) => ({ ...prev, [ticket.id]: validValue }));
+    // Live preview while typing (unsnapped so price/discount follow along).
+    setSelections((prev) => ({ ...prev, [ticket.id]: numValue }));
+  };
+
+  const handleQuantityBlur = (ticket: Ticket) => {
+    const draft = qtyDrafts[ticket.id];
+    if (draft === undefined) return; // not edited via typing
+    const num = parseInt(draft) || 0;
+    // Snap to the nearest multiple of 5, never below the minimum; empty/0 clears it.
+    const snapped = num <= 0 ? 0 : Math.max(MIN_QUANTITY, Math.round(num / STEP) * STEP);
+    setSelections((prev) => ({ ...prev, [ticket.id]: snapped }));
+    setQtyDrafts((prev) => { const next = { ...prev }; delete next[ticket.id]; return next; });
   };
 
   const handleConfirmOption = (ticketId: string) => {
     const optionId = tempSelectedOptions[ticketId];
     if (optionId) {
       setSelectedOptions((prev) => ({ ...prev, [ticketId]: optionId }));
-      setSelections((prev) => ({ ...prev, [ticketId]: 1 }));
+      setSelections((prev) => ({ ...prev, [ticketId]: MIN_QUANTITY }));
       setOptionsModalOpen((prev) => ({ ...prev, [ticketId]: false }));
     }
   };
@@ -221,13 +255,13 @@ export function B2BPackageCalculator({
           return (
             <div
               key={tier.label}
-              className={`flex-1 min-w-[72px] py-2 px-2 rounded-xl border text-center transition-all ${
+              className={`flex-1 min-w-[84px] py-2 px-2 rounded-xl border text-center transition-all ${
                 isActive
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border"
               }`}
             >
-              <div className={`text-[10px] ${isActive ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{tier.label}</div>
+              <div className={`text-xs font-medium whitespace-nowrap ${isActive ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{tier.label} {t("ticketsUnit")}</div>
               <div className={`text-lg font-bold ${isActive ? "text-primary-foreground" : "text-primary"}`}>
                 {tier.discountPercent}%
               </div>
@@ -291,10 +325,12 @@ export function B2BPackageCalculator({
                       <Minus className="h-3.5 w-3.5" />
                     </Button>
                     <Input
-                      type="number"
-                      min="0"
-                      value={qty}
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="0"
+                      value={qtyDrafts[ticket.id] ?? (qty > 0 ? String(qty) : "")}
                       onChange={(e) => handleQuantityInput(ticket, e.target.value)}
+                      onBlur={() => handleQuantityBlur(ticket)}
                       className="h-9 w-14 text-center font-semibold text-base rounded-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     <Button

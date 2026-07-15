@@ -46,13 +46,12 @@ interface B2BOrderWizardProps {
   isSubmitting: boolean;
 }
 
-const MIN_QUANTITY = 50;
+const MIN_QUANTITY = 10;
 
 const DISCOUNT_TIERS = [
-  { minQuantity: 50, maxQuantity: 99, discountPercent: 5, label: "50-99" },
-  { minQuantity: 100, maxQuantity: 149, discountPercent: 7, label: "100-149" },
-  { minQuantity: 150, maxQuantity: 199, discountPercent: 10, label: "150-199" },
-  { minQuantity: 200, maxQuantity: null, discountPercent: 15, label: "200+" },
+  { minQuantity: 10, maxQuantity: 29, discountPercent: 10, label: "10-25" },
+  { minQuantity: 30, maxQuantity: 54, discountPercent: 15, label: "30-50" },
+  { minQuantity: 55, maxQuantity: null, discountPercent: 20, label: "55+" },
 ];
 
 interface SummaryCardProps {

@@ -1140,7 +1140,7 @@
     "faq": {
       "q1": {
         "question": "Care este dimensiunea minimă a comenzii corporate?",
-        "answer": "Comanda minimă începe de la 50 de bilete. Oferim condiții speciale și bonusuri suplimentare, inclusiv zone exclusive și servicii personalizate."
+        "answer": "Comanda minimă începe de la 10 bilete. Oferim condiții speciale și bonusuri suplimentare, inclusiv zone exclusive și servicii personalizate."
       },
       "q2": {
         "question": "Pot organiza un eveniment privat pe teritoriul festivalului?",
@@ -1180,7 +1180,7 @@
     "orderBadge": "Comandă bilete corporate",
     "orderTitle": "Creați comanda dvs.",
     "orderSubtitle": "Selectați bilete, introduceți datele companiei și plasați comanda",
-    "selectMinimum": "Selectați minim 50 de bilete pentru a continua",
+    "selectMinimum": "Selectați minim 10 bilete pentru a continua",
     "orderSuccess": "Comanda a fost creată cu succes!",
     "orderSuccessMessage": "Veți primi un email cu detaliile comenzii și factura proformă. Mulțumim!",
     "orderNumberLabel": "Număr comandă",
@@ -1199,6 +1199,7 @@
     "back": "Înapoi"
   },
   "B2BCalculator": {
+    "ticketsUnit": "bilete",
     "discountTiers": "Niveluri de reducere",
     "discountTiersDescription": "Cu cât cumperi mai multe bilete, cu atât reducerea este mai mare",
     "active": "Activ",
