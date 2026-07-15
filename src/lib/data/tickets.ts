@@ -51,7 +51,7 @@ async function fetchActiveTickets(): Promise<TicketData[]> {
     price: Number(t.price),
     originalPrice: t.original_price ? Number(t.original_price) : undefined,
     currency: t.currency ?? "MDL",
-    maxPerOrder: t.max_per_order ?? 10,
+    maxPerOrder: t.max_per_order ?? 50,
     hasOptions: t.has_options ?? false,
     options: (t.ticket_options ?? [])
       .sort((a: { sort_order: number }, b: { sort_order: number }) => a.sort_order - b.sort_order)
