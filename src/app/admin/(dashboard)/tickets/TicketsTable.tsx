@@ -76,7 +76,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
     original_price: "",
     currency: "MDL",
     sort_order: "0",
-    max_per_order: "10",
+    max_per_order: "50",
     is_active: true,
     has_options: false,
   });
@@ -102,7 +102,7 @@ export function TicketsTable({ tickets }: TicketsTableProps) {
       currency: formData.currency || "MDL",
       is_active: formData.is_active,
       sort_order: parseInt(formData.sort_order) || 0,
-      max_per_order: parseInt(formData.max_per_order) || 10,
+      max_per_order: parseInt(formData.max_per_order) || 50,
       has_options: formData.has_options,
     };
 

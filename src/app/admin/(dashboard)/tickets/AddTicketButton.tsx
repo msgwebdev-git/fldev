@@ -57,7 +57,7 @@ export function AddTicketButton() {
       currency: formData.get("currency") as string || "MDL",
       is_active: formData.get("is_active") === "on",
       sort_order: parseInt(formData.get("sort_order") as string) || 0,
-      max_per_order: parseInt(formData.get("max_per_order") as string) || 10,
+      max_per_order: parseInt(formData.get("max_per_order") as string) || 50,
       has_options: formData.get("has_options") === "on",
     });
 
@@ -286,7 +286,7 @@ export function AddTicketButton() {
                 id="max_per_order"
                 name="max_per_order"
                 type="number"
-                defaultValue="10"
+                defaultValue="50"
                 className="bg-white border-gray-300 text-gray-900"
               />
             </div>
