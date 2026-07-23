@@ -57,9 +57,22 @@ async function getSalesData(): Promise<{
   // Get order IDs of paid revenue orders
   const paidOrderIds = orders?.map((o) => o.id) || [];
 
-  // Get order items only from revenue orders
-  const { data: orderItems } = paidOrderIds.length > 0
-    ? await supabase
+  // Get order items only from revenue orders.
+  // Paginate in 1000-row batches — a flat order_items query is capped at
+  // PostgREST's default max-rows (1000), which silently truncated the ticket
+  // count (531 orders can have >1000 items). Loop until a short page returns.
+  const PAGE = 1000;
+  const orderItems: Array<{
+    id: string;
+    order_id: string;
+    ticket_id: string;
+    unit_price: number;
+    quantity: number;
+    ticket: { id: string; name_ru: string } | null;
+  }> = [];
+  if (paidOrderIds.length > 0) {
+    for (let from = 0; ; from += PAGE) {
+      const { data: page } = await supabase
         .from("order_items")
         .select(`
           id,
@@ -73,7 +86,13 @@ async function getSalesData(): Promise<{
           )
         `)
         .in("order_id", paidOrderIds)
-    : { data: [] };
+        .range(from, from + PAGE - 1);
+
+      if (!page || page.length === 0) break;
+      orderItems.push(...(page as unknown as typeof orderItems));
+      if (page.length < PAGE) break;
+    }
+  }
 
   // Process daily sales.
   // Bucket by Europe/Chisinau calendar day — created_at is UTC, and
